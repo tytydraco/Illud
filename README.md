@@ -29,7 +29,7 @@ An OLED-friendly, user-friendly notes app with NFC tag compatibility.
 - Press the sweep-delete icon to delete all list items.
   - Press confirm.
   
-  # Contact
-  - Telegram: @tytydraco
-  - Email: tylernij@gmail.com
-  - GitHub: @tytydraco
+# Contact
+- Telegram: @tytydraco
+- Email: tylernij@gmail.com
+- GitHub: @tytydraco
