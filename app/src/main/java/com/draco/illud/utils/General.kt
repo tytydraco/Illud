@@ -1,6 +1,7 @@
 package com.draco.illud.utils
 
 import android.view.View
+import androidx.core.graphics.toColorInt
 import com.google.android.material.snackbar.Snackbar
 
 /*
@@ -17,6 +18,7 @@ val listItems = ListItems()
 fun makeSnackbar(view: View, text: String) {
     val snackbar = Snackbar.make(view, text, Snackbar.LENGTH_SHORT)
     snackbar.setAction("Dismiss") {}
+    snackbar.view.setBackgroundColor("#000000".toColorInt())
     snackbar.show()
 }
 
@@ -24,5 +26,6 @@ fun makeSnackbar(view: View, text: String) {
 fun makeUndoSnackbar(view: View, text: String, callback: () -> Unit) {
     val snackbar = Snackbar.make(view, text, Snackbar.LENGTH_LONG)
     snackbar.setAction("Undo") { callback() }
+    snackbar.view.setBackgroundColor("#000000".toColorInt())
     snackbar.show()
 }
