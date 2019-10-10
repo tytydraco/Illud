@@ -1,0 +1,19 @@
+<resources>
+    <!-- Application strings -->
+    <string name="app_name">Illud</string>
+
+    <!-- FAB strings -->
+    <string name="add_new">New</string>
+    <string name="write_contents">Write</string>
+    <string name="wipe">Wipe</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+
+    <!-- Label hint strings -->
+    <string name="hint_label">Title</string>
+    <string name="hint_sublabel">Additional content.</string>
+
+    <!-- Misc strings -->
+    <string name="bullet">Bullet</string>
+    <string name="handle">Handle</string>
+</resources>

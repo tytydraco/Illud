@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Application Colors -->
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#141414</color>
+    <color name="colorAccent">#1e88e5</color>
+    <color name="colorNavigation">#fe000000</color>
+
+    <!-- FAB Colors -->
+    <color name="fabBackground">#141414</color>
+    <color name="fabBlue">#1e88e5</color>
+    <color name="fabGreen">#4caf50</color>
+    <color name="fabRed">#f44336</color>
+    <color name="fabOrange">#ef6c00</color>
+</resources>

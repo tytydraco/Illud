@@ -1,0 +1,21 @@
+<resources>
+
+    <!-- Base application theme -->
+    <style name="AppTheme" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:navigationBarColor">@color/colorNavigation</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <!-- FAB theme -->
+    <style name="FloatingActionButtonTheme" parent="Widget.Design.FloatingActionButton">
+        <item name="android:layout_marginStart">12dp</item>
+        <item name="android:layout_marginEnd">12dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:backgroundTint">@color/fabBackground</item>
+        <item name="borderWidth">0dp</item>
+    </style>
+</resources>
