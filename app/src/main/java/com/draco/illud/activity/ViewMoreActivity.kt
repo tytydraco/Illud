@@ -1,8 +1,12 @@
 package com.draco.illud.activity
 
+import android.content.Context
+import android.inputmethodservice.InputMethodService
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.draco.illud.R
@@ -34,6 +38,12 @@ class ViewMoreActivity : AppCompatActivity() {
         /* Set the labels based on what was given to us */
         label.setText(labelText)
         sublabel.setText(sublabelText)
+
+        /* Start editing label if this is a new item */
+        if (position == -1) {
+            label.requestFocus()
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        }
     }
 
     /* Add back button support */
