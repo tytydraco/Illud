@@ -26,6 +26,7 @@ class ListItems {
         if (string.isNotBlank()) {
             val split = string.split(divider)
             rawItems.addAll(0, split)
+            save()
             return split.size
         }
 
@@ -58,6 +59,7 @@ class ListItems {
         else
             return false
 
+        save()
         return true
     }
 
@@ -77,11 +79,13 @@ class ListItems {
             rawItems[position] = "${label}${separator}${sublabel}"
         else if (label.isNotBlank())
             rawItems[position] = label
+        save()
     }
 
     /* Remove a label : sublabel pair at position */
     fun remove(position: Int) {
         rawItems.removeAt(position)
+        save()
     }
 
     /* Get a label : sublabel pair at position */
@@ -103,6 +107,7 @@ class ListItems {
     /* Clear list items */
     fun clear() {
         rawItems.clear()
+        save()
     }
 
     /* Return the size of the list */

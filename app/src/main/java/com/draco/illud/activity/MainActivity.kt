@@ -95,7 +95,6 @@ class MainActivity : AppCompatActivity() {
                 /* Append data and scroll up to new data */
                 viewAdapter.notifyItemRangeInserted(0, addedSize)
                 recyclerView.scrollToPosition(0)
-                viewAdapter.update()
             }
             .setNegativeButton("Cancel", null)
             .create()
@@ -128,12 +127,8 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         /* When we switch activities, make sure to get updated info */
-        if (intent != null && Nfc.startedByNDEF(intent))
-            viewAdapter.update()
-        else {
-            viewAdapter.update()
+        if (intent == null || !Nfc.startedByNDEF(intent))
             viewAdapter.notifyDataSetChanged()
-        }
 
         nfc.enableForegroundIntent(this)
 
@@ -202,7 +197,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         /* Setup our list view */
-        viewAdapter.update()
         viewAdapter.notifyDataSetChanged()
 
         /* Setup drag and drop handler */
@@ -243,7 +237,6 @@ class MainActivity : AppCompatActivity() {
                     .setPositiveButton("Confirm") { _: DialogInterface, _: Int ->
                         viewAdapter.notifyItemRangeRemoved(0, listItems.size())
                         listItems.clear()
-                        viewAdapter.update()
                     }
                     .setNegativeButton("Cancel", null)
                     .create()

@@ -80,10 +80,8 @@ class ViewMoreActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.delete -> {
-                if (position != -1) {
+                if (position != -1)
                     listItems.remove(position)
-                    listItems.save()
-                }
 
                 finish()
             }

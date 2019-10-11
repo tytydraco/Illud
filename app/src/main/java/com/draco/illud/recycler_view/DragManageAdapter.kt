@@ -29,13 +29,11 @@ class DragManageAdapter(
 
             listItems.remove(position)
             adapter.notifyItemRemoved(position)
-            adapter.update()
 
             /* Allow user to undo item deletion temporarily */
             makeUndoSnackbar(viewHolder.itemView, "Deleted item.") {
                 listItems.insert(position, deletedItem.first, deletedItem.second)
                 adapter.notifyItemInserted(position)
-                adapter.update()
             }
         } else if (direction == ItemTouchHelper.LEFT) {
             /* Send first item to back, else to front */
@@ -47,7 +45,6 @@ class DragManageAdapter(
                 listItems.addToBack(targetItem.first, targetItem.second)
                 adapter.notifyItemRemoved(position)
                 adapter.notifyItemInserted(listItems.size())
-                adapter.update()
             } else {
                 val targetItem = listItems.get(position)
 
@@ -56,7 +53,6 @@ class DragManageAdapter(
                 listItems.insert(0, targetItem.first, targetItem.second)
                 adapter.notifyItemRemoved(position)
                 adapter.notifyItemInserted(0)
-                adapter.update()
             }
         }
     }
