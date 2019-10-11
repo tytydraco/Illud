@@ -171,7 +171,7 @@ class MainActivity : AppCompatActivity() {
 
         /* Ensure Nfc support */
         val nfcCurrentState = nfc.supportState()
-        if (nfcCurrentState != Nfc.State.SUPPORTED_ON)
+        if (nfc.supportState() != Nfc.State.SUPPORTED_ON)
             warnUserAboutNfcStatus(nfcCurrentState)
 
         /* Allow Nfc tags to be scanned */
@@ -230,7 +230,11 @@ class MainActivity : AppCompatActivity() {
 
         when (item.itemId) {
             R.id.write_contents -> {
-                putUserIntoWriteMode()
+                val nfcCurrentState = nfc.supportState()
+                if (nfcCurrentState != Nfc.State.SUPPORTED_ON)
+                    warnUserAboutNfcStatus(nfcCurrentState)
+                else
+                    putUserIntoWriteMode()
             }
             R.id.wipe -> {
                 AlertDialog.Builder(this)
