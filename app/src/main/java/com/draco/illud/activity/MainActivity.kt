@@ -207,7 +207,8 @@ class MainActivity : AppCompatActivity() {
             viewAdapter,
             ItemTouchHelper.UP or
             ItemTouchHelper.DOWN,
-            ItemTouchHelper.RIGHT)
+            ItemTouchHelper.RIGHT or
+                    ItemTouchHelper.LEFT)
         val helper = ItemTouchHelper(callback)
         helper.attachToRecyclerView(recyclerView)
 

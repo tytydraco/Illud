@@ -22,7 +22,8 @@ class DragManageAdapter(
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int)
     {
-        if (direction == ItemTouchHelper.RIGHT) {
+        if (direction == ItemTouchHelper.RIGHT ||
+            direction == ItemTouchHelper.LEFT) {
             val deletedPosition = viewHolder.adapterPosition
             val deletedItem = listItems.get(deletedPosition)
 
