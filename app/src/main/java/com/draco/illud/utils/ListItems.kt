@@ -41,6 +41,8 @@ class ListItems {
 
     /* Restore backed up list items */
     fun load() {
+        /* Empty items since we are loading. Do not call clear() due to save() */
+        rawItems.clear()
         parseJoinedString(prefs.getString("listItems", "")!!)
     }
 
