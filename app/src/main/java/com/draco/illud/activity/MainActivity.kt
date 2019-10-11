@@ -5,12 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.draco.illud.*
+import com.draco.illud.R
 import com.draco.illud.recycler_view.DragManageAdapter
 import com.draco.illud.recycler_view.RecyclerViewAdapter
 import com.draco.illud.utils.Nfc
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerViewAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var addNew: ImageButton
 
     /* Internal */
     private var writeContentsAlertDialog: AlertDialog? = null /* Alert dialog for when user writes to car */
@@ -182,6 +184,11 @@ class MainActivity : AppCompatActivity() {
         /* Setup UI elements */
         recyclerView = findViewById(R.id.recycler_view)
         viewManager = LinearLayoutManager(this)
+        addNew = findViewById(R.id.add_new)
+
+        addNew.setOnClickListener {
+            startActivity(Intent(this, ViewMoreActivity::class.java))
+        }
 
         /* Set adapter */
         viewAdapter = RecyclerViewAdapter(this)
@@ -233,9 +240,6 @@ class MainActivity : AppCompatActivity() {
                     .setNegativeButton("Cancel", null)
                     .create()
                     .show()
-            }
-            R.id.add_new -> {
-                startActivity(Intent(this, ViewMoreActivity::class.java))
             }
         }
 

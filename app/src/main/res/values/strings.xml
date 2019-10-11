@@ -2,7 +2,7 @@
     <!-- Application strings -->
     <string name="app_name">Illud</string>
 
-    <!-- FAB strings -->
+    <!-- Menu strings -->
     <string name="add_new">New</string>
     <string name="write_contents">Write</string>
     <string name="wipe">Wipe</string>

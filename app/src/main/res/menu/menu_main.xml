@@ -5,15 +5,10 @@
         android:id="@+id/wipe"
         android:icon="@drawable/ic_delete_sweep_white_24dp"
         app:showAsAction="ifRoom"
-        android:title="@string/wipe" />
+        android:title="" />
     <item
         android:id="@+id/write_contents"
         android:icon="@drawable/ic_file_upload_white_24dp"
         app:showAsAction="ifRoom"
-        android:title="@string/write_contents"/>
-    <item
-        android:id="@+id/add_new"
-        android:icon="@drawable/ic_create_white_24dp"
-        app:showAsAction="ifRoom"
-        android:title="@string/add_new"/>
+        android:title=""/>
 </menu>

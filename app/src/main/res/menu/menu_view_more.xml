@@ -6,9 +6,4 @@
         android:icon="@drawable/ic_delete_white_24dp"
         app:showAsAction="ifRoom"
         android:title="@string/delete"/>
-    <item
-        android:id="@+id/save"
-        android:icon="@drawable/ic_check_white_24dp"
-        app:showAsAction="ifRoom"
-        android:title="@string/save"/>
 </menu>

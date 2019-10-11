@@ -77,22 +77,9 @@ class RecyclerViewAdapter(
             notifyDataSetChanged()
     }
 
-    /* Start the ViewMore activity when we click an item */
-    private fun clickListener(position: Int) {
-        val itemPair = listItems.get(position)
-        val label = itemPair.first
-        val sublabel = itemPair.second
-
-        val intent = Intent(context, ViewMoreActivity::class.java)
-            .putExtra("label", label)
-            .putExtra("sublabel", sublabel)
-            .putExtra("position", position)
-        context.startActivity(intent)
-    }
-
     /* Configure each holder view */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        /* Hide the sublabel view if there is no content */
+       /* Hide the sublabel view if there is no content */
         if (sublabels[position].isBlank())
             holder.sublabel.visibility = View.GONE
         else
@@ -104,7 +91,19 @@ class RecyclerViewAdapter(
 
         /* Set the external click listener */
         holder.itemView.setOnClickListener {
-            clickListener(position)
+            /* The local position variable may be outdated */
+            val updatedPosition = holder.adapterPosition
+
+            /* Fetch new and updated label information */
+            val label = labels[updatedPosition]
+            val sublabel = sublabels[updatedPosition]
+
+            /* Start the ViewMore activity when we click an item */
+            val intent = Intent(context, ViewMoreActivity::class.java)
+                .putExtra("label", label)
+                .putExtra("sublabel", sublabel)
+                .putExtra("position", updatedPosition)
+            context.startActivity(intent)
         }
     }
 }

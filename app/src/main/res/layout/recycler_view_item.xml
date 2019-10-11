@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="16dp"
+    android:paddingVertical="14dp"
     android:paddingHorizontal="24dp"
     android:background="@color/colorPrimary">
 
@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
         android:id="@+id/bullet"
-        android:src="@drawable/ic_drag_handle_white_24dp"
+        android:src="@drawable/ic_chevron_right_white_24dp"
         android:tint="@color/colorAccent"
         android:layout_centerVertical="true"
         android:contentDescription="@string/bullet" />
@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/label"
         style="@style/TextAppearance.AppCompat.Medium"
+        android:paddingVertical="2dp"
         android:textSize="18sp"
         android:textColor="@android:color/white"
         android:paddingStart="?android:attr/listPreferredItemPaddingStart"

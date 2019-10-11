@@ -59,16 +59,18 @@ class ViewMoreActivity : AppCompatActivity() {
 
                 finish()
             }
-            R.id.save -> {
-                if (position == -1)
-                    listItems.add(label.text.toString(), sublabel.text.toString())
-                else
-                    listItems.set(position, label.text.toString(), sublabel.text.toString())
-
-                finish()
-            }
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    /* Save contents on exit */
+    override fun onPause() {
+        super.onPause()
+
+        if (position == -1)
+            listItems.add(label.text.toString(), sublabel.text.toString())
+        else
+            listItems.set(position, label.text.toString(), sublabel.text.toString())
     }
 }
