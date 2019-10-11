@@ -11,7 +11,7 @@
 
     <!-- Label hint strings -->
     <string name="hint_label">Title</string>
-    <string name="hint_sublabel">Additional content.</string>
+    <string name="hint_sublabel">Details</string>
 
     <!-- Misc strings -->
     <string name="bullet">Bullet</string>
