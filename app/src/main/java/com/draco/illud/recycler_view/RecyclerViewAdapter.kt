@@ -75,7 +75,7 @@ class RecyclerViewAdapter(
 
     /* Configure each holder view */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       /* Hide the sublabel view if there is no content */
+        /* Hide the sublabel view if there is no content */
         if (sublabels[position].isBlank())
             holder.sublabel.visibility = View.GONE
         else

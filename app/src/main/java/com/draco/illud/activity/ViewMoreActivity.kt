@@ -68,9 +68,12 @@ class ViewMoreActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
 
-        if (position == -1)
+        if (position == -1) {
             listItems.add(label.text.toString(), sublabel.text.toString())
-        else
+
+            /* The new location of our item is at 0. Prevents item from being recreated */
+            position = 0
+        } else
             listItems.set(position, label.text.toString(), sublabel.text.toString())
     }
 }
