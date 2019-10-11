@@ -61,9 +61,14 @@ class ListItems {
         return true
     }
 
-    /* Add a label : sublabel pair */
+    /* Add a label : sublabel pair at the start */
     fun add(label: String, sublabel: String): Boolean {
         return insert(0, label, sublabel)
+    }
+
+    /* Add a label : sublabel pair at the end */
+    fun addToBack(label: String, sublabel: String): Boolean {
+        return insert(size(), label, sublabel)
     }
 
     /* Set a label : sublabel pair and preserve its position */

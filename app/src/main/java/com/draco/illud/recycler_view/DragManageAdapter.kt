@@ -22,31 +22,42 @@ class DragManageAdapter(
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int)
     {
+        val position = viewHolder.adapterPosition
         if (direction == ItemTouchHelper.RIGHT) {
             /* Delete Item */
-            val deletedPosition = viewHolder.adapterPosition
-            val deletedItem = listItems.get(deletedPosition)
+            val deletedItem = listItems.get(position)
 
-            listItems.remove(deletedPosition)
-            adapter.notifyItemRemoved(deletedPosition)
+            listItems.remove(position)
+            adapter.notifyItemRemoved(position)
             adapter.update()
 
             /* Allow user to undo item deletion temporarily */
             makeUndoSnackbar(viewHolder.itemView, "Deleted item.") {
-                listItems.insert(deletedPosition, deletedItem.first, deletedItem.second)
-                adapter.notifyItemInserted(deletedPosition)
+                listItems.insert(position, deletedItem.first, deletedItem.second)
+                adapter.notifyItemInserted(position)
                 adapter.update()
             }
         } else if (direction == ItemTouchHelper.LEFT) {
-            /* Reposition Item */
-            val targetItemPosition = viewHolder.adapterPosition
-            val targetItem = listItems.get(targetItemPosition)
+            /* Send first item to back, else to front */
+            if (position == 0) {
+                val targetItem = listItems.get(position)
 
-            listItems.remove(targetItemPosition)
-            listItems.insert(0, targetItem.first, targetItem.second)
-            adapter.notifyItemRemoved(targetItemPosition)
-            adapter.notifyItemInserted(0)
-            adapter.update()
+                /* To back */
+                listItems.remove(position)
+                listItems.addToBack(targetItem.first, targetItem.second)
+                adapter.notifyItemRemoved(position)
+                adapter.notifyItemInserted(listItems.size())
+                adapter.update()
+            } else {
+                val targetItem = listItems.get(position)
+
+                /* To front */
+                listItems.remove(position)
+                listItems.insert(0, targetItem.first, targetItem.second)
+                adapter.notifyItemRemoved(position)
+                adapter.notifyItemInserted(0)
+                adapter.update()
+            }
         }
     }
 
