@@ -55,11 +55,11 @@ class RecyclerViewAdapter(
         }
 
         notifyItemMoved(fromPosition, toPosition)
-        update(false)
+        update()
     }
 
     /* Save the new contents of the recycler view and update */
-    fun update(refresh: Boolean = true) {
+    fun update() {
         /* Save this */
         listItems.save()
 
@@ -71,10 +71,6 @@ class RecyclerViewAdapter(
         /* Set adapter */
         labels = newLabels
         sublabels = newSublabels
-
-        /* Refresh the view while we're at it */
-        if (refresh)
-            notifyDataSetChanged()
     }
 
     /* Configure each holder view */

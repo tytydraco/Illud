@@ -22,21 +22,31 @@ class DragManageAdapter(
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int)
     {
-        if (direction == ItemTouchHelper.RIGHT ||
-            direction == ItemTouchHelper.LEFT) {
+        if (direction == ItemTouchHelper.RIGHT) {
+            /* Delete Item */
             val deletedPosition = viewHolder.adapterPosition
             val deletedItem = listItems.get(deletedPosition)
 
             listItems.remove(deletedPosition)
             adapter.notifyItemRemoved(deletedPosition)
-            adapter.update(false)
+            adapter.update()
 
             /* Allow user to undo item deletion temporarily */
             makeUndoSnackbar(viewHolder.itemView, "Deleted item.") {
                 listItems.insert(deletedPosition, deletedItem.first, deletedItem.second)
                 adapter.notifyItemInserted(deletedPosition)
-                adapter.update(false)
+                adapter.update()
             }
+        } else if (direction == ItemTouchHelper.LEFT) {
+            /* Reposition Item */
+            val targetItemPosition = viewHolder.adapterPosition
+            val targetItem = listItems.get(targetItemPosition)
+
+            listItems.remove(targetItemPosition)
+            listItems.insert(0, targetItem.first, targetItem.second)
+            adapter.notifyItemRemoved(targetItemPosition)
+            adapter.notifyItemInserted(0)
+            adapter.update()
         }
     }
 
