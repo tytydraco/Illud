@@ -11,6 +11,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.draco.illud.R
 import com.draco.illud.utils.listItems
+import com.draco.illud.utils.makeSnackbar
 
 class ViewMoreActivity : AppCompatActivity() {
     /* UI elements */
@@ -50,6 +51,23 @@ class ViewMoreActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    /* Do not exit if label is not filled in */
+    override fun onBackPressed() {
+        /* Only if sublabel is filled but label is blank */
+        if (label.text.isBlank() &&
+            sublabel.text.isNotBlank()) {
+            makeSnackbar(label, "Label must not be blank.")
+
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(label.windowToken, 0)
+            imm.hideSoftInputFromWindow(sublabel.windowToken, 0)
+
+            return
+        }
+
+        super.onBackPressed()
     }
 
     /* Inflate top menu buttons */

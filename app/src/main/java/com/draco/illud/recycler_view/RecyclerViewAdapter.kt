@@ -77,11 +77,12 @@ class RecyclerViewAdapter(
     /* Configure each holder view */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         /* Use alternative icon if there is a sublabel */
-        if (sublabels[position].isNotBlank()) {
-            holder.bullet.setImageDrawable(
-                context.getDrawable(R.drawable.ic_short_text_white_24dp)
-            )
-        }
+        val drawable = if (sublabels[position].isBlank())
+            context.getDrawable(R.drawable.ic_chevron_right_white_24dp)
+        else
+            context.getDrawable(R.drawable.ic_short_text_white_24dp)
+
+        holder.bullet.setImageDrawable(drawable)
 
         /* Set the text */
         holder.label.text = labels[position]
