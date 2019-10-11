@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.draco.illud.R
@@ -20,8 +21,8 @@ class RecyclerViewAdapter(
 
     /* Holds our views inside our row view */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val bullet = view.findViewById<ImageView>(R.id.bullet)!!
         val label = view.findViewById<TextView>(R.id.label)!!
-        val sublabel = view.findViewById<TextView>(R.id.sublabel)!!
     }
 
     /* Inflate our rows for each item */
@@ -75,15 +76,15 @@ class RecyclerViewAdapter(
 
     /* Configure each holder view */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        /* Hide the sublabel view if there is no content */
-        if (sublabels[position].isBlank())
-            holder.sublabel.visibility = View.GONE
-        else
-            holder.sublabel.visibility = View.VISIBLE
+        /* Use alternative icon if there is a sublabel */
+        if (sublabels[position].isNotBlank()) {
+            holder.bullet.setImageDrawable(
+                context.getDrawable(R.drawable.ic_short_text_white_24dp)
+            )
+        }
 
         /* Set the text */
         holder.label.text = labels[position]
-        holder.sublabel.text = sublabels[position]
 
         /* Set the external click listener */
         holder.itemView.setOnClickListener {
