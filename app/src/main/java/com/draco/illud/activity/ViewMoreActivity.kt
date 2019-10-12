@@ -20,6 +20,7 @@ class ViewMoreActivity : AppCompatActivity() {
 
     /* Internal */
     private var position = -1
+    private var deleted = false
 
     /* Occurs on application start */
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,6 +84,7 @@ class ViewMoreActivity : AppCompatActivity() {
                 if (position != -1)
                     listItems.remove(position)
 
+                deleted = true
                 finish()
             }
         }
@@ -93,6 +95,10 @@ class ViewMoreActivity : AppCompatActivity() {
     /* Save contents on exit */
     override fun onPause() {
         super.onPause()
+
+        /* Don't do auto-save if we press delete */
+        if (deleted)
+            return
 
         if (position == -1) {
             listItems.add(label.text.toString(), sublabel.text.toString())
