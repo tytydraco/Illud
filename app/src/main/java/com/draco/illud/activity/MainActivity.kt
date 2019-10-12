@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -182,6 +183,9 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recycler_view)
         viewManager = LinearLayoutManager(this)
         addNew = findViewById(R.id.add_new)
+
+        /* Add dividers */
+        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
         addNew.setOnClickListener {
             startActivity(Intent(this, ViewMoreActivity::class.java))

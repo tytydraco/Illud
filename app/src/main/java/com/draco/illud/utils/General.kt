@@ -16,16 +16,14 @@ val listItems = ListItems()
 
 /* Make a snackbar pop-up with a dismissal button */
 fun makeSnackbar(view: View, text: String) {
-    val snackbar = Snackbar.make(view, text, Snackbar.LENGTH_SHORT)
-    snackbar.setAction("Dismiss") {}
-    snackbar.view.setBackgroundColor("#000000".toColorInt())
-    snackbar.show()
+    Snackbar.make(view, text, Snackbar.LENGTH_SHORT)
+        .setAction("Dismiss") {}
+        .show()
 }
 
 /* Make a snackbar pop-up with a dismissal button */
 fun makeUndoSnackbar(view: View, text: String, callback: () -> Unit) {
-    val snackbar = Snackbar.make(view, text, Snackbar.LENGTH_LONG)
-    snackbar.setAction("Undo") { callback() }
-    snackbar.view.setBackgroundColor("#000000".toColorInt())
-    snackbar.show()
+    Snackbar.make(view, text, Snackbar.LENGTH_LONG)
+        .setAction("Undo") { callback() }
+        .show()
 }

@@ -68,9 +68,9 @@ class RecyclerViewAdapter(
         val item = listItems.get(position)
         /* Use alternative icon if there is a sublabel */
         val drawable = if (item.second.isBlank())
-            context.getDrawable(R.drawable.ic_chevron_right_white_24dp)
+            context.getDrawable(R.drawable.ic_chevron_right_black_24dp)
         else
-            context.getDrawable(R.drawable.ic_short_text_white_24dp)
+            context.getDrawable(R.drawable.ic_short_text_black_24dp)
 
         holder.bullet.setImageDrawable(drawable)
 
