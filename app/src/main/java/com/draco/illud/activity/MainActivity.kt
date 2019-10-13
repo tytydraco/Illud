@@ -164,7 +164,7 @@ class MainActivity : AppCompatActivity() {
         nfc.registerAdapter(this)
 
         /* Ensure Nfc support */
-        val nfcCurrentState = nfc.supportState()
+        var nfcCurrentState = nfc.supportState()
         if (nfc.supportState() != Nfc.State.SUPPORTED_ON)
             warnUserAboutNfcStatus(nfcCurrentState)
 
@@ -192,7 +192,8 @@ class MainActivity : AppCompatActivity() {
         bottomAppBar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.write_contents -> {
-                    val nfcCurrentState = nfc.supportState()
+                    /* Make sure we still have Nfc on */
+                    nfcCurrentState = nfc.supportState()
                     if (nfcCurrentState != Nfc.State.SUPPORTED_ON)
                         warnUserAboutNfcStatus(nfcCurrentState)
                     else
