@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Application Colors -->
-    <color name="colorPrimary">#fafafa</color>
-    <color name="colorPrimaryDark">#cccccc</color>
-    <color name="colorAccent">#2196f3</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#222222</color>
+    <color name="colorAccent">#000000</color>
 </resources>

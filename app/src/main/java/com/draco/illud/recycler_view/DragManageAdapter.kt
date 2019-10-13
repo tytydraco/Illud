@@ -4,14 +4,15 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.draco.illud.utils.listItems
 import com.draco.illud.utils.makeUndoSnackbar
+import com.google.android.material.bottomappbar.BottomAppBar
 
 class DragManageAdapter(
+    private val bottomAppBar: BottomAppBar,
     private var adapter: RecyclerViewAdapter,
     dragDirs: Int,
     swipeDirs: Int):
     ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs)
 {
-
     override fun onMove(recyclerView: RecyclerView,
                         viewHolder: RecyclerView.ViewHolder,
                         target: RecyclerView.ViewHolder): Boolean
@@ -31,7 +32,7 @@ class DragManageAdapter(
             adapter.notifyItemRemoved(position)
 
             /* Allow user to undo item deletion temporarily */
-            makeUndoSnackbar(viewHolder.itemView, "Deleted item.") {
+            makeUndoSnackbar(bottomAppBar, "Deleted item.") {
                 listItems.insert(position, deletedItem.first, deletedItem.second)
                 adapter.notifyItemInserted(position)
             }

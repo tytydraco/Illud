@@ -18,6 +18,7 @@ val listItems = ListItems()
 fun makeSnackbar(view: View, text: String) {
     Snackbar.make(view, text, Snackbar.LENGTH_SHORT)
         .setAction("Dismiss") {}
+        .setAnchorView(view)
         .show()
 }
 
@@ -25,5 +26,6 @@ fun makeSnackbar(view: View, text: String) {
 fun makeUndoSnackbar(view: View, text: String, callback: () -> Unit) {
     Snackbar.make(view, text, Snackbar.LENGTH_LONG)
         .setAction("Undo") { callback() }
+        .setAnchorView(view)
         .show()
 }

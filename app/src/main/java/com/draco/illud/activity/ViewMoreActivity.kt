@@ -1,10 +1,8 @@
 package com.draco.illud.activity
 
 import android.content.Context
-import android.inputmethodservice.InputMethodService
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -12,11 +10,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.draco.illud.R
 import com.draco.illud.utils.listItems
 import com.draco.illud.utils.makeSnackbar
+import com.google.android.material.bottomappbar.BottomAppBar
 
 class ViewMoreActivity : AppCompatActivity() {
     /* UI elements */
     private lateinit var label: EditText
     private lateinit var sublabel: EditText
+    private lateinit var bottomAppBar: BottomAppBar
 
     /* Internal */
     private var position = -1
@@ -28,7 +28,6 @@ class ViewMoreActivity : AppCompatActivity() {
         setContentView(R.layout.view_more_activity)
 
         title = ""
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         val labelText = intent.getStringExtra("label")
         val sublabelText = intent.getStringExtra("sublabel")
@@ -36,6 +35,28 @@ class ViewMoreActivity : AppCompatActivity() {
         position = intent.getIntExtra("position", -1)
         label = findViewById(R.id.label)
         sublabel = findViewById(R.id.sublabel)
+        bottomAppBar = findViewById(R.id.bottom_app_bar)
+
+        /* Use proper menu */
+        bottomAppBar.replaceMenu(R.menu.menu_view_more)
+        bottomAppBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+
+        /* Menu item actions */
+        bottomAppBar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.delete -> {
+                    if (position != -1)
+                        listItems.remove(position)
+
+                    deleted = true
+                    finish()
+                    true
+                }
+                else -> false
+            }
+        }
 
         /* Set the labels based on what was given to us */
         label.setText(labelText)
@@ -59,7 +80,7 @@ class ViewMoreActivity : AppCompatActivity() {
         /* Only if sublabel is filled but label is blank */
         if (label.text.isBlank() &&
             sublabel.text.isNotBlank()) {
-            makeSnackbar(label, "Label must not be blank.")
+            makeSnackbar(bottomAppBar, "Label must not be blank.")
 
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(label.windowToken, 0)
@@ -75,21 +96,6 @@ class ViewMoreActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_view_more, menu)
         return true
-    }
-
-    /* Top menu item button actions */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.delete -> {
-                if (position != -1)
-                    listItems.remove(position)
-
-                deleted = true
-                finish()
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
     /* Save contents on exit */

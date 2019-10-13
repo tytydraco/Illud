@@ -3,9 +3,6 @@ package com.draco.illud.activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -19,13 +16,14 @@ import com.draco.illud.utils.Nfc
 import com.draco.illud.utils.listItems
 import com.draco.illud.utils.makeSnackbar
 import com.draco.illud.utils.nfc
+import com.google.android.material.bottomappbar.BottomAppBar
 
 class MainActivity : AppCompatActivity() {
     /* UI elements */
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerViewAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
-    private lateinit var addNew: ImageButton
+    private lateinit var bottomAppBar: BottomAppBar
 
     /* Internal */
     private var writeContentsAlertDialog: AlertDialog? = null /* Alert dialog for when user writes to car */
@@ -66,9 +64,9 @@ class MainActivity : AppCompatActivity() {
         val success = Nfc.writeBytes(intent, writeString.toByteArray())
 
         if (success)
-            makeSnackbar(recyclerView, "Wrote contents to tag.")
+            makeSnackbar(bottomAppBar, "Wrote contents to tag.")
         else
-            makeSnackbar(recyclerView, "Write failed. Tag may be full.")
+            makeSnackbar(bottomAppBar, "Write failed. Tag may be full.")
 
         /* Dismiss the non-cancellable dialog for the user */
         dismissWriteContentsAlertDialog()
@@ -81,7 +79,7 @@ class MainActivity : AppCompatActivity() {
 
         /* Tell user we are blank. */
         if (nfcContent == null || nfcContent.isEmpty()) {
-            makeSnackbar(recyclerView, "Tag has no contents.")
+            makeSnackbar(bottomAppBar, "Tag has no contents.")
             return
         }
 
@@ -110,7 +108,7 @@ class MainActivity : AppCompatActivity() {
             else -> return
         }
 
-        makeSnackbar(recyclerView, nfcStateString)
+        makeSnackbar(bottomAppBar, nfcStateString)
     }
 
     /* Process Nfc tag scan event */
@@ -182,14 +180,44 @@ class MainActivity : AppCompatActivity() {
         /* Setup UI elements */
         recyclerView = findViewById(R.id.recycler_view)
         viewManager = LinearLayoutManager(this)
-        addNew = findViewById(R.id.add_new)
+        bottomAppBar = findViewById(R.id.bottom_app_bar)
+
+        /* Use proper menu */
+        bottomAppBar.replaceMenu(R.menu.menu_main)
+        bottomAppBar.setNavigationOnClickListener {
+            startActivity(Intent(this, ViewMoreActivity::class.java))
+        }
+
+        /* Menu item actions */
+        bottomAppBar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.write_contents -> {
+                    val nfcCurrentState = nfc.supportState()
+                    if (nfcCurrentState != Nfc.State.SUPPORTED_ON)
+                        warnUserAboutNfcStatus(nfcCurrentState)
+                    else
+                        putUserIntoWriteMode()
+                    true
+                }
+                R.id.wipe -> {
+                    AlertDialog.Builder(this)
+                        .setTitle("Clear")
+                        .setMessage("Are you sure you would like to clear your list?")
+                        .setPositiveButton("Confirm") { _: DialogInterface, _: Int ->
+                            viewAdapter.notifyItemRangeRemoved(0, listItems.size())
+                            listItems.clear()
+                        }
+                        .setNegativeButton("Cancel", null)
+                        .create()
+                        .show()
+                    true
+                }
+                else -> false
+            }
+        }
 
         /* Add dividers */
         recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-
-        addNew.setOnClickListener {
-            startActivity(Intent(this, ViewMoreActivity::class.java))
-        }
 
         /* Set adapter */
         viewAdapter = RecyclerViewAdapter(this)
@@ -205,6 +233,7 @@ class MainActivity : AppCompatActivity() {
 
         /* Setup drag and drop handler */
         val callback = DragManageAdapter(
+            bottomAppBar,
             viewAdapter,
             ItemTouchHelper.UP or
             ItemTouchHelper.DOWN,
@@ -215,39 +244,5 @@ class MainActivity : AppCompatActivity() {
 
         /* Check if we opened the app due to a Nfc event */
         nfcTagScanHandler()
-    }
-
-    /* Inflate top menu buttons */
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    /* Top menu item button actions */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        when (item.itemId) {
-            R.id.write_contents -> {
-                val nfcCurrentState = nfc.supportState()
-                if (nfcCurrentState != Nfc.State.SUPPORTED_ON)
-                    warnUserAboutNfcStatus(nfcCurrentState)
-                else
-                    putUserIntoWriteMode()
-            }
-            R.id.wipe -> {
-                AlertDialog.Builder(this)
-                    .setTitle("Clear")
-                    .setMessage("Are you sure you would like to clear your list?")
-                    .setPositiveButton("Confirm") { _: DialogInterface, _: Int ->
-                        viewAdapter.notifyItemRangeRemoved(0, listItems.size())
-                        listItems.clear()
-                    }
-                    .setNegativeButton("Cancel", null)
-                    .create()
-                    .show()
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 }

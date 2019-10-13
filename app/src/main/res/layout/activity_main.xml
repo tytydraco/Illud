@@ -3,27 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".activity.MainActivity">
-
-    <ImageButton
-        android:id="@+id/add_new"
-        android:layout_width="match_parent"
-        android:layout_height="?listPreferredItemHeight"
-        android:elevation="8dp"
-        android:background="@color/colorAccent"
-        android:src="@drawable/ic_add_black_24dp"
-        android:tint="@android:color/white"
-        android:contentDescription="@string/add_new"
-        android:layout_alignParentTop="true"
-        android:gravity="center" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/add_new"
-        android:layout_below="@id/add_new"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignBottom="@id/bottom_app_bar_coordinator"
+        android:layout_alignParentTop="true" />
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/bottom_app_bar_coordinator"
+        android:layout_alignParentBottom="true">
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottom_app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+            app:backgroundTint="@color/colorPrimary"
+            app:navigationIcon="@drawable/ic_add_black_24dp" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </RelativeLayout>
