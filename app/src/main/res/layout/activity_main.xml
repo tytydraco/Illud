@@ -6,6 +6,14 @@
     android:orientation="vertical"
     tools:context=".activity.MainActivity">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/add_new"
+        android:layout_alignParentBottom="true" />
+
     <ImageButton
         android:id="@+id/add_new"
         android:layout_width="match_parent"
@@ -15,15 +23,7 @@
         android:src="@drawable/ic_add_black_24dp"
         android:tint="@android:color/white"
         android:contentDescription="@string/add_new"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:gravity="center" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/add_new"
-        android:layout_below="@id/add_new"
-        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>
