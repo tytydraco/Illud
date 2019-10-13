@@ -9,8 +9,8 @@
     <ImageButton
         android:id="@+id/add_new"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:elevation="4dp"
+        android:layout_height="?listPreferredItemHeight"
+        android:elevation="8dp"
         android:background="@color/colorAccent"
         android:src="@drawable/ic_add_black_24dp"
         android:tint="@android:color/white"
