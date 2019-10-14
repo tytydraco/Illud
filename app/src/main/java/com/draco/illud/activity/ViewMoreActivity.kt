@@ -15,7 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 class ViewMoreActivity : AppCompatActivity() {
     /* UI elements */
     private lateinit var label: EditText
-    private lateinit var sublabel: EditText
+    private lateinit var content: EditText
     private lateinit var toolbar: Toolbar
 
     /* Internal */
@@ -30,11 +30,11 @@ class ViewMoreActivity : AppCompatActivity() {
         title = ""
 
         val labelText = intent.getStringExtra("label")
-        val sublabelText = intent.getStringExtra("sublabel")
+        val contentText = intent.getStringExtra("content")
 
         position = intent.getIntExtra("position", -1)
         label = findViewById(R.id.label)
-        sublabel = findViewById(R.id.sublabel)
+        content = findViewById(R.id.content)
         toolbar = findViewById(R.id.toolbar)
         toolbar.inflateMenu(R.menu.menu_view_more)
 
@@ -60,7 +60,7 @@ class ViewMoreActivity : AppCompatActivity() {
 
         /* Set the labels based on what was given to us */
         label.setText(labelText)
-        sublabel.setText(sublabelText)
+        content.setText(contentText)
 
         /* Start editing label if this is a new item */
         if (position == -1) {
@@ -71,7 +71,7 @@ class ViewMoreActivity : AppCompatActivity() {
 
     /* Do not exit if label is not filled in */
     override fun onBackPressed() {
-        /* Only if sublabel is filled but label is blank */
+        /* Only if content is filled but label is blank */
         if (label.text.isBlank()) {
             Snackbar.make(toolbar, "Label must not be blank.", Snackbar.LENGTH_SHORT)
                 .setAction("Dismiss") {}
@@ -79,7 +79,7 @@ class ViewMoreActivity : AppCompatActivity() {
 
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(label.windowToken, 0)
-            imm.hideSoftInputFromWindow(sublabel.windowToken, 0)
+            imm.hideSoftInputFromWindow(content.windowToken, 0)
 
             return
         }
@@ -95,7 +95,7 @@ class ViewMoreActivity : AppCompatActivity() {
         if (deleted)
             return
 
-        val item = ListItem(label.text.toString(), sublabel.text.toString())
+        val item = ListItem(label.text.toString(), content.text.toString())
 
         if (position == -1) {
             listItems.add(item)

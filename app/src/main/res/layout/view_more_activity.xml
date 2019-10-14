@@ -32,7 +32,7 @@
         android:linksClickable="true"
         android:autoLink="all"
         android:gravity="top"
-        android:id="@+id/sublabel"
+        android:id="@+id/content"
         style="@style/TextAppearance.AppCompat.Medium"
         android:textSize="18sp"
         android:paddingBottom="12dp"
@@ -41,8 +41,8 @@
         android:background="@color/colorPrimary"
         android:layout_below="@id/label"
         android:layout_alignParentBottom="true"
-        android:hint="@string/hint_sublabel"
+        android:hint="@string/hint_content"
         android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
-        android:autofillHints="@string/hint_sublabel" />
+        android:autofillHints="@string/hint_content" />
 
 </RelativeLayout>

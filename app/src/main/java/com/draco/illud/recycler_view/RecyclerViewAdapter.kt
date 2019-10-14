@@ -58,7 +58,7 @@ class RecyclerViewAdapter(
     /* Configure each holder view */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = listItems.get(position)
-        /* Use alternative icon if there is a sublabel */
+        /* Use alternative icon if there is a content */
         val drawable = if (item.content.isBlank())
             context.getDrawable(R.drawable.ic_chevron_right_black_24dp)
         else
@@ -77,12 +77,12 @@ class RecyclerViewAdapter(
 
             /* Fetch new and updated label information */
             val label = updatedItem.label
-            val sublabel = updatedItem.content
+            val content = updatedItem.content
 
             /* Start the ViewMore activity when we click an item */
             val intent = Intent(context, ViewMoreActivity::class.java)
                 .putExtra("label", label)
-                .putExtra("sublabel", sublabel)
+                .putExtra("content", content)
                 .putExtra("position", updatedPosition)
             context.startActivity(intent)
         }

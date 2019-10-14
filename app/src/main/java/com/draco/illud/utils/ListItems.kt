@@ -53,7 +53,7 @@ class ListItems {
         prefsEditor = prefs.edit()
     }
 
-    /* Insert a label : sublabel pair at position */
+    /* Insert a label : content pair at position */
     fun insert(position: Int, listItem: ListItem): Boolean {
         listItems.add(position, listItem)
 
@@ -61,29 +61,29 @@ class ListItems {
         return true
     }
 
-    /* Add a label : sublabel pair at the start */
+    /* Add a label : content pair at the start */
     fun add(listItem: ListItem): Boolean {
         return insert(0, listItem)
     }
 
-    /* Add a label : sublabel pair at the end */
+    /* Add a label : content pair at the end */
     fun addToBack(listItem: ListItem): Boolean {
         return insert(size(), listItem)
     }
 
-    /* Set a label : sublabel pair and preserve its position */
+    /* Set a label : content pair and preserve its position */
     fun set(position: Int, listItem: ListItem) {
         listItems[position] = listItem
         save()
     }
 
-    /* Remove a label : sublabel pair at position */
+    /* Remove a label : content pair at position */
     fun remove(position: Int) {
         listItems.removeAt(position)
         save()
     }
 
-    /* Get a label : sublabel pair at position */
+    /* Get a label : content pair at position */
     fun get(position: Int): ListItem {
         return listItems[position]
     }

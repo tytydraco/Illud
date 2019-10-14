@@ -1,7 +1,7 @@
 package com.draco.illud.utils
 
 class ListItem {
-    private val separator = "\t" /* Separates label from sublabel */
+    private val separator = "\t" /* Separates label from content */
 
     var label: String = ""
     var content: String = ""
