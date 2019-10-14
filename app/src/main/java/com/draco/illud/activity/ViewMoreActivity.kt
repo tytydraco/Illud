@@ -72,8 +72,7 @@ class ViewMoreActivity : AppCompatActivity() {
     /* Do not exit if label is not filled in */
     override fun onBackPressed() {
         /* Only if sublabel is filled but label is blank */
-        if (label.text.isBlank() &&
-            sublabel.text.isNotBlank()) {
+        if (label.text.isBlank()) {
             Snackbar.make(toolbar, "Label must not be blank.", Snackbar.LENGTH_SHORT)
                 .setAction("Dismiss") {}
                 .show()
