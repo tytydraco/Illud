@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         if (success)
             makeSnackbar(bottomAppBar, "Wrote successfully.")
         else
-            makeSnackbar(bottomAppBar, "Write failed; contents may be too large.")
+            makeSnackbar(bottomAppBar, "Contents too large.")
 
         /* Dismiss the non-cancellable dialog for the user */
         dismissWriteContentsAlertDialog()
