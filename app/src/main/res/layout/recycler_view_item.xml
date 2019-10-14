@@ -2,9 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="14dp"
+    android:paddingVertical="18dp"
     android:paddingHorizontal="24dp"
-    android:background="@color/colorPrimary">
+    android:background="@drawable/pill_shape_background"
+    android:layout_marginVertical="8dp"
+    android:layout_marginHorizontal="16dp"
+    android:elevation="4dp">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -26,7 +29,7 @@
         android:textColor="@android:color/black"
         android:paddingStart="?android:attr/listPreferredItemPaddingStart"
         android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
-        android:maxLines="2"
+        android:maxLines="3"
         android:ellipsize="end"
         android:includeFontPadding="false"
         android:layout_toEndOf="@id/bullet" />

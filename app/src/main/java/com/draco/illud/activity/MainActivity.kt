@@ -212,9 +212,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        /* Add dividers */
-        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-
         /* Set adapter */
         viewAdapter = RecyclerViewAdapter(this)
 
