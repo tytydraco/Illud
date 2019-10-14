@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     private fun putUserIntoWriteMode() {
         val builder = AlertDialog.Builder(this)
             .setTitle("Write Nfc Tag")
-            .setMessage("Approach an Nfc tag to write the updated contents to it. Hold it steady until this dialog disappears.")
+            .setMessage("Hold a tag to the back of the device until this dialog disappears.")
             .setNegativeButton("Cancel", null)
             .setOnDismissListener {
                 dismissWriteContentsAlertDialog()
@@ -64,9 +64,9 @@ class MainActivity : AppCompatActivity() {
         val success = Nfc.writeBytes(intent, writeString.toByteArray())
 
         if (success)
-            makeSnackbar(bottomAppBar, "Wrote contents to tag.")
+            makeSnackbar(bottomAppBar, "Wrote successfully.")
         else
-            makeSnackbar(bottomAppBar, "Write failed. Tag may be full.")
+            makeSnackbar(bottomAppBar, "Write failed; contents may be too large.")
 
         /* Dismiss the non-cancellable dialog for the user */
         dismissWriteContentsAlertDialog()
@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
         /* Ask for confirmation, but keep data in memory so tag can be removed */
         AlertDialog.Builder(this)
             .setTitle("Import")
-            .setMessage("Would you like to import items from this tag?")
+            .setMessage("Import items from this tag?")
             .setPositiveButton("Confirm") { _: DialogInterface, _: Int ->
                 /* Splice the card contents and append the list view for the user */
                 val addedSize = listItems.parseJoinedString(String(nfcContent))
