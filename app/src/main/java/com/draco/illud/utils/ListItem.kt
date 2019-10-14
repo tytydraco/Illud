@@ -25,6 +25,7 @@ class ListItem {
             content = splitString[1]!!
     }
 
+    /* Return as coagulated string with separators */
     override fun toString(): String {
         return "${label}${separator}${content}"
     }
