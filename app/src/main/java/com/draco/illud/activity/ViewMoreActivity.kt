@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.draco.illud.R
 import com.draco.illud.utils.listItems
-import com.draco.illud.utils.makeSnackbar
+import com.google.android.material.snackbar.Snackbar
 
 class ViewMoreActivity : AppCompatActivity() {
     /* UI elements */
@@ -73,7 +73,9 @@ class ViewMoreActivity : AppCompatActivity() {
         /* Only if sublabel is filled but label is blank */
         if (label.text.isBlank() &&
             sublabel.text.isNotBlank()) {
-            makeSnackbar(toolbar, "Label must not be blank.")
+            Snackbar.make(toolbar, "Label must not be blank.", Snackbar.LENGTH_SHORT)
+                .setAction("Dismiss") {}
+                .show()
 
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(label.windowToken, 0)

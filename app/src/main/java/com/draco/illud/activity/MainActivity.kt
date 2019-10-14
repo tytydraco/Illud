@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,9 +13,9 @@ import com.draco.illud.recycler_view.DragManageAdapter
 import com.draco.illud.recycler_view.RecyclerViewAdapter
 import com.draco.illud.utils.Nfc
 import com.draco.illud.utils.listItems
-import com.draco.illud.utils.makeSnackbar
 import com.draco.illud.utils.nfc
 import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
     /* UI elements */
@@ -64,9 +63,15 @@ class MainActivity : AppCompatActivity() {
         val success = Nfc.writeBytes(intent, writeString.toByteArray())
 
         if (success)
-            makeSnackbar(bottomAppBar, "Wrote successfully.")
+            Snackbar.make(bottomAppBar, "Wrote successfully.", Snackbar.LENGTH_SHORT)
+                .setAction("Dismiss") {}
+                .setAnchorView(bottomAppBar)
+                .show()
         else
-            makeSnackbar(bottomAppBar, "Contents too large.")
+            Snackbar.make(bottomAppBar, "Contents too large.", Snackbar.LENGTH_SHORT)
+                .setAction("Dismiss") {}
+                .setAnchorView(bottomAppBar)
+                .show()
 
         /* Dismiss the non-cancellable dialog for the user */
         dismissWriteContentsAlertDialog()
@@ -79,7 +84,10 @@ class MainActivity : AppCompatActivity() {
 
         /* Tell user we are blank. */
         if (nfcContent == null || nfcContent.isEmpty()) {
-            makeSnackbar(bottomAppBar, "Tag has no contents.")
+            Snackbar.make(bottomAppBar, "Tag has no contents.", Snackbar.LENGTH_SHORT)
+                .setAction("Dismiss") {}
+                .setAnchorView(bottomAppBar)
+                .show()
             return
         }
 
@@ -108,7 +116,10 @@ class MainActivity : AppCompatActivity() {
             else -> return
         }
 
-        makeSnackbar(bottomAppBar, nfcStateString)
+        Snackbar.make(bottomAppBar, nfcStateString, Snackbar.LENGTH_SHORT)
+            .setAction("Dismiss") {}
+            .setAnchorView(bottomAppBar)
+            .show()
     }
 
     /* Process Nfc tag scan event */
