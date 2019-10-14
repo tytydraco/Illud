@@ -5,11 +5,10 @@ import android.content.SharedPreferences
 
 class ListItems {
     /* Constants */
-    private val separator = "\t" /* Separates label from sublabel */
     private val divider = "\r" /* Separates individual notes */
 
     /* Internal */
-    private var rawItems: ArrayList<String> = arrayListOf()
+    private var listItems: ArrayList<ListItem> = arrayListOf()
 
     /* Shared Preferences */
     private val prefsName = "TagDrivePrefs"
@@ -18,14 +17,16 @@ class ListItems {
 
     /* Coagulate raw items into a single string */
     fun generateJoinedString(): String {
-        return rawItems.joinToString(divider)
+        return listItems.joinToString(divider)
     }
 
     /* Parse raw string and save to rawItems */
     fun parseJoinedString(string: String): Int {
         if (string.isNotBlank()) {
             val split = string.split(divider)
-            rawItems.addAll(0, split)
+            for (item in split)
+                listItems.add(ListItem(item))
+
             save()
             return split.size
         }
@@ -42,7 +43,7 @@ class ListItems {
     /* Restore backed up list items */
     fun load() {
         /* Empty items since we are loading. Do not call clear() due to save() */
-        rawItems.clear()
+        listItems.clear()
         parseJoinedString(prefs.getString("listItems", "")!!)
     }
 
@@ -53,88 +54,48 @@ class ListItems {
     }
 
     /* Insert a label : sublabel pair at position */
-    fun insert(position: Int, label: String, sublabel: String): Boolean {
-        if (label.isNotBlank() && sublabel.isNotBlank())
-            rawItems.add(position, "${label}${separator}${sublabel}")
-        else if (label.isNotBlank())
-            rawItems.add(position, label)
-        else
-            return false
+    fun insert(position: Int, listItem: ListItem): Boolean {
+        listItems.add(position, listItem)
 
         save()
         return true
     }
 
     /* Add a label : sublabel pair at the start */
-    fun add(label: String, sublabel: String): Boolean {
-        return insert(0, label, sublabel)
+    fun add(listItem: ListItem): Boolean {
+        return insert(0, listItem)
     }
 
     /* Add a label : sublabel pair at the end */
-    fun addToBack(label: String, sublabel: String): Boolean {
-        return insert(size(), label, sublabel)
+    fun addToBack(listItem: ListItem): Boolean {
+        return insert(size(), listItem)
     }
 
     /* Set a label : sublabel pair and preserve its position */
-    fun set(position: Int, label: String, sublabel: String) {
-        if (label.isNotBlank() && sublabel.isNotBlank())
-            rawItems[position] = "${label}${separator}${sublabel}"
-        else if (label.isNotBlank())
-            rawItems[position] = label
+    fun set(position: Int, listItem: ListItem) {
+        listItems[position] = listItem
         save()
     }
 
     /* Remove a label : sublabel pair at position */
     fun remove(position: Int) {
-        rawItems.removeAt(position)
+        listItems.removeAt(position)
         save()
     }
 
     /* Get a label : sublabel pair at position */
-    fun get(position: Int): Pair<String, String> {
-        val thisListItem = rawItems[position]
-        val splitItem = thisListItem.split(separator)
-
-        var label = thisListItem
-        var sublabel = ""
-
-        if (splitItem.size == 2) {
-            label = splitItem[0]
-            sublabel = splitItem[1]
-        }
-
-        return Pair(label, sublabel)
+    fun get(position: Int): ListItem {
+        return listItems[position]
     }
 
     /* Clear list items */
     fun clear() {
-        rawItems.clear()
+        listItems.clear()
         save()
     }
 
     /* Return the size of the list */
     fun size(): Int {
-        return rawItems.size
-    }
-
-    /* Return label : sublabel for each list item */
-    fun parseListItems(): Pair<ArrayList<String>, ArrayList<String>> {
-        val labels = arrayListOf<String>()
-        val sublabels = arrayListOf<String>()
-
-        for (listItem in rawItems) {
-            val splitItems = listItem.split(separator)
-            if (splitItems.size == 2) {
-                val label = splitItems[0]
-                val sublabel = splitItems[1]
-                labels.add(label)
-                sublabels.add(sublabel)
-            } else {
-                labels.add(listItem)
-                sublabels.add("")
-            }
-        }
-
-        return Pair(labels, sublabels)
+        return listItems.size
     }
 }

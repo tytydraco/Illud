@@ -8,6 +8,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.draco.illud.R
+import com.draco.illud.utils.ListItem
 import com.draco.illud.utils.listItems
 import com.google.android.material.snackbar.Snackbar
 
@@ -95,12 +96,14 @@ class ViewMoreActivity : AppCompatActivity() {
         if (deleted)
             return
 
+        val item = ListItem(label.text.toString(), sublabel.text.toString())
+
         if (position == -1) {
-            listItems.add(label.text.toString(), sublabel.text.toString())
+            listItems.add(item)
 
             /* The new location of our item is at 0. Prevents item from being recreated */
             position = 0
         } else
-            listItems.set(position, label.text.toString(), sublabel.text.toString())
+            listItems.set(position, item)
     }
 }

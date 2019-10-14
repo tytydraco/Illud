@@ -24,17 +24,15 @@ class DragManageAdapter(
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int)
     {
         val position = viewHolder.adapterPosition
+        val targetItem = listItems.get(position)
         if (direction == ItemTouchHelper.RIGHT) {
-            /* Delete Item */
-            val deletedItem = listItems.get(position)
-
             listItems.remove(position)
             adapter.notifyItemRemoved(position)
 
             /* Allow user to undo item deletion temporarily */
             Snackbar.make(bottomAppBar, "Deleted item.", Snackbar.LENGTH_LONG)
                 .setAction("Undo") {
-                    listItems.insert(position, deletedItem.first, deletedItem.second)
+                    listItems.insert(position, targetItem)
                     adapter.notifyItemInserted(position)
                 }
                 .setAnchorView(bottomAppBar)
@@ -42,19 +40,15 @@ class DragManageAdapter(
         } else if (direction == ItemTouchHelper.LEFT) {
             /* Send first item to back, else to front */
             if (position == 0) {
-                val targetItem = listItems.get(position)
-
                 /* To back */
                 listItems.remove(position)
-                listItems.addToBack(targetItem.first, targetItem.second)
+                listItems.addToBack(targetItem)
                 adapter.notifyItemRemoved(position)
                 adapter.notifyItemInserted(listItems.size())
             } else {
-                val targetItem = listItems.get(position)
-
                 /* To front */
                 listItems.remove(position)
-                listItems.insert(0, targetItem.first, targetItem.second)
+                listItems.insert(0, targetItem)
                 adapter.notifyItemRemoved(position)
                 adapter.notifyItemInserted(0)
             }

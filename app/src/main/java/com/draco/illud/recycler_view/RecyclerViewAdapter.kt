@@ -39,24 +39,16 @@ class RecyclerViewAdapter(
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
                 val oldItem = listItems.get(i + 1)
-                val oldLabel = oldItem.first
-                val oldSublabel = oldItem.second
                 val newItem = listItems.get(i)
-                val newLabel = newItem.first
-                val newSublabel = newItem.second
-                listItems.set(i + 1, newLabel, newSublabel)
-                listItems.set(i, oldLabel, oldSublabel)
+                listItems.set(i + 1, newItem)
+                listItems.set(i, oldItem)
             }
         } else {
             for (i in fromPosition..toPosition + 1) {
                 val oldItem = listItems.get(i - 1)
-                val oldLabel = oldItem.first
-                val oldSublabel = oldItem.second
                 val newItem = listItems.get(i)
-                val newLabel = newItem.first
-                val newSublabel = newItem.second
-                listItems.set(i - 1, newLabel, newSublabel)
-                listItems.set(i, oldLabel, oldSublabel)
+                listItems.set(i - 1, newItem)
+                listItems.set(i, oldItem)
             }
         }
 
@@ -67,7 +59,7 @@ class RecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = listItems.get(position)
         /* Use alternative icon if there is a sublabel */
-        val drawable = if (item.second.isBlank())
+        val drawable = if (item.content.isBlank())
             context.getDrawable(R.drawable.ic_chevron_right_black_24dp)
         else
             context.getDrawable(R.drawable.ic_short_text_black_24dp)
@@ -75,7 +67,7 @@ class RecyclerViewAdapter(
         holder.bullet.setImageDrawable(drawable)
 
         /* Set the text */
-        holder.label.text = item.first
+        holder.label.text = item.label
 
         /* Set the external click listener */
         holder.itemView.setOnClickListener {
@@ -84,8 +76,8 @@ class RecyclerViewAdapter(
             val updatedItem = listItems.get(updatedPosition)
 
             /* Fetch new and updated label information */
-            val label = updatedItem.first
-            val sublabel = updatedItem.second
+            val label = updatedItem.label
+            val sublabel = updatedItem.content
 
             /* Start the ViewMore activity when we click an item */
             val intent = Intent(context, ViewMoreActivity::class.java)
