@@ -2,21 +2,20 @@ package com.draco.illud.activity
 
 import android.content.Context
 import android.os.Bundle
-import android.view.Menu
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.draco.illud.R
 import com.draco.illud.utils.listItems
 import com.draco.illud.utils.makeSnackbar
-import com.google.android.material.bottomappbar.BottomAppBar
 
 class ViewMoreActivity : AppCompatActivity() {
     /* UI elements */
     private lateinit var label: EditText
     private lateinit var sublabel: EditText
-    private lateinit var bottomAppBar: BottomAppBar
+    private lateinit var toolbar: Toolbar
 
     /* Internal */
     private var position = -1
@@ -35,16 +34,16 @@ class ViewMoreActivity : AppCompatActivity() {
         position = intent.getIntExtra("position", -1)
         label = findViewById(R.id.label)
         sublabel = findViewById(R.id.sublabel)
-        bottomAppBar = findViewById(R.id.bottom_app_bar)
+        toolbar = findViewById(R.id.toolbar)
+        toolbar.inflateMenu(R.menu.menu_view_more)
 
         /* Use proper menu */
-        bottomAppBar.replaceMenu(R.menu.menu_view_more)
-        bottomAppBar.setNavigationOnClickListener {
+        toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
 
         /* Menu item actions */
-        bottomAppBar.setOnMenuItemClickListener {
+        toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.delete -> {
                     if (position != -1)
@@ -69,18 +68,12 @@ class ViewMoreActivity : AppCompatActivity() {
         }
     }
 
-    /* Add back button support */
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
-
     /* Do not exit if label is not filled in */
     override fun onBackPressed() {
         /* Only if sublabel is filled but label is blank */
         if (label.text.isBlank() &&
             sublabel.text.isNotBlank()) {
-            makeSnackbar(bottomAppBar, "Label must not be blank.")
+            makeSnackbar(toolbar, "Label must not be blank.")
 
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(label.windowToken, 0)
@@ -90,12 +83,6 @@ class ViewMoreActivity : AppCompatActivity() {
         }
 
         super.onBackPressed()
-    }
-
-    /* Inflate top menu buttons */
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_view_more, menu)
-        return true
     }
 
     /* Save contents on exit */
