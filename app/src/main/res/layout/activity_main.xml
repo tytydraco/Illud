@@ -5,18 +5,19 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".activity.MainActivity">
+    tools:context=".activity.MainActivity"
+    android:clipChildren="false">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/bottom_app_bar_coordinator"
+        android:layout_above="@id/bottom_app_bar_coordinator"
         android:layout_alignParentTop="true" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/bottom_app_bar_coordinator"
         android:layout_alignParentBottom="true">
         <com.google.android.material.bottomappbar.BottomAppBar
