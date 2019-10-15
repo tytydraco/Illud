@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/bottom_app_bar_coordinator"
-        android:paddingBottom="16dp"
+        android:paddingVertical="12dp"
         android:clipToPadding="false"
         android:layout_alignParentTop="true" />
 

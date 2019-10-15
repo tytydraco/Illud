@@ -2,6 +2,8 @@ package com.draco.illud.activity
 
 import android.content.Context
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -16,7 +18,6 @@ class ViewMoreActivity : AppCompatActivity() {
     /* UI elements */
     private lateinit var label: EditText
     private lateinit var content: EditText
-    private lateinit var toolbar: Toolbar
 
     /* Internal */
     private var position = -1
@@ -27,6 +28,10 @@ class ViewMoreActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.view_more_activity)
 
+        /* Allow back button functionality */
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+        /* Don't put a title */
         title = ""
 
         val labelText = intent.getStringExtra("label")
@@ -35,28 +40,6 @@ class ViewMoreActivity : AppCompatActivity() {
         position = intent.getIntExtra("position", -1)
         label = findViewById(R.id.label)
         content = findViewById(R.id.content)
-        toolbar = findViewById(R.id.toolbar)
-        toolbar.inflateMenu(R.menu.menu_view_more)
-
-        /* Use proper menu */
-        toolbar.setNavigationOnClickListener {
-            onBackPressed()
-        }
-
-        /* Menu item actions */
-        toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.delete -> {
-                    if (position != -1)
-                        listItems.remove(position)
-
-                    deleted = true
-                    finish()
-                    true
-                }
-                else -> false
-            }
-        }
 
         /* Set the labels based on what was given to us */
         label.setText(labelText)
@@ -69,11 +52,38 @@ class ViewMoreActivity : AppCompatActivity() {
         }
     }
 
+    /* Setup the toolbar back button */
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onNavigateUp()
+    }
+
+    /* Setup toolbar */
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_view_more, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    /* Setup toolbar menu actions */
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item!!.itemId) {
+            R.id.delete -> {
+                if (position != -1)
+                    listItems.remove(position)
+
+                deleted = true
+                finish()
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
     /* Do not exit if label is not filled in */
     override fun onBackPressed() {
         /* Only if content is filled but label is blank */
         if (label.text.isBlank()) {
-            Snackbar.make(toolbar, "Label must not be blank.", Snackbar.LENGTH_SHORT)
+            Snackbar.make(content, "Label must not be blank.", Snackbar.LENGTH_SHORT)
                 .setAction("Dismiss") {}
                 .show()
 
