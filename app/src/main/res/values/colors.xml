@@ -3,5 +3,5 @@
     <!-- Application Colors -->
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#222222</color>
-    <color name="colorAccent">#000000</color>
+    <color name="colorAccent">#03a9f4</color>
 </resources>
