@@ -101,8 +101,8 @@ class ViewMoreActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
 
-        /* Don't do auto-save if we press delete */
-        if (deleted)
+        /* Don't do auto-save if we press delete or if no label */
+        if (deleted || label.text.toString().isBlank())
             return
 
         val item = ListItem(label.text.toString(), content.text.toString())
