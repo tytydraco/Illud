@@ -15,6 +15,7 @@ import com.draco.illud.utils.Nfc
 import com.draco.illud.utils.listItems
 import com.draco.illud.utils.nfc
 import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewAdapter: RecyclerViewAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var bottomAppBar: BottomAppBar
+    private lateinit var addNew: FloatingActionButton
 
     /* Internal */
     private var writeContentsAlertDialog: AlertDialog? = null /* Alert dialog for when user writes to car */
@@ -187,10 +189,13 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recycler_view)
         viewManager = LinearLayoutManager(this)
         bottomAppBar = findViewById(R.id.bottom_app_bar)
+        addNew = findViewById(R.id.add_new)
 
         /* Use proper menu */
         bottomAppBar.replaceMenu(R.menu.menu_main)
-        bottomAppBar.setNavigationOnClickListener {
+
+        /* Add new item */
+        addNew.setOnClickListener {
             startActivity(Intent(this, ViewMoreActivity::class.java))
         }
 
