@@ -63,17 +63,15 @@ class MainActivity : AppCompatActivity() {
 
         /* Write contents as compressed bytes */
         val success = Nfc.writeBytes(intent, writeString.toByteArray())
-
-        if (success)
-            Snackbar.make(addNew, "Wrote successfully.", Snackbar.LENGTH_SHORT)
-                .setAction("Dismiss") {}
-                .setAnchorView(bottomAppBar)
-                .show()
+        val message = if (success)
+            "Wrote successfully."
         else
-            Snackbar.make(addNew, "Contents too large.", Snackbar.LENGTH_SHORT)
-                .setAction("Dismiss") {}
-                .setAnchorView(bottomAppBar)
-                .show()
+            "Contents too large."
+
+        Snackbar.make(addNew, message, Snackbar.LENGTH_SHORT)
+            .setAction("Dismiss") {}
+            .setAnchorView(bottomAppBar)
+            .show()
 
         /* Dismiss the non-cancellable dialog for the user */
         dismissWriteContentsAlertDialog()
