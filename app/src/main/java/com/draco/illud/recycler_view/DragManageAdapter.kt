@@ -1,13 +1,13 @@
 package com.draco.illud.recycler_view
 
+import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.draco.illud.utils.listItems
-import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.snackbar.Snackbar
 
 class DragManageAdapter(
-    private val bottomAppBar: BottomAppBar,
+    private val snackbarAnchor: View,
     private var adapter: RecyclerViewAdapter,
     dragDirs: Int,
     swipeDirs: Int):
@@ -30,12 +30,12 @@ class DragManageAdapter(
             adapter.notifyItemRemoved(position)
 
             /* Allow user to undo item deletion temporarily */
-            Snackbar.make(bottomAppBar, "Deleted item.", Snackbar.LENGTH_LONG)
+            Snackbar.make(snackbarAnchor, "Deleted item.", Snackbar.LENGTH_LONG)
                 .setAction("Undo") {
                     listItems.insert(position, targetItem)
                     adapter.notifyItemInserted(position)
                 }
-                .setAnchorView(bottomAppBar)
+                .setAnchorView(snackbarAnchor)
                 .show()
         } else if (direction == ItemTouchHelper.LEFT) {
             /* Send first item to back, else to front */

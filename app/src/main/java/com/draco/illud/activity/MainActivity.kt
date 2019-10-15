@@ -65,12 +65,12 @@ class MainActivity : AppCompatActivity() {
         val success = Nfc.writeBytes(intent, writeString.toByteArray())
 
         if (success)
-            Snackbar.make(bottomAppBar, "Wrote successfully.", Snackbar.LENGTH_SHORT)
+            Snackbar.make(addNew, "Wrote successfully.", Snackbar.LENGTH_SHORT)
                 .setAction("Dismiss") {}
                 .setAnchorView(bottomAppBar)
                 .show()
         else
-            Snackbar.make(bottomAppBar, "Contents too large.", Snackbar.LENGTH_SHORT)
+            Snackbar.make(addNew, "Contents too large.", Snackbar.LENGTH_SHORT)
                 .setAction("Dismiss") {}
                 .setAnchorView(bottomAppBar)
                 .show()
@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
 
         /* Tell user we are blank. */
         if (nfcContent == null || nfcContent.isEmpty()) {
-            Snackbar.make(bottomAppBar, "Tag has no contents.", Snackbar.LENGTH_SHORT)
+            Snackbar.make(addNew, "Tag has no contents.", Snackbar.LENGTH_SHORT)
                 .setAction("Dismiss") {}
                 .setAnchorView(bottomAppBar)
                 .show()
@@ -118,7 +118,7 @@ class MainActivity : AppCompatActivity() {
             else -> return
         }
 
-        Snackbar.make(bottomAppBar, nfcStateString, Snackbar.LENGTH_SHORT)
+        Snackbar.make(addNew, nfcStateString, Snackbar.LENGTH_SHORT)
             .setAction("Dismiss") {}
             .setAnchorView(bottomAppBar)
             .show()
@@ -242,7 +242,7 @@ class MainActivity : AppCompatActivity() {
 
         /* Setup drag and drop handler */
         val callback = DragManageAdapter(
-            bottomAppBar,
+            addNew,
             viewAdapter,
             ItemTouchHelper.UP or
             ItemTouchHelper.DOWN,
