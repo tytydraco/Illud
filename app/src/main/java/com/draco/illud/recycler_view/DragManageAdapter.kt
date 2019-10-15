@@ -1,14 +1,17 @@
 package com.draco.illud.recycler_view
 
+import android.os.Handler
 import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.draco.illud.utils.listItems
 import com.google.android.material.snackbar.Snackbar
 
 class DragManageAdapter(
     private val snackbarAnchor: View,
     private var adapter: RecyclerViewAdapter,
+    private var recyclerView: RecyclerView,
     dragDirs: Int,
     swipeDirs: Int):
     ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs)
@@ -44,13 +47,15 @@ class DragManageAdapter(
                 listItems.remove(position)
                 listItems.addToBack(targetItem)
                 adapter.notifyItemRemoved(position)
-                adapter.notifyItemInserted(listItems.size())
+                adapter.notifyItemInserted(listItems.size() - 1)
+                recyclerView.scrollToPosition(listItems.size() - 1)
             } else {
                 /* To front */
                 listItems.remove(position)
                 listItems.insert(0, targetItem)
                 adapter.notifyItemRemoved(position)
                 adapter.notifyItemInserted(0)
+                recyclerView.scrollToPosition(0)
             }
         }
     }

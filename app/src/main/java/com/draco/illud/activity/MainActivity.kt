@@ -242,6 +242,7 @@ class MainActivity : AppCompatActivity() {
         val callback = DragManageAdapter(
             addNew,
             viewAdapter,
+            recyclerView,
             ItemTouchHelper.UP or
             ItemTouchHelper.DOWN,
             ItemTouchHelper.RIGHT or
