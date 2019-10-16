@@ -22,18 +22,19 @@ class MainActivity : AppCompatActivity() {
     /* UI elements */
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerViewAdapter
-    private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var viewLayoutManager: RecyclerView.LayoutManager
     private lateinit var bottomAppBar: BottomAppBar
     private lateinit var addNew: FloatingActionButton
 
     /* Internal */
-    private var writeContentsAlertDialog: AlertDialog? = null /* Alert dialog for when user writes to car */
-    private var swapContentsAlertDialog: AlertDialog? = null /* Alert dialog for when user swaps with car */
-    private var tagWriteMode = false /* When the next tag is scanned, should we write to it? */
-    private var tagSwapMode = false /* When the next tag is scanned, should we swap with it? */
+    private var writeContentsAlertDialog: AlertDialog? = null
+    private var swapContentsAlertDialog: AlertDialog? = null
+    private var tagWriteMode = false
+    private var tagSwapMode = false
 
     /* Put the user into write mode (locks UI until scan) */
     private fun putUserIntoWriteMode() {
+        /* Lock the UI for the user */
         val builder = AlertDialog.Builder(this)
             .setTitle("Write Nfc Tag")
             .setMessage("Hold a tag to the back of the device until this dialog disappears.")
@@ -51,6 +52,7 @@ class MainActivity : AppCompatActivity() {
 
     /* Put the user into swap mode (locks UI until scan) */
     private fun putUserIntoSwapMode() {
+        /* Lock the UI for the user */
         val builder = AlertDialog.Builder(this)
             .setTitle("Swap With Nfc Tag")
             .setMessage("Hold a tag to the back of the device until this dialog disappears.")
@@ -84,6 +86,7 @@ class MainActivity : AppCompatActivity() {
         tagSwapMode = false
     }
 
+    /* Swap contents of card and local list */
     private fun nfcSwap(intent: Intent) {
         /* Store everything in the first NDEF record */
         val writeString = listItems.generateJoinedString()
@@ -98,6 +101,7 @@ class MainActivity : AppCompatActivity() {
         /* Write contents as compressed bytes */
         val success = Nfc.writeBytes(intent, writeString.toByteArray())
 
+        /* If we were able to write to the tag, overwrite our list */
         if (success) {
             /* Splice the card contents and append the list view for the user */
             viewAdapter.notifyItemRangeRemoved(0, listItems.size())
@@ -110,6 +114,7 @@ class MainActivity : AppCompatActivity() {
             recyclerView.scrollToPosition(0)
         }
 
+        /* Based on our result, show a special message */
         val message = if (success)
             "Swapped successfully."
         else
@@ -131,6 +136,8 @@ class MainActivity : AppCompatActivity() {
 
         /* Write contents as compressed bytes */
         val success = Nfc.writeBytes(intent, writeString.toByteArray())
+
+        /* Based on our result, show a special message */
         val message = if (success)
             "Wrote successfully."
         else
@@ -178,6 +185,7 @@ class MainActivity : AppCompatActivity() {
 
     /* Tell the user to check device compatibility */
     private fun warnUserAboutNfcStatus(nfcState: Nfc.State) {
+        /* Based on our Nfc status, show a special message */
         val nfcStateString = when (nfcState) {
             Nfc.State.SUPPORTED_OFF -> "Please enable Nfc."
             Nfc.State.UNSUPPORTED -> "This device lacks Nfc."
@@ -191,7 +199,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /* Process Nfc tag scan event */
-    private fun nfcTagScanHandler() {
+    private fun processNfcTagScanned() {
         if (intent != null && Nfc.startedByNDEF(intent)) {
             when {
                 tagWriteMode -> nfcWrite(intent)
@@ -229,7 +237,7 @@ class MainActivity : AppCompatActivity() {
         intent = thisIntent
 
         /* Call Nfc tag handler if we are sure this is an Nfc scan */
-        nfcTagScanHandler()
+        processNfcTagScanned()
     }
 
     /* Occurs on application start */
@@ -254,7 +262,7 @@ class MainActivity : AppCompatActivity() {
 
         /* Setup UI elements */
         recyclerView = findViewById(R.id.recycler_view)
-        viewManager = LinearLayoutManager(this)
+        viewLayoutManager = LinearLayoutManager(this)
         bottomAppBar = findViewById(R.id.bottom_app_bar)
         addNew = findViewById(R.id.add_new)
 
@@ -306,13 +314,16 @@ class MainActivity : AppCompatActivity() {
 
         /* Set adapter */
         viewAdapter = RecyclerViewAdapter(
+            /* This includes context */
             recyclerView,
+
+            /* Our add button as a snackbar anchor */
             addNew
         )
 
         /* Update the recycler view */
         recyclerView.apply {
-            layoutManager = viewManager
+            layoutManager = viewLayoutManager
             adapter = viewAdapter
         }
 
@@ -321,17 +332,19 @@ class MainActivity : AppCompatActivity() {
 
         /* Setup drag and drop handler */
         val callback = DragManageAdapter(
+            /* Our add button as a snackbar anchor */
             addNew,
             viewAdapter,
             recyclerView,
-            ItemTouchHelper.UP or
-            ItemTouchHelper.DOWN,
-            ItemTouchHelper.RIGHT or
-                    ItemTouchHelper.LEFT)
-        val helper = ItemTouchHelper(callback)
-        helper.attachToRecyclerView(recyclerView)
+            /* Supported vertical directions */
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            /* Supported horizontal directions */
+            ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT)
+
+        /* Create and attach our drag and drop handler */
+        ItemTouchHelper(callback).attachToRecyclerView(recyclerView)
 
         /* Check if we opened the app due to a Nfc event */
-        nfcTagScanHandler()
+        processNfcTagScanned()
     }
 }
