@@ -41,17 +41,14 @@
         android:id="@+id/tag"
         style="@style/TextAppearance.AppCompat.Medium"
         android:textSize="14sp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
         android:textAlignment="center"
-        android:layout_marginHorizontal="12dp"
-        android:paddingVertical="4dp"
-        android:paddingHorizontal="12dp"
+        android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+        android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
         android:ellipsize="end"
         android:maxLines="1"
-        android:background="@drawable/pill_shape_tag_background"
         android:includeFontPadding="false"
         android:layout_below="@id/label"
-        android:layout_toEndOf="@id/bullet"
-        android:elevation="4dp"/>
+        android:layout_toEndOf="@id/bullet"/>
 
 </RelativeLayout>
