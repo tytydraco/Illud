@@ -13,8 +13,11 @@ import android.nfc.tech.Ndef
 class Nfc {
     /* Device Nfc State */
     enum class State {
+        /* Device lacks Nfc support on a hardware level */
         UNSUPPORTED,
+        /* The device supports Nfc, but it is currently off */
         SUPPORTED_OFF,
+        /* The device supports Nfc, and it is currently on */
         SUPPORTED_ON
     }
 
@@ -141,9 +144,7 @@ class Nfc {
             return
 
         /* Disable scanning while app is closed */
-        nfcAdapter?.disableForegroundDispatch(
-            activity
-        )
+        nfcAdapter?.disableForegroundDispatch(activity)
     }
 
     /* Try to register the Nfc adapter */
