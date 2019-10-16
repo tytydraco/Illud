@@ -35,37 +35,35 @@ class ViewMoreActivity : AppCompatActivity() {
         /* Don't put a title */
         title = ""
 
+        /* Import the item that was passed to us as a raw string */
         val itemString = intent.getStringExtra("itemString")
+        position = intent.getIntExtra("position", -1)
         val thisItem = ListItem(itemString)
 
-        val labelText = thisItem.label
-        val contentText = thisItem.content
-        val tagText = thisItem.tag
-
-        position = intent.getIntExtra("position", -1)
+        /* Setup our local UI elements */
         label = findViewById(R.id.label)
         content = findViewById(R.id.content)
         tag = findViewById(R.id.tag)
 
         /* Set the labels based on what was given to us */
-        label.setText(labelText)
-        content.setText(contentText)
-        tag.setText(tagText)
+        label.setText(thisItem.label)
+        content.setText(thisItem.content)
+        tag.setText(thisItem.tag)
 
-        /* Start editing label if this is a new item */
+        /* Start editing label if this is a new item (position == -1) */
         if (position == -1) {
             label.requestFocus()
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         }
     }
 
-    /* Setup the toolbar back button */
+    /* Simulate back button press on navigation icon click */
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onNavigateUp()
     }
 
-    /* Setup toolbar */
+    /* Setup and inflate toolbar */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_view_more, menu)
         return super.onCreateOptionsMenu(menu)
@@ -75,10 +73,14 @@ class ViewMoreActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             R.id.delete -> {
+                /* Don't actually delete anything if we are a brand new item */
                 if (position != -1)
                     listItems.remove(position)
 
+                /* Tell override functions that we already finished deleting */
                 deleted = true
+
+                /* Close activity */
                 finish()
             }
             R.id.share -> run {
@@ -86,10 +88,10 @@ class ViewMoreActivity : AppCompatActivity() {
                 val contentText = content.text.toString()
 
                 val sendText = when {
-                    /* First choice */
+                    /* First choice is content */
                     contentText.isNotBlank() -> contentText
 
-                    /* Second choice */
+                    /* Second choice is label */
                     labelText.isNotBlank() -> labelText
 
                     /* Fail safe */
@@ -98,6 +100,7 @@ class ViewMoreActivity : AppCompatActivity() {
                             .setAction("Dismiss") {}
                             .show()
 
+                        /* Dismiss keyboard to show snackbar */
                         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(label.windowToken, 0)
                         imm.hideSoftInputFromWindow(content.windowToken, 0)
@@ -107,7 +110,7 @@ class ViewMoreActivity : AppCompatActivity() {
                     }
                 }
 
-                /* Open send-to dialog */
+                /* Open send-to dialog with our copy text */
                 val shareIntent = Intent()
                 shareIntent.action = Intent.ACTION_SEND
                 shareIntent.type="text/plain"
@@ -127,6 +130,7 @@ class ViewMoreActivity : AppCompatActivity() {
                 .setAction("Dismiss") {}
                 .show()
 
+            /* Dismiss keyboard to show snackbar */
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(label.windowToken, 0)
             imm.hideSoftInputFromWindow(content.windowToken, 0)
@@ -146,12 +150,14 @@ class ViewMoreActivity : AppCompatActivity() {
         if (deleted || label.text.toString().isBlank())
             return
 
+        /* Create a ListItem based on our user-inputted contents */
         val item = ListItem(
             label.text.toString(),
             content.text.toString(),
             tag.text.toString()
         )
 
+        /* If this is a new item, add it. Otherwise, just overwrite current item */
         if (position == -1) {
             listItems.add(item)
 
