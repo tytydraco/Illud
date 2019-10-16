@@ -20,6 +20,7 @@ class RecyclerViewAdapter(
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val bullet = view.findViewById<ImageView>(R.id.bullet)!!
         val label = view.findViewById<TextView>(R.id.label)!!
+        val tag = view.findViewById<TextView>(R.id.tag)!!
     }
 
     /* Inflate our rows for each item */
@@ -68,6 +69,13 @@ class RecyclerViewAdapter(
 
         /* Set the text */
         holder.label.text = item.label
+        holder.tag.text = item.tag
+
+        /* If tag has no contents, remove from view */
+        if (holder.tag.text.isBlank())
+            holder.tag.visibility = View.GONE
+        else
+            holder.tag.visibility = View.VISIBLE
 
         /* Set the external click listener */
         holder.itemView.setOnClickListener {
@@ -75,14 +83,9 @@ class RecyclerViewAdapter(
             val updatedPosition = holder.adapterPosition
             val updatedItem = listItems.get(updatedPosition)
 
-            /* Fetch new and updated label information */
-            val label = updatedItem.label
-            val content = updatedItem.content
-
             /* Start the ViewMore activity when we click an item */
             val intent = Intent(context, ViewMoreActivity::class.java)
-                .putExtra("label", label)
-                .putExtra("content", content)
+                .putExtra("itemString", updatedItem.toString())
                 .putExtra("position", updatedPosition)
             context.startActivity(intent)
         }

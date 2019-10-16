@@ -5,20 +5,24 @@ class ListItem {
 
     var label: String = ""
     var content: String = ""
+    var tag: String = ""
 
     /* Input each item individually */
     constructor(setLabel: String?,
-                 setContent: String?) {
+                setContent: String?,
+                setTag: String?) {
         if (!setLabel.isNullOrBlank())
             label = setLabel
         if (!setContent.isNullOrBlank())
             content = setContent
+        if (!setTag.isNullOrBlank())
+            tag = setTag
     }
 
     /* Import as coagulated string with separators */
-    constructor(rawString: String) {
+    constructor(rawString: String?) {
         /* Nothing in the string */
-        if (rawString.isBlank())
+        if (rawString == null || rawString.isBlank())
             return
 
         val splitString: List<String> = rawString.split(separator)
@@ -27,10 +31,12 @@ class ListItem {
             label = splitString[0]
         if (splitString.size > 1 && !splitString[1].isBlank())
             content = splitString[1]
+        if (splitString.size > 2 && !splitString[2].isBlank())
+            tag = splitString[2]
     }
 
     /* Return as coagulated string with separators */
     override fun toString(): String {
-        return "${label}${separator}${content}"
+        return "${label}${separator}${content}${separator}${tag}"
     }
 }

@@ -21,11 +21,14 @@ class ListItems {
     }
 
     /* Parse raw string and save to rawItems */
-    fun parseJoinedString(string: String): Int {
+    fun parseJoinedString(string: String, toBack: Boolean = false): Int {
         if (string.isNotBlank()) {
             val split = string.split(divider)
             for (item in split)
-                add(ListItem(item))
+                if (toBack)
+                    addToBack(ListItem(item))
+                else
+                    add(ListItem(item))
 
             save()
             return split.size
@@ -44,7 +47,7 @@ class ListItems {
     fun load() {
         /* Empty items since we are loading. Do not call clear() due to save() */
         listItems.clear()
-        parseJoinedString(prefs.getString("listItems", "")!!)
+        parseJoinedString(prefs.getString("listItems", "")!!, true)
     }
 
     /* Setup shared preferences */

@@ -12,6 +12,7 @@
     <!-- Label hint strings -->
     <string name="hint_label">Title</string>
     <string name="hint_content">Content</string>
+    <string name="hint_tag">Tag</string>
 
     <!-- Misc strings -->
     <string name="bullet">Bullet</string>

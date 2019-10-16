@@ -18,6 +18,7 @@ class ViewMoreActivity : AppCompatActivity() {
     /* UI elements */
     private lateinit var label: EditText
     private lateinit var content: EditText
+    private lateinit var tag: EditText
 
     /* Internal */
     private var position = -1
@@ -34,16 +35,22 @@ class ViewMoreActivity : AppCompatActivity() {
         /* Don't put a title */
         title = ""
 
-        val labelText = intent.getStringExtra("label")
-        val contentText = intent.getStringExtra("content")
+        val itemString = intent.getStringExtra("itemString")
+        val thisItem = ListItem(itemString)
+
+        val labelText = thisItem.label
+        val contentText = thisItem.content
+        val tagText = thisItem.tag
 
         position = intent.getIntExtra("position", -1)
         label = findViewById(R.id.label)
         content = findViewById(R.id.content)
+        tag = findViewById(R.id.tag)
 
         /* Set the labels based on what was given to us */
         label.setText(labelText)
         content.setText(contentText)
+        tag.setText(tagText)
 
         /* Start editing label if this is a new item */
         if (position == -1) {
@@ -94,6 +101,7 @@ class ViewMoreActivity : AppCompatActivity() {
                         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(label.windowToken, 0)
                         imm.hideSoftInputFromWindow(content.windowToken, 0)
+                        imm.hideSoftInputFromWindow(tag.windowToken, 0)
 
                         return@run
                     }
@@ -122,6 +130,7 @@ class ViewMoreActivity : AppCompatActivity() {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(label.windowToken, 0)
             imm.hideSoftInputFromWindow(content.windowToken, 0)
+            imm.hideSoftInputFromWindow(tag.windowToken, 0)
 
             return
         }
@@ -137,7 +146,11 @@ class ViewMoreActivity : AppCompatActivity() {
         if (deleted || label.text.toString().isBlank())
             return
 
-        val item = ListItem(label.text.toString(), content.text.toString())
+        val item = ListItem(
+            label.text.toString(),
+            content.text.toString(),
+            tag.text.toString()
+        )
 
         if (position == -1) {
             listItems.add(item)
