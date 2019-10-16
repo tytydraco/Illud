@@ -2,6 +2,6 @@
 <resources>
     <!-- Application Colors -->
     <color name="colorPrimary">#ffffff</color>
-    <color name="colorPrimaryDark">#cccccc</color>
+    <color name="colorPrimaryDark">#dddddd</color>
     <color name="colorAccent">#03a9f4</color>
 </resources>
