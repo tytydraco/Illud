@@ -30,6 +30,7 @@
         android:src="@drawable/ic_add_black_24dp"
         app:layout_anchor="@id/bottom_app_bar"
         app:backgroundTint="@color/colorAccent"
+        app:tint="@color/colorPrimary"
         android:id="@+id/add_new" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
