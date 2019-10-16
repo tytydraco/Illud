@@ -305,7 +305,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         /* Set adapter */
-        viewAdapter = RecyclerViewAdapter(this, addNew)
+        viewAdapter = RecyclerViewAdapter(
+            this,
+            recyclerView,
+            addNew
+        )
 
         /* Update the recycler view */
         recyclerView.apply {

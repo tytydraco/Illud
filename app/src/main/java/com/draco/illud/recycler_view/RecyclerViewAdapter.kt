@@ -15,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 
 class RecyclerViewAdapter(
     private val context: Context,
+    private val recyclerView: RecyclerView,
     private val snackbarAnchor: View):
     RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
@@ -74,6 +75,7 @@ class RecyclerViewAdapter(
                 .setAction("Undo") {
                     listItems.insert(updatedPosition, updatedItem)
                     notifyItemInserted(updatedPosition)
+                    recyclerView.scrollToPosition(position)
                 }
                 .setAnchorView(snackbarAnchor)
                 .show()

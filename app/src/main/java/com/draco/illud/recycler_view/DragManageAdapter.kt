@@ -35,6 +35,7 @@ class DragManageAdapter(
                 .setAction("Undo") {
                     listItems.insert(position, targetItem)
                     adapter.notifyItemInserted(position)
+                    recyclerView.scrollToPosition(position)
                 }
                 .setAnchorView(snackbarAnchor)
                 .show()
