@@ -17,12 +17,16 @@ class ListItem {
 
     /* Import as coagulated string with separators */
     constructor(rawString: String) {
-        val splitString: List<String?> = rawString.split(separator)
+        /* Nothing in the string */
+        if (rawString.isBlank())
+            return
 
-        if (!splitString[0].isNullOrBlank())
-            label = splitString[0]!!
-        if (!splitString[1].isNullOrBlank())
-            content = splitString[1]!!
+        val splitString: List<String> = rawString.split(separator)
+
+        if (!splitString[0].isBlank())
+            label = splitString[0]
+        if (splitString.size > 1 && !splitString[1].isBlank())
+            content = splitString[1]
     }
 
     /* Return as coagulated string with separators */

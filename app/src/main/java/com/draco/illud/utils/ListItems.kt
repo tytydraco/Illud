@@ -25,7 +25,7 @@ class ListItems {
         if (string.isNotBlank()) {
             val split = string.split(divider)
             for (item in split)
-                listItems.add(ListItem(item))
+                add(ListItem(item))
 
             save()
             return split.size
