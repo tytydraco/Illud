@@ -107,10 +107,11 @@ class MainActivity : AppCompatActivity() {
             viewAdapter.notifyItemRangeRemoved(0, listItems.size())
             listItems.clear()
 
-            val addedSize = listItems.parseJoinedString(String(nfcContent))
+            val nfcItems = listItems.parseJoinedString(String(nfcContent))
+            listItems.addAll(nfcItems)
 
             /* Append data and scroll up to new data */
-            viewAdapter.notifyItemRangeInserted(0, addedSize)
+            viewAdapter.notifyItemRangeInserted(0, nfcItems.size)
             recyclerView.scrollToPosition(0)
         }
 
@@ -172,10 +173,11 @@ class MainActivity : AppCompatActivity() {
             .setMessage("Import items from this tag?")
             .setPositiveButton("Confirm") { _: DialogInterface, _: Int ->
                 /* Splice the card contents and append the list view for the user */
-                val addedSize = listItems.parseJoinedString(String(nfcContent))
+                val nfcItems = listItems.parseJoinedString(String(nfcContent))
+                listItems.addAll(nfcItems)
 
                 /* Append data and scroll up to new data */
-                viewAdapter.notifyItemRangeInserted(0, addedSize)
+                viewAdapter.notifyItemRangeInserted(0, nfcItems.size)
                 recyclerView.scrollToPosition(0)
             }
             .setNegativeButton("Cancel", null)

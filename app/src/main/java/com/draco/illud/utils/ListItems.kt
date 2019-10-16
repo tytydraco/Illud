@@ -20,21 +20,15 @@ class ListItems {
         return listItems.joinToString(divider)
     }
 
-    /* Parse raw string and save to rawItems */
-    fun parseJoinedString(string: String, toBack: Boolean = false): Int {
+    /* Parse raw string and return items */
+    fun parseJoinedString(string: String): ArrayList<ListItem> {
+        val items = arrayListOf<ListItem>()
         if (string.isNotBlank()) {
-            val split = string.split(divider)
-            for (item in split)
-                if (toBack)
-                    addToBack(ListItem(item))
-                else
-                    add(ListItem(item))
-
-            save()
-            return split.size
+            for (item in string.split(divider))
+                items.add(ListItem(item))
         }
 
-        return 0
+        return items
     }
 
     /* Backup list items */
@@ -47,7 +41,8 @@ class ListItems {
     fun load() {
         /* Empty items since we are loading. Do not call clear() due to save() */
         listItems.clear()
-        parseJoinedString(prefs.getString("listItems", "")!!, true)
+        val loadedItems = parseJoinedString(prefs.getString("listItems", "")!!)
+        addAllToBack(loadedItems)
     }
 
     /* Setup shared preferences */
@@ -57,21 +52,32 @@ class ListItems {
     }
 
     /* Insert a label : content pair at position */
-    fun insert(position: Int, listItem: ListItem): Boolean {
+    fun insert(position: Int, listItem: ListItem) {
         listItems.add(position, listItem)
 
         save()
-        return true
     }
 
     /* Add a label : content pair at the start */
-    fun add(listItem: ListItem): Boolean {
-        return insert(0, listItem)
+    fun add(listItem: ListItem) {
+        insert(0, listItem)
+    }
+
+    /* Add multiple label : content pairs at the start */
+    fun addAll(listItems: ArrayList<ListItem>) {
+        for (listItem in listItems)
+            insert(0, listItem)
     }
 
     /* Add a label : content pair at the end */
-    fun addToBack(listItem: ListItem): Boolean {
-        return insert(size(), listItem)
+    fun addToBack(listItem: ListItem) {
+        insert(size(), listItem)
+    }
+
+    /* Add multiple label : content pairs at the end */
+    fun addAllToBack(listItems: ArrayList<ListItem>) {
+        for (listItem in listItems)
+            insert(size(), listItem)
     }
 
     /* Set a label : content pair and preserve its position */
