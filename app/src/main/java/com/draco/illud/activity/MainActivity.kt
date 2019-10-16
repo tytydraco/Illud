@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity() {
 
         Snackbar.make(addNew, message, Snackbar.LENGTH_SHORT)
             .setAction("Dismiss") {}
-            .setAnchorView(bottomAppBar)
+            .setAnchorView(addNew)
             .show()
 
         /* Dismiss the non-cancellable dialog for the user */
@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity() {
 
         Snackbar.make(addNew, message, Snackbar.LENGTH_SHORT)
             .setAction("Dismiss") {}
-            .setAnchorView(bottomAppBar)
+            .setAnchorView(addNew)
             .show()
 
         /* Dismiss the non-cancellable dialog for the user */
@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity() {
         if (nfcContent == null || nfcContent.isEmpty()) {
             Snackbar.make(addNew, "Tag has no contents.", Snackbar.LENGTH_SHORT)
                 .setAction("Dismiss") {}
-                .setAnchorView(bottomAppBar)
+                .setAnchorView(addNew)
                 .show()
             return
         }
@@ -186,7 +186,7 @@ class MainActivity : AppCompatActivity() {
 
         Snackbar.make(addNew, nfcStateString, Snackbar.LENGTH_SHORT)
             .setAction("Dismiss") {}
-            .setAnchorView(bottomAppBar)
+            .setAnchorView(addNew)
             .show()
     }
 
