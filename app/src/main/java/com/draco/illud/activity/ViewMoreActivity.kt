@@ -1,6 +1,7 @@
 package com.draco.illud.activity
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -8,7 +9,6 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import com.draco.illud.R
 import com.draco.illud.utils.ListItem
 import com.draco.illud.utils.listItems
@@ -73,6 +73,38 @@ class ViewMoreActivity : AppCompatActivity() {
 
                 deleted = true
                 finish()
+            }
+            R.id.share -> run {
+                val labelText = label.text.toString()
+                val contentText = content.text.toString()
+
+                val sendText = when {
+                    /* First choice */
+                    contentText.isNotBlank() -> contentText
+
+                    /* Second choice */
+                    labelText.isNotBlank() -> labelText
+
+                    /* Fail safe */
+                    else -> {
+                        Snackbar.make(content, "Nothing to share.", Snackbar.LENGTH_SHORT)
+                            .setAction("Dismiss") {}
+                            .show()
+
+                        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(label.windowToken, 0)
+                        imm.hideSoftInputFromWindow(content.windowToken, 0)
+
+                        return@run
+                    }
+                }
+
+                /* Open send-to dialog */
+                val shareIntent = Intent()
+                shareIntent.action = Intent.ACTION_SEND
+                shareIntent.type="text/plain"
+                shareIntent.putExtra(Intent.EXTRA_TEXT, sendText)
+                startActivity(Intent.createChooser(shareIntent, "Send to"))
             }
         }
 
