@@ -28,7 +28,9 @@ class MainActivity : AppCompatActivity() {
 
     /* Internal */
     private var writeContentsAlertDialog: AlertDialog? = null /* Alert dialog for when user writes to car */
+    private var swapContentsAlertDialog: AlertDialog? = null /* Alert dialog for when user swaps with car */
     private var tagWriteMode = false /* When the next tag is scanned, should we write to it? */
+    private var tagSwapMode = false /* When the next tag is scanned, should we swap with it? */
 
     /* Put the user into write mode (locks UI until scan) */
     private fun putUserIntoWriteMode() {
@@ -47,6 +49,23 @@ class MainActivity : AppCompatActivity() {
         tagWriteMode = true
     }
 
+    /* Put the user into swap mode (locks UI until scan) */
+    private fun putUserIntoSwapMode() {
+        val builder = AlertDialog.Builder(this)
+            .setTitle("Swap With Nfc Tag")
+            .setMessage("Hold a tag to the back of the device until this dialog disappears.")
+            .setNegativeButton("Cancel", null)
+            .setOnDismissListener {
+                dismissSwapContentsAlertDialog()
+            }
+
+        swapContentsAlertDialog = builder.create()
+        swapContentsAlertDialog!!.show()
+
+        /* Next time we scan a tag, write to it */
+        tagSwapMode = true
+    }
+
     /* Dismiss write Nfc tag alert dialog */
     private fun dismissWriteContentsAlertDialog() {
         /* Allow any context to dismiss the write dialog */
@@ -54,6 +73,55 @@ class MainActivity : AppCompatActivity() {
             writeContentsAlertDialog!!.cancel()
 
         tagWriteMode = false
+    }
+
+    /* Dismiss swap Nfc tag alert dialog */
+    private fun dismissSwapContentsAlertDialog() {
+        /* Allow any context to dismiss the swap dialog */
+        if (swapContentsAlertDialog != null)
+            swapContentsAlertDialog!!.cancel()
+
+        tagSwapMode = false
+    }
+
+    private fun nfcSwap(intent: Intent) {
+        /* Store everything in the first NDEF record */
+        val writeString = listItems.generateJoinedString()
+
+        /* Get the contents of the current Nfc tag */
+        var nfcContent = Nfc.readBytes(intent)
+
+        /* If for some reason the read fails, use blank contents */
+        if (nfcContent == null)
+            nfcContent = byteArrayOf()
+
+        /* Write contents as compressed bytes */
+        val success = Nfc.writeBytes(intent, writeString.toByteArray())
+
+        if (success) {
+            /* Splice the card contents and append the list view for the user */
+            viewAdapter.notifyItemRangeRemoved(0, listItems.size())
+            listItems.clear()
+
+            val addedSize = listItems.parseJoinedString(String(nfcContent))
+
+            /* Append data and scroll up to new data */
+            viewAdapter.notifyItemRangeInserted(0, addedSize)
+            recyclerView.scrollToPosition(0)
+        }
+
+        val message = if (success)
+            "Swapped successfully."
+        else
+            "Contents too large."
+
+        Snackbar.make(addNew, message, Snackbar.LENGTH_SHORT)
+            .setAction("Dismiss") {}
+            .setAnchorView(bottomAppBar)
+            .show()
+
+        /* Dismiss the non-cancellable dialog for the user */
+        dismissSwapContentsAlertDialog()
     }
 
     /* Update card contents */
@@ -125,9 +193,10 @@ class MainActivity : AppCompatActivity() {
     /* Process Nfc tag scan event */
     private fun nfcTagScanHandler() {
         if (intent != null && Nfc.startedByNDEF(intent)) {
-            when (tagWriteMode) {
-                true -> nfcWrite(intent)
-                false -> nfcRead(intent)
+            when {
+                tagWriteMode -> nfcWrite(intent)
+                tagSwapMode -> nfcSwap(intent)
+                else -> nfcRead(intent)
             }
         }
     }
@@ -207,6 +276,15 @@ class MainActivity : AppCompatActivity() {
                         warnUserAboutNfcStatus(nfcCurrentState)
                     else
                         putUserIntoWriteMode()
+                    true
+                }
+                R.id.swap -> {
+                    /* Make sure we still have Nfc on */
+                    val nfcCurrentState = nfc.supportState()
+                    if (nfcCurrentState != Nfc.State.SUPPORTED_ON)
+                        warnUserAboutNfcStatus(nfcCurrentState)
+                    else
+                        putUserIntoSwapMode()
                     true
                 }
                 R.id.wipe -> {
