@@ -14,7 +14,6 @@ import com.draco.illud.utils.listItems
 import com.google.android.material.snackbar.Snackbar
 
 class RecyclerViewAdapter(
-    private val context: Context,
     private val recyclerView: RecyclerView,
     private val snackbarAnchor: View):
     RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
@@ -98,10 +97,10 @@ class RecyclerViewAdapter(
             val updatedItem = listItems.get(updatedPosition)
 
             /* Start the ViewMore activity when we click an item */
-            val intent = Intent(context, ViewMoreActivity::class.java)
+            val intent = Intent(recyclerView.context, ViewMoreActivity::class.java)
                 .putExtra("itemString", updatedItem.toString())
                 .putExtra("position", updatedPosition)
-            context.startActivity(intent)
+            recyclerView.context.startActivity(intent)
         }
     }
 }
