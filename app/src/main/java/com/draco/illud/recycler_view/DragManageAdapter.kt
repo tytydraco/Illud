@@ -14,6 +14,7 @@ class DragManageAdapter(
     swipeDirs: Int):
     ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs)
 {
+    /* Start swapping the positions of our list and save it to shared preferences */
     override fun onMove(recyclerView: RecyclerView,
                         viewHolder: RecyclerView.ViewHolder,
                         target: RecyclerView.ViewHolder): Boolean
@@ -22,11 +23,13 @@ class DragManageAdapter(
         return true
     }
 
+    /* Depending on which direction we swipe, process a different action */
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int)
     {
         val position = viewHolder.adapterPosition
         val targetItem = listItems.get(position)
         if (direction == ItemTouchHelper.RIGHT) {
+            /* Swipe right to delete */
             listItems.remove(position)
             adapter.notifyItemRemoved(position)
 
