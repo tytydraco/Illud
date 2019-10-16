@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.draco.illud.utils.listItems
 import com.google.android.material.snackbar.Snackbar
 
-class DragManageAdapter(
+class RecyclerViewDragHelper(
     private val snackbarAnchor: View,
     private var adapter: RecyclerViewAdapter,
     private var recyclerView: RecyclerView,

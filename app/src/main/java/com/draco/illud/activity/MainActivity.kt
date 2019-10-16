@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.draco.illud.R
-import com.draco.illud.recycler_view.DragManageAdapter
+import com.draco.illud.recycler_view.RecyclerViewDragHelper
 import com.draco.illud.recycler_view.RecyclerViewAdapter
 import com.draco.illud.utils.Nfc
 import com.draco.illud.utils.listItems
@@ -331,7 +331,7 @@ class MainActivity : AppCompatActivity() {
         viewAdapter.notifyDataSetChanged()
 
         /* Setup drag and drop handler */
-        val callback = DragManageAdapter(
+        val callback = RecyclerViewDragHelper(
             /* Our add button as a snackbar anchor */
             addNew,
             viewAdapter,
