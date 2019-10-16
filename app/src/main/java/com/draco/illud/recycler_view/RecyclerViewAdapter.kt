@@ -11,9 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.draco.illud.R
 import com.draco.illud.activity.ViewMoreActivity
 import com.draco.illud.utils.listItems
+import com.google.android.material.snackbar.Snackbar
 
 class RecyclerViewAdapter(
-    private val context: Context):
+    private val context: Context,
+    private val snackbarAnchor: View):
     RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
     /* Holds our views inside our row view */
@@ -59,13 +61,23 @@ class RecyclerViewAdapter(
     /* Configure each holder view */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = listItems.get(position)
-        /* Use alternative icon if there is a content */
-        val drawable = if (item.content.isBlank())
-            context.getDrawable(R.drawable.ic_chevron_right_black_24dp)
-        else
-            context.getDrawable(R.drawable.ic_short_text_black_24dp)
 
-        holder.bullet.setImageDrawable(drawable)
+        holder.bullet.setOnClickListener {
+            val updatedPosition = holder.adapterPosition
+            val updatedItem = listItems.get(updatedPosition)
+
+            listItems.remove(updatedPosition)
+            notifyItemRemoved(updatedPosition)
+
+            /* Allow user to undo item deletion temporarily */
+            Snackbar.make(snackbarAnchor, "Deleted item.", Snackbar.LENGTH_LONG)
+                .setAction("Undo") {
+                    listItems.insert(updatedPosition, updatedItem)
+                    notifyItemInserted(updatedPosition)
+                }
+                .setAnchorView(snackbarAnchor)
+                .show()
+        }
 
         /* Set the text */
         holder.label.text = item.label

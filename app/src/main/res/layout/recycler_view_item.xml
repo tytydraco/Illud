@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
         android:id="@+id/bullet"
-        android:src="@drawable/ic_chevron_right_black_24dp"
+        android:src="@drawable/ic_radio_button_unchecked_black_24dp"
         android:tint="@color/colorAccent"
         android:layout_centerVertical="true"
         android:contentDescription="@string/bullet" />

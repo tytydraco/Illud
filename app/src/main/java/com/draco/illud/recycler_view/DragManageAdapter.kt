@@ -1,10 +1,8 @@
 package com.draco.illud.recycler_view
 
-import android.os.Handler
 import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
 import com.draco.illud.utils.listItems
 import com.google.android.material.snackbar.Snackbar
 
