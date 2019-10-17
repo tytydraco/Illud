@@ -52,37 +52,35 @@ class ListItems {
     }
 
     /* Insert a label : content pair at position */
-    fun insert(position: Int, listItem: ListItem) {
-        listItems.add(position, listItem)
+    fun insert(position: Int, item: ListItem) {
+        listItems.add(position, item)
 
         save()
     }
 
     /* Add a label : content pair at the start */
-    fun add(listItem: ListItem) {
-        insert(0, listItem)
+    fun add(item: ListItem) {
+        insert(0, item)
     }
 
     /* Add multiple label : content pairs at the start */
-    fun addAll(listItems: ArrayList<ListItem>) {
-        for (listItem in listItems)
-            insert(0, listItem)
+    fun addAll(items: ArrayList<ListItem>) {
+        listItems.addAll(0, items)
     }
 
     /* Add a label : content pair at the end */
-    fun addToBack(listItem: ListItem) {
-        insert(size(), listItem)
+    fun addToBack(item: ListItem) {
+        insert(size(), item)
     }
 
     /* Add multiple label : content pairs at the end */
-    fun addAllToBack(listItems: ArrayList<ListItem>) {
-        for (listItem in listItems)
-            insert(size(), listItem)
+    fun addAllToBack(items: ArrayList<ListItem>) {
+        listItems.addAll(items)
     }
 
     /* Set a label : content pair and preserve its position */
-    fun set(position: Int, listItem: ListItem) {
-        listItems[position] = listItem
+    fun set(position: Int, item: ListItem) {
+        listItems[position] = item
         save()
     }
 
