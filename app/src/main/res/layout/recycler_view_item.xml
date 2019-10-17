@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="24dp"
+    android:paddingVertical="18dp"
     android:paddingHorizontal="24dp"
     android:background="@drawable/pill_shape_background"
     android:layout_marginVertical="8dp"
