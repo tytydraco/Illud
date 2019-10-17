@@ -293,6 +293,20 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, ViewMoreActivity::class.java))
         }
 
+        /* Menu navigation action */
+        bottomAppBar.setNavigationOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle("Clear")
+                .setMessage("Are you sure you would like to clear your list?")
+                .setPositiveButton("Confirm") { _: DialogInterface, _: Int ->
+                    viewAdapter.notifyItemRangeRemoved(0, listItems.size())
+                    listItems.clear()
+                }
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show()
+        }
+
         /* Menu item actions */
         bottomAppBar.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -312,19 +326,6 @@ class MainActivity : AppCompatActivity() {
                         warnUserAboutNfcStatus(nfcCurrentState)
                     else
                         putUserIntoSwapMode()
-                    true
-                }
-                R.id.wipe -> {
-                    AlertDialog.Builder(this)
-                        .setTitle("Clear")
-                        .setMessage("Are you sure you would like to clear your list?")
-                        .setPositiveButton("Confirm") { _: DialogInterface, _: Int ->
-                            viewAdapter.notifyItemRangeRemoved(0, listItems.size())
-                            listItems.clear()
-                        }
-                        .setNegativeButton("Cancel", null)
-                        .create()
-                        .show()
                     true
                 }
                 else -> false
