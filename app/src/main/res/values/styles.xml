@@ -13,8 +13,12 @@
 
     <style name="TextTheme">
         <item name="android:textColor">@android:color/black</item>
-        <item name="android:paddingStart">?android:attr/listPreferredItemPaddingStart</item>
-        <item name="android:paddingEnd">?android:attr/listPreferredItemPaddingEnd</item>
+        <item name="android:paddingHorizontal">24dp</item>
+    </style>
+
+    <style name="ItemTheme">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:paddingHorizontal">16dp</item>
     </style>
 
     <!-- Colors for material alert dialogs -->
