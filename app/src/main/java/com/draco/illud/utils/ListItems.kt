@@ -67,6 +67,7 @@ class ListItems {
     /* Add multiple label : content pairs at the start */
     fun addAll(items: ArrayList<ListItem>) {
         listItems.addAll(0, items)
+        save()
     }
 
     /* Add a label : content pair at the end */
@@ -77,6 +78,7 @@ class ListItems {
     /* Add multiple label : content pairs at the end */
     fun addAllToBack(items: ArrayList<ListItem>) {
         listItems.addAll(items)
+        save()
     }
 
     /* Set a label : content pair and preserve its position */
