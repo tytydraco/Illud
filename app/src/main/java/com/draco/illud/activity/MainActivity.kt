@@ -310,6 +310,11 @@ class MainActivity : AppCompatActivity() {
         /* Menu item actions */
         bottomAppBar.setOnMenuItemClickListener {
             when (it.itemId) {
+                R.id.sort -> {
+                    /* Sort by tag, then by label */
+                    viewAdapter.sort()
+                    true
+                }
                 R.id.write_contents -> {
                     /* Make sure we still have Nfc on */
                     val nfcCurrentState = nfc.supportState()

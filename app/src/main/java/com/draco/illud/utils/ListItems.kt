@@ -106,6 +106,13 @@ class ListItems {
         return listItems
     }
 
+    /* Sort based on ListItem contents */
+    fun sort() {
+        listItems.sortBy { it.label }
+        listItems.sortBy { it.tag }
+        save()
+    }
+
     /* Clear list items */
     fun clear() {
         listItems.clear()

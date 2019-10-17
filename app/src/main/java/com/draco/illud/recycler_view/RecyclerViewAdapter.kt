@@ -37,6 +37,12 @@ class RecyclerViewAdapter(
         return listItems.size()
     }
 
+    /* Sort items by tag, and by label */
+    fun sort() {
+        listItems.sort()
+        notifyItemRangeChanged(0, listItems.size())
+    }
+
     /* Swap to items in a list */
     fun swapItems(fromPosition: Int, toPosition: Int) {
         if (fromPosition < toPosition) {
