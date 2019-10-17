@@ -71,10 +71,11 @@ class Nfc {
         fun writeBytes(intent: Intent?, bytes: ByteArray): Boolean {
             val currentTag = intent?.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
 
+            /* Connect to the tag */
+            val ndef = Ndef.get(currentTag)
+
             /* Try to write to the tag; if fail, return false */
             try {
-                /* Connect to the tag */
-                val ndef = Ndef.get(currentTag)
                 ndef.connect()
 
                 /* Don't bother writing if read-only */
@@ -90,6 +91,8 @@ class Nfc {
                 /* Close */
                 ndef.close()
             } catch (e: Exception) {
+                /* Close to prevent corruption */
+                ndef.close()
                 return false
             }
 
