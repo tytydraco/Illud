@@ -11,8 +11,8 @@
 
     <!-- Label hint strings -->
     <string name="hint_label">Start typing…</string>
-    <string name="hint_content">Additional content or details.</string>
-    <string name="hint_tag">Tag this item.</string>
+    <string name="hint_content">Type additional content or details here…</string>
+    <string name="hint_tag">Optional Tag</string>
 
     <!-- Misc strings -->
     <string name="bullet">Bullet</string>
