@@ -12,6 +12,7 @@ class ListItems {
 
     /* Shared Preferences */
     private val prefsName = "TagDrivePrefs"
+    private val prefsStringId = "listItems"
     private lateinit var prefs: SharedPreferences
     private lateinit var prefsEditor: SharedPreferences.Editor
 
@@ -33,7 +34,7 @@ class ListItems {
 
     /* Backup list items */
     fun save() {
-        prefsEditor.putString("listItems", generateJoinedString())
+        prefsEditor.putString(prefsStringId, generateJoinedString())
         prefsEditor.apply()
     }
 
@@ -41,7 +42,7 @@ class ListItems {
     fun load() {
         /* Empty items since we are loading. Do not call clear() due to save() */
         listItems.clear()
-        val loadedItems = parseJoinedString(prefs.getString("listItems", "")!!)
+        val loadedItems = parseJoinedString(prefs.getString(prefsStringId, "")!!)
         addAllToBack(loadedItems)
     }
 
