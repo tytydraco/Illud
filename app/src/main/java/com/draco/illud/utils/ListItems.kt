@@ -84,6 +84,12 @@ class ListItems {
         save()
     }
 
+    /* Set all label : content pairs */
+    fun setAll(items: ArrayList<ListItem>) {
+        listItems = items
+        save()
+    }
+
     /* Remove a label : content pair at position */
     fun remove(position: Int) {
         listItems.removeAt(position)
@@ -93,6 +99,11 @@ class ListItems {
     /* Get a label : content pair at position */
     fun get(position: Int): ListItem {
         return listItems[position]
+    }
+
+    /* Get all a label : content pairs */
+    fun getAll(): ArrayList<ListItem> {
+        return listItems
     }
 
     /* Clear list items */
