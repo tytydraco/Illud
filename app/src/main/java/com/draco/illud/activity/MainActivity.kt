@@ -29,11 +29,17 @@ class MainActivity : AppCompatActivity() {
     /* Internal */
     private var writeContentsAlertDialog: AlertDialog? = null
     private var swapContentsAlertDialog: AlertDialog? = null
+    private var readContentsAlertDialog: AlertDialog? = null
     private var tagWriteMode = false
     private var tagSwapMode = false
 
     /* Put the user into write mode (locks UI until scan) */
     private fun putUserIntoWriteMode() {
+        /* Do not show the dialog if we already have it open */
+        if (writeContentsAlertDialog != null &&
+            writeContentsAlertDialog!!.isShowing)
+            return
+
         /* Lock the UI for the user */
         val builder = AlertDialog.Builder(this)
             .setTitle("Write Nfc Tag")
@@ -52,6 +58,11 @@ class MainActivity : AppCompatActivity() {
 
     /* Put the user into swap mode (locks UI until scan) */
     private fun putUserIntoSwapMode() {
+        /* Do not show the dialog if we already have it open */
+        if (swapContentsAlertDialog != null &&
+            swapContentsAlertDialog!!.isShowing)
+            return
+
         /* Lock the UI for the user */
         val builder = AlertDialog.Builder(this)
             .setTitle("Swap With Nfc Tag")
@@ -168,7 +179,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         /* Ask for confirmation, but keep data in memory so tag can be removed */
-        AlertDialog.Builder(this)
+        val dialog = AlertDialog.Builder(this)
             .setTitle("Import")
             .setMessage("Import items from this tag?")
             .setPositiveButton("Confirm") { _: DialogInterface, _: Int ->
@@ -181,8 +192,14 @@ class MainActivity : AppCompatActivity() {
                 recyclerView.scrollToPosition(0)
             }
             .setNegativeButton("Cancel", null)
-            .create()
-            .show()
+
+        /* Do not show the dialog if we already have it open */
+        if (readContentsAlertDialog != null &&
+            readContentsAlertDialog!!.isShowing)
+            return
+
+        readContentsAlertDialog = dialog.create()
+        readContentsAlertDialog!!.show()
     }
 
     /* Tell the user to check device compatibility */
