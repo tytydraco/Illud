@@ -122,32 +122,12 @@ class ViewMoreActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    /* Do not exit if label is not filled in */
-    override fun onBackPressed() {
-        /* Only if content is filled but label is blank */
-        if (label.text.isBlank()) {
-            Snackbar.make(content, "Label must not be blank.", Snackbar.LENGTH_SHORT)
-                .setAction("Dismiss") {}
-                .show()
-
-            /* Dismiss keyboard to show snackbar */
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(label.windowToken, 0)
-            imm.hideSoftInputFromWindow(content.windowToken, 0)
-            imm.hideSoftInputFromWindow(tag.windowToken, 0)
-
-            return
-        }
-
-        super.onBackPressed()
-    }
-
     /* Save contents on exit */
     override fun onPause() {
         super.onPause()
 
-        /* Don't do auto-save if we press delete or if no label */
-        if (deleted || label.text.toString().isBlank())
+        /* Don't do auto-save if we press delete */
+        if (deleted)
             return
 
         /* Create a ListItem based on our user-inputted contents */
