@@ -41,15 +41,6 @@ class MainActivity : AppCompatActivity() {
             return
 
         /* Lock the UI for the user */
-        val builder = AlertDialog.Builder(this)
-            .setTitle("Write Nfc Tag")
-            .setMessage("Hold a tag to the back of the device until this dialog disappears.")
-            .setNegativeButton("Cancel", null)
-            .setOnDismissListener {
-                dismissWriteContentsAlertDialog()
-            }
-
-        writeContentsAlertDialog = builder.create()
         writeContentsAlertDialog!!.show()
 
         /* Next time we scan a tag, write to it */
@@ -64,15 +55,6 @@ class MainActivity : AppCompatActivity() {
             return
 
         /* Lock the UI for the user */
-        val builder = AlertDialog.Builder(this)
-            .setTitle("Swap With Nfc Tag")
-            .setMessage("Hold a tag to the back of the device until this dialog disappears.")
-            .setNegativeButton("Cancel", null)
-            .setOnDismissListener {
-                dismissSwapContentsAlertDialog()
-            }
-
-        swapContentsAlertDialog = builder.create()
         swapContentsAlertDialog!!.show()
 
         /* Next time we scan a tag, write to it */
@@ -287,6 +269,24 @@ class MainActivity : AppCompatActivity() {
 
         /* Use proper menu */
         bottomAppBar.replaceMenu(R.menu.menu_main)
+
+        /* Create write dialog */
+        writeContentsAlertDialog = AlertDialog.Builder(this)
+            .setTitle("Write Nfc Tag")
+            .setMessage("Hold a tag to the back of the device until this dialog disappears.")
+            .setNegativeButton("Cancel", null)
+            .setOnDismissListener {
+                dismissWriteContentsAlertDialog()
+            }.create()
+
+        /* Create swap dialog */
+        swapContentsAlertDialog = AlertDialog.Builder(this)
+            .setTitle("Swap With Nfc Tag")
+            .setMessage("Hold a tag to the back of the device until this dialog disappears.")
+            .setNegativeButton("Cancel", null)
+            .setOnDismissListener {
+                dismissSwapContentsAlertDialog()
+            }.create()
 
         /* Add new item */
         addNew.setOnClickListener {
