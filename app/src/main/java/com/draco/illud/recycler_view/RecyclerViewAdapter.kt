@@ -14,7 +14,8 @@ import com.google.android.material.snackbar.Snackbar
 
 class RecyclerViewAdapter(
     private val recyclerView: RecyclerView,
-    private val snackbarAnchor: View):
+    private val snackbarAnchor: View,
+    private val emptyView: View):
     RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
     /* Holds our views inside our row view */
@@ -24,6 +25,14 @@ class RecyclerViewAdapter(
         val tag = view.findViewById<TextView>(R.id.tag)!!
     }
 
+    /* Check if list is empty; if so, show the empty view */
+    private fun checkEmptyView() {
+        if (listItems.size() == 0)
+            emptyView.visibility = View.VISIBLE
+        else
+            emptyView.visibility = View.GONE
+    }
+
     /* Inflate our rows for each item */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -31,8 +40,15 @@ class RecyclerViewAdapter(
         return ViewHolder(view)
     }
 
+    /* Check if our list is empty when we attach our recycler view */
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        checkEmptyView()
+    }
+
     /* Return our item count */
     override fun getItemCount(): Int {
+        checkEmptyView()
         return listItems.size()
     }
 

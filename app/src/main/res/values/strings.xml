@@ -16,4 +16,5 @@
 
     <!-- Misc strings -->
     <string name="bullet">Bullet</string>
+    <string name="recycler_view_empty">There are no entries</string>
 </resources>

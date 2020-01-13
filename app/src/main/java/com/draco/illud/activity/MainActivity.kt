@@ -3,6 +3,7 @@ package com.draco.illud.activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -21,6 +22,7 @@ import com.google.android.material.snackbar.Snackbar
 class MainActivity : AppCompatActivity() {
     /* UI elements */
     private lateinit var recyclerView: RecyclerView
+    private lateinit var emptyView: View
     private lateinit var viewAdapter: RecyclerViewAdapter
     private lateinit var viewLayoutManager: RecyclerView.LayoutManager
     private lateinit var bottomAppBar: BottomAppBar
@@ -263,6 +265,7 @@ class MainActivity : AppCompatActivity() {
 
         /* Setup UI elements */
         recyclerView = findViewById(R.id.recycler_view)
+        emptyView = findViewById(R.id.recycler_view_empty)
         viewLayoutManager = LinearLayoutManager(this)
         bottomAppBar = findViewById(R.id.bottom_app_bar)
         addNew = findViewById(R.id.add_new)
@@ -343,7 +346,10 @@ class MainActivity : AppCompatActivity() {
             recyclerView,
 
             /* Our add button as a snackbar anchor */
-            addNew
+            addNew,
+
+            /* View to show when we have an empty list */
+            emptyView
         )
 
         /* Update the recycler view */
