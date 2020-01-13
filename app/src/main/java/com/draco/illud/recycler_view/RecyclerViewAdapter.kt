@@ -1,6 +1,5 @@
 package com.draco.illud.recycler_view
 
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
