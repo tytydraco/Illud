@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="12dp"
-    android:background="@color/colorPrimary">
+    android:layout_marginTop="12dp">
 
     <EditText
         android:layout_width="match_parent"
@@ -25,7 +24,7 @@
         android:id="@+id/tag"
         style="@style/TextTheme"
         android:background="@null"
-        android:drawableStart="@drawable/ic_label_outline_black_24dp"
+        android:drawableStart="@drawable/ic_label_outline_24dp"
         android:drawablePadding="12dp"
         android:drawableTint="@color/colorAccent"
         android:textSize="18sp"
@@ -47,7 +46,7 @@
         android:gravity="top"
         android:id="@+id/content"
         style="@style/TextTheme"
-        android:drawableStart="@drawable/ic_short_text_black_24dp"
+        android:drawableStart="@drawable/ic_short_text_24dp"
         android:drawablePadding="12dp"
         android:drawableTint="@color/colorAccent"
         android:textSize="18sp"
