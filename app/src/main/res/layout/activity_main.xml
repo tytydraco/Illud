@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:text="@string/recycler_view_empty"
         android:textAlignment="center"
+        style="@style/TextTheme"
         android:gravity="center"
         android:visibility="gone" />
 
