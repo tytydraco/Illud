@@ -4,11 +4,9 @@ import android.app.Activity
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.nfc.NdefMessage
-import android.nfc.NdefRecord
-import android.nfc.NfcAdapter
-import android.nfc.Tag
+import android.nfc.*
 import android.nfc.tech.Ndef
+import java.io.IOException
 
 class Nfc {
     /* Device Nfc State */
@@ -20,6 +18,9 @@ class Nfc {
         /* The device supports Nfc, and it is currently on */
         SUPPORTED_ON
     }
+
+    /* Custom exception for non-writable tags */
+    class NotWritableException(message: String? = null): Exception(message)
 
     /* Check if Nfc supported */
     private var nfcAdapter: NfcAdapter? = null
@@ -68,7 +69,8 @@ class Nfc {
         }
 
         /* Try to write a ByteArray to a tag. Return true if succeeded */
-        fun writeBytes(intent: Intent?, bytes: ByteArray): Boolean {
+        fun writeBytes(intent: Intent?, bytes: ByteArray): Exception? {
+            var exception: Exception? = null
             val currentTag = intent?.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
 
             /* Connect to the tag */
@@ -81,22 +83,30 @@ class Nfc {
                 /* Don't bother writing if read-only */
                 if (!ndef.isWritable) {
                     ndef.close()
-                    return false
+                    throw NotWritableException()
                 }
 
                 /* Write the message */
                 val record = createByteRecord(bytes)
                 ndef.writeNdefMessage(NdefMessage(record))
-
-                /* Close */
-                ndef.close()
-            } catch (e: Exception) {
-                /* Close to prevent corruption */
-                ndef.close()
-                return false
+            } catch (_: NotWritableException) {
+                /* Tag is write only */
+                exception = NotWritableException("Tag not writable.")
+            } catch (_: FormatException) {
+                /* Malformed NDEF */
+                exception = FormatException("There was an internal error.")
+            } catch (_: IOException) {
+                /* Cancelled or unexpected data */
+                exception = IOException("Write unexpectedly cancelled.")
+            } catch (_: TagLostException) {
+                /* Tag removed too quickly */
+                exception = TagLostException("Tag disconnected.")
             }
 
-            return true
+            /* Close */
+            ndef.close()
+
+            return exception
         }
 
         /* Check if the passed intent was caused by a tag */

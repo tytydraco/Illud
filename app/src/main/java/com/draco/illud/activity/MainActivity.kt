@@ -94,14 +94,20 @@ class MainActivity : AppCompatActivity() {
             nfcContent = byteArrayOf()
 
         /* Write contents as compressed bytes */
-        val success = Nfc.writeBytes(intent, writeString.toByteArray())
+        val exception = Nfc.writeBytes(intent, writeString.toByteArray())
 
-        /* If we were able to write to the tag, overwrite our list */
-        if (success) {
+        /* Based on our result, show a special message */
+        var message = "Swapped successfully."
+
+        /* If there was an exception, show the user the issue */
+        if (exception != null)
+            message = exception.message!!
+        else {
             /* Splice the card contents and append the list view for the user */
             viewAdapter.notifyItemRangeRemoved(0, listItems.size())
             listItems.clear()
 
+            /* If we were able to write to the tag, overwrite our list */
             val nfcItems = listItems.parseJoinedString(String(nfcContent))
             listItems.addAll(nfcItems)
 
@@ -109,12 +115,6 @@ class MainActivity : AppCompatActivity() {
             viewAdapter.notifyItemRangeInserted(0, nfcItems.size)
             recyclerView.scrollToPosition(0)
         }
-
-        /* Based on our result, show a special message */
-        val message = if (success)
-            "Swapped successfully."
-        else
-            "Contents too large."
 
         Snackbar.make(addNew, message, Snackbar.LENGTH_SHORT)
             .setAction("Dismiss") {}
@@ -131,13 +131,13 @@ class MainActivity : AppCompatActivity() {
         val writeString = listItems.generateJoinedString()
 
         /* Write contents as compressed bytes */
-        val success = Nfc.writeBytes(intent, writeString.toByteArray())
+        val exception = Nfc.writeBytes(intent, writeString.toByteArray())
 
         /* Based on our result, show a special message */
-        val message = if (success)
-            "Wrote successfully."
-        else
-            "Contents too large."
+        var message = "Wrote successfully."
+
+        if (exception != null)
+            message = exception.message!!
 
         Snackbar.make(addNew, message, Snackbar.LENGTH_SHORT)
             .setAction("Dismiss") {}
