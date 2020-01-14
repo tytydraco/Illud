@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.nfc.*
 import android.nfc.tech.Ndef
+import android.nfc.tech.NfcA
 import java.io.IOException
 
 class Nfc {
@@ -78,6 +79,10 @@ class Nfc {
 
             /* Try to write to the tag; if fail, return false */
             try {
+                /* Current tag is null */
+                if (ndef == null)
+                    throw NotWritableException()
+
                 ndef.connect()
 
                 /* Don't bother writing if read-only */
@@ -89,6 +94,9 @@ class Nfc {
                 /* Write the message */
                 val record = createByteRecord(bytes)
                 ndef.writeNdefMessage(NdefMessage(record))
+
+                /* Close */
+                ndef.close()
             } catch (_: NotWritableException) {
                 /* Tag is write only */
                 exception = NotWritableException("Tag not writable.")
@@ -103,9 +111,6 @@ class Nfc {
                 exception = TagLostException("Tag disconnected.")
             }
 
-            /* Close */
-            ndef.close()
-
             return exception
         }
 
@@ -114,7 +119,9 @@ class Nfc {
             val action = intent?.action
 
             /* Any of these actions are valid for an Nfc tag scan */
-            return (NfcAdapter.ACTION_NDEF_DISCOVERED == action)
+            return (NfcAdapter.ACTION_NDEF_DISCOVERED == action ||
+                    NfcAdapter.ACTION_TECH_DISCOVERED == action ||
+                    NfcAdapter.ACTION_TAG_DISCOVERED == action)
         }
 
         /* Create binary record */
