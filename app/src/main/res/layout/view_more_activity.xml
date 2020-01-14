@@ -29,7 +29,6 @@
         android:drawableTint="@color/colorAccent"
         android:textSize="18sp"
         android:textColor="@color/colorAccent"
-        android:textColorHint="@color/colorPrimaryDark"
         android:textStyle="bold"
         android:ellipsize="end"
         android:maxLines="1"
