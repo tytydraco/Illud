@@ -33,7 +33,7 @@ class Nfc {
     companion object {
 
         /* Mime type for NDEF record. P.S.: Takes up Nfc tag space */
-        private const val mimeType: String = "text/tagdrive"
+        private const val mimeType: String = "text/illud"
 
         /* Get the byte contents of a Nfc tag */
         fun readBytes(intent: Intent?): ByteArray? {
