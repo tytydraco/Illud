@@ -35,24 +35,6 @@ class Nfc {
         /* Mime type for NDEF record. P.S.: Takes up Nfc tag space */
         private const val mimeType: String = "text/tagdrive"
 
-        /* Return the maximum amount of bytes that the tag can hold */
-        fun maxSize(intent: Intent?): Int {
-            val currentTag = intent?.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
-            var maxSize: Int
-
-            /* Try to write to the tag; if fail, return false */
-            try {
-                val ndef = Ndef.get(currentTag)
-                ndef.connect()
-                maxSize = ndef.maxSize
-                ndef.close()
-            } catch (e: Exception) {
-                maxSize = 0
-            }
-
-            return maxSize
-        }
-
         /* Get the byte contents of a Nfc tag */
         fun readBytes(intent: Intent?): ByteArray? {
             val parcelables = intent?.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
