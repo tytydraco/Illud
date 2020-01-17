@@ -2,6 +2,7 @@ package com.draco.illud.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.preference.PreferenceManager
 
 class ListItems {
     /* Constants */
@@ -11,7 +12,6 @@ class ListItems {
     private var listItems: ArrayList<ListItem> = arrayListOf()
 
     /* Shared Preferences */
-    private val prefsName = "TagDrivePrefs"
     private val prefsStringId = "listItems"
     private lateinit var prefs: SharedPreferences
     private lateinit var prefsEditor: SharedPreferences.Editor
@@ -48,7 +48,7 @@ class ListItems {
 
     /* Setup shared preferences */
     fun setupSharedPrefs(context: Context) {
-        prefs = context.getSharedPreferences(prefsName, Context.MODE_PRIVATE)
+        prefs = PreferenceManager.getDefaultSharedPreferences(context)
         prefsEditor = prefs.edit()
     }
 
