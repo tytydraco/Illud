@@ -30,56 +30,35 @@ class MainActivity : AppCompatActivity() {
     private lateinit var addNew: FloatingActionButton
 
     /* Internal */
-    private var writeContentsAlertDialog: AlertDialog? = null
-    private var swapContentsAlertDialog: AlertDialog? = null
-    private var readContentsAlertDialog: AlertDialog? = null
-    private var tagWriteMode = false
-    private var tagSwapMode = false
-
-    /* Put the user into write mode (locks UI until scan) */
-    private fun putUserIntoWriteMode() {
-        /* Do not show the dialog if we already have it open */
-        if (writeContentsAlertDialog != null &&
-            writeContentsAlertDialog!!.isShowing)
-            return
-
-        /* Lock the UI for the user */
-        writeContentsAlertDialog!!.show()
-
-        /* Next time we scan a tag, write to it */
-        tagWriteMode = true
+    enum class NfcScanAction {
+        NONE,
+        WRITE,
+        SWAP
     }
 
-    /* Put the user into swap mode (locks UI until scan) */
-    private fun putUserIntoSwapMode() {
+    private var nfcScanAlertDialog: AlertDialog? = null
+    private var readContentsAlertDialog: AlertDialog? = null
+    private var scanAction = NfcScanAction.NONE
+
+    /* Put the user into scan mode (locks UI until scan) */
+    private fun nfcScanDialog() {
         /* Do not show the dialog if we already have it open */
-        if (swapContentsAlertDialog != null &&
-            swapContentsAlertDialog!!.isShowing)
+        if (nfcScanAlertDialog != null &&
+            nfcScanAlertDialog!!.isShowing)
             return
 
         /* Lock the UI for the user */
-        swapContentsAlertDialog!!.show()
+        nfcScanAlertDialog!!.show()
 
         /* Next time we scan a tag, write to it */
-        tagSwapMode = true
+        scanAction = NfcScanAction.WRITE
     }
 
     /* Dismiss write Nfc tag alert dialog */
-    private fun dismissWriteContentsAlertDialog() {
+    private fun dismissNfcScanDialog() {
         /* Allow any context to dismiss the write dialog */
-        if (writeContentsAlertDialog != null)
-            writeContentsAlertDialog!!.cancel()
-
-        tagWriteMode = false
-    }
-
-    /* Dismiss swap Nfc tag alert dialog */
-    private fun dismissSwapContentsAlertDialog() {
-        /* Allow any context to dismiss the swap dialog */
-        if (swapContentsAlertDialog != null)
-            swapContentsAlertDialog!!.cancel()
-
-        tagSwapMode = false
+        if (nfcScanAlertDialog != null)
+            nfcScanAlertDialog!!.cancel()
     }
 
     /* Swap contents of card and local list */
@@ -123,7 +102,8 @@ class MainActivity : AppCompatActivity() {
             .show()
 
         /* Dismiss the non-cancellable dialog for the user */
-        dismissSwapContentsAlertDialog()
+        dismissNfcScanDialog()
+        scanAction = NfcScanAction.NONE
     }
 
     /* Update card contents */
@@ -146,7 +126,8 @@ class MainActivity : AppCompatActivity() {
             .show()
 
         /* Dismiss the non-cancellable dialog for the user */
-        dismissWriteContentsAlertDialog()
+        dismissNfcScanDialog()
+        scanAction = NfcScanAction.NONE
     }
 
     /* Read and process card contents */
@@ -205,10 +186,12 @@ class MainActivity : AppCompatActivity() {
     /* Process Nfc tag scan event */
     private fun processNfcTagScanned() {
         if (intent != null && Nfc.startedByNDEF(intent)) {
-            when {
-                tagWriteMode -> nfcWrite(intent)
-                tagSwapMode -> nfcSwap(intent)
-                else -> nfcRead(intent)
+            when (scanAction) {
+                NfcScanAction.WRITE -> nfcWrite(intent)
+                NfcScanAction.SWAP -> nfcSwap(intent)
+
+                /* None means we can read the tag */
+                NfcScanAction.NONE -> nfcRead(intent)
             }
         }
     }
@@ -275,21 +258,13 @@ class MainActivity : AppCompatActivity() {
         bottomAppBar.replaceMenu(R.menu.menu_main)
 
         /* Create write dialog */
-        writeContentsAlertDialog = AlertDialog.Builder(this)
-            .setTitle("Write Nfc Tag")
+        nfcScanAlertDialog = AlertDialog.Builder(this)
+            .setTitle("Scan Nfc Tag")
             .setMessage("Hold a tag to the back of the device until this dialog disappears.")
             .setNegativeButton("Cancel", null)
             .setOnDismissListener {
-                dismissWriteContentsAlertDialog()
-            }.create()
-
-        /* Create swap dialog */
-        swapContentsAlertDialog = AlertDialog.Builder(this)
-            .setTitle("Swap With Nfc Tag")
-            .setMessage("Hold a tag to the back of the device until this dialog disappears.")
-            .setNegativeButton("Cancel", null)
-            .setOnDismissListener {
-                dismissSwapContentsAlertDialog()
+                dismissNfcScanDialog()
+                scanAction = NfcScanAction.NONE
             }.create()
 
         /* Add new item */
@@ -324,8 +299,10 @@ class MainActivity : AppCompatActivity() {
                     val nfcCurrentState = nfc.supportState()
                     if (nfcCurrentState != Nfc.State.SUPPORTED_ON)
                         warnUserAboutNfcStatus(nfcCurrentState)
-                    else
-                        putUserIntoWriteMode()
+                    else {
+                        nfcScanDialog()
+                        scanAction = NfcScanAction.WRITE
+                    }
                     true
                 }
                 R.id.swap -> {
@@ -334,7 +311,8 @@ class MainActivity : AppCompatActivity() {
                     if (nfcCurrentState != Nfc.State.SUPPORTED_ON)
                         warnUserAboutNfcStatus(nfcCurrentState)
                     else
-                        putUserIntoSwapMode()
+                        nfcScanDialog()
+                    scanAction = NfcScanAction.SWAP
                     true
                 }
                 else -> false
