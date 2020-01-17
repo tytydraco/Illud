@@ -205,37 +205,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /* Occurs on application start */
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        /* Register ourselves */
-        nfc = Nfc()
-
-        /* Register Nfc adapter */
-        nfc.registerAdapter(this)
-
-        /* Allow Nfc tags to be scanned */
-        nfc.setupForegroundIntent(this)
-
-        /* Setup shared preferences */
-        listItems.setupSharedPrefs(this)
-
-        /* Restore backed up list items */
-        listItems.load()
-
-        /* Setup UI elements */
+    private fun setupUI() {
+        /* Set our local lateinit variables */
         recyclerView = findViewById(R.id.recycler_view)
         emptyView = findViewById(R.id.recycler_view_empty)
         viewLayoutManager = LinearLayoutManager(this)
         bottomAppBar = findViewById(R.id.bottom_app_bar)
         addNew = findViewById(R.id.add_new)
 
-        /* Use proper menu */
+        /* Use custom bottomAppBar menu */
         bottomAppBar.replaceMenu(R.menu.menu_main)
 
-        /* Create write dialog */
+        /* Create scan dialog for writing and swapping */
         nfcScanAlertDialog = AlertDialog.Builder(this)
             .setTitle("Scan Nfc Tag")
             .setMessage(getString(R.string.nfc_scan_dialog))
@@ -245,22 +226,21 @@ class MainActivity : AppCompatActivity() {
                 scanAction = NfcScanAction.NONE
             }.create()
 
-        /* Add new item */
+        /* Add new list item */
         addNew.setOnClickListener {
             startActivity(Intent(this, ViewMoreActivity::class.java))
         }
 
-        /* Menu navigation action */
+        /* Clear all list items button ("navigation" button) */
         bottomAppBar.setNavigationOnClickListener {
             AlertDialog.Builder(this)
                 .setTitle("Clear")
-                .setMessage("Are you sure you would like to clear your list?")
+                .setMessage(getString(R.string.list_items_clear))
                 .setPositiveButton("Confirm") { _: DialogInterface, _: Int ->
                     viewAdapter.notifyItemRangeRemoved(0, listItems.size())
                     listItems.clear()
                 }
                 .setNegativeButton("Cancel", null)
-                .create()
                 .show()
         }
 
@@ -272,23 +252,27 @@ class MainActivity : AppCompatActivity() {
                     viewAdapter.sort()
                     true
                 }
+
                 R.id.write_contents -> {
                     showNfcScanDialog()
                     scanAction = NfcScanAction.WRITE
                     true
                 }
+
                 R.id.swap -> {
                     showNfcScanDialog()
                     scanAction = NfcScanAction.SWAP
                     true
                 }
+
+                /* Should never happen */
                 else -> false
             }
         }
 
         /* Set adapter */
         viewAdapter = RecyclerViewAdapter(
-            /* This includes context */
+            /* Used to scroll to positions, and for activity context */
             recyclerView,
 
             /* Our add button as a snackbar anchor */
@@ -298,13 +282,13 @@ class MainActivity : AppCompatActivity() {
             emptyView
         )
 
-        /* Update the recycler view */
+        /* Update the recycler view with our new view adapter */
         recyclerView.apply {
             layoutManager = viewLayoutManager
             adapter = viewAdapter
         }
 
-        /* Setup our list view */
+        /* Tell our adapter that we have new data to handle */
         viewAdapter.notifyDataSetChanged()
 
         /* Setup drag and drop handler */
@@ -313,13 +297,39 @@ class MainActivity : AppCompatActivity() {
             addNew,
             viewAdapter,
             recyclerView,
-            /* Supported vertical directions */
+
+            /* Reposition with long press and drag */
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-            /* Supported horizontal directions */
+
+            /* Prioritization shortcuts and dismissals */
             ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT)
 
         /* Create and attach our drag and drop handler */
         ItemTouchHelper(callback).attachToRecyclerView(recyclerView)
+    }
+
+    /* Occurs on application start */
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        /* Register our Nfc helper class */
+        nfc = Nfc()
+
+        /* Register Nfc adapter */
+        nfc.registerAdapter(this)
+
+        /* Allow Nfc tags to be scanned while the app is opened */
+        nfc.setupForegroundIntent(this)
+
+        /* Setup shared preferences for our list items */
+        listItems.setupSharedPrefs(this)
+
+        /* Restore backed up list items if we have any */
+        listItems.load()
+
+        /* Setup UI elements */
+        setupUI()
 
         /* Check if we opened the app due to a Nfc event */
         processNfcTagScanned()

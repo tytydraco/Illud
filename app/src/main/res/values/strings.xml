@@ -23,4 +23,5 @@
 Please ensure NFC is enabled."
     </string>
     <string name="nfc_read_dialog">Append tag items to current list?</string>
+    <string name="list_items_clear">"Are you sure you would like to clear your list?"</string>
 </resources>
