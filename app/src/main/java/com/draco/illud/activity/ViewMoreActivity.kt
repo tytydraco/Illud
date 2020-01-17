@@ -90,10 +90,14 @@ class ViewMoreActivity : AppCompatActivity() {
                 val contentText = content.text.toString()
 
                 val sendText = when {
-                    /* First choice is content */
+                    /* First choice is both (label: content)*/
+                    contentText.isNotBlank() &&
+                    labelText.isNotBlank() -> "$labelText: $contentText"
+
+                    /* Second choice is content */
                     contentText.isNotBlank() -> contentText
 
-                    /* Second choice is label */
+                    /* Third choice is label */
                     labelText.isNotBlank() -> labelText
 
                     /* If there's nothing to share, just ignore request */
