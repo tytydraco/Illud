@@ -20,8 +20,10 @@ class ViewMoreActivity : AppCompatActivity() {
     private lateinit var content: EditText
     private lateinit var tag: EditText
 
-    /* Internal */
+    /* Position to insert the list item into (-1 means its a new item) */
     private var position = -1
+
+    /* User wanted to delete this item (so don't save it on onPause) */
     private var deleted = false
 
     /* Occurs on application start */
@@ -29,21 +31,23 @@ class ViewMoreActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.view_more_activity)
 
-        /* Allow back button functionality */
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
-        /* Don't put a title */
-        title = ""
-
-        /* Import the item that was passed to us as a raw string */
-        val itemString = intent.getStringExtra("itemString")
-        position = intent.getIntExtra("position", -1)
-        val thisItem = ListItem(itemString)
-
         /* Setup our local UI elements */
         label = findViewById(R.id.label)
         content = findViewById(R.id.content)
         tag = findViewById(R.id.tag)
+
+        /* Allow back button functionality */
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+        /* Change title to be more relevant */
+        title = "View More"
+
+        /* Import the item that was passed to us as a raw string */
+        val itemString = intent.getStringExtra("itemString")
+        position = intent.getIntExtra("position", -1)
+
+        /* Create a new list item object based on the intent extras */
+        val thisItem = ListItem(itemString)
 
         /* Set the labels based on what was given to us */
         label.setText(thisItem.label)
@@ -83,6 +87,7 @@ class ViewMoreActivity : AppCompatActivity() {
                 /* Close activity */
                 finish()
             }
+
             R.id.share -> run {
                 val labelText = label.text.toString()
                 val contentText = content.text.toString()
@@ -94,20 +99,8 @@ class ViewMoreActivity : AppCompatActivity() {
                     /* Second choice is label */
                     labelText.isNotBlank() -> labelText
 
-                    /* Fail safe */
-                    else -> {
-                        Snackbar.make(content, "Nothing to share.", Snackbar.LENGTH_SHORT)
-                            .setAction("Dismiss") {}
-                            .show()
-
-                        /* Dismiss keyboard to show snackbar */
-                        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                        imm.hideSoftInputFromWindow(label.windowToken, 0)
-                        imm.hideSoftInputFromWindow(content.windowToken, 0)
-                        imm.hideSoftInputFromWindow(tag.windowToken, 0)
-
-                        return@run
-                    }
+                    /* If there's nothing to share, just ignore request */
+                    else -> return@run
                 }
 
                 /* Open send-to dialog with our copy text */
@@ -126,11 +119,11 @@ class ViewMoreActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
 
-        /* Don't do auto-save if we press delete */
+        /* Don't save this item if we pressed delete */
         if (deleted)
             return
 
-        /* Create a ListItem based on our user-inputted contents */
+        /* Create a new list item object based on the new contents */
         val item = ListItem(
             label.text.toString(),
             content.text.toString(),
@@ -141,7 +134,7 @@ class ViewMoreActivity : AppCompatActivity() {
         if (position == -1) {
             listItems.add(item)
 
-            /* The new location of our item is at 0. Prevents item from being recreated */
+            /* Prevents item from being recreated if we resume later */
             position = 0
         } else
             listItems.set(position, item)
