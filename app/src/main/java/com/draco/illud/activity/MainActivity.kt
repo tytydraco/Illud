@@ -193,11 +193,14 @@ class MainActivity : AppCompatActivity() {
     private fun processNfcTagScanned() {
         if (intent != null && Nfc.startedByNDEF(intent)) {
             when (scanAction) {
-                NfcScanAction.WRITE -> nfcWrite(intent)
-                NfcScanAction.SWAP -> nfcSwap(intent)
-
-                /* None means we can read the tag */
+                /* Do nothing, or read contents of tag */
                 NfcScanAction.NONE -> nfcRead(intent)
+
+                /* Write to tag */
+                NfcScanAction.WRITE -> nfcWrite(intent)
+
+                /* Write to tag, and read contents */
+                NfcScanAction.SWAP -> nfcSwap(intent)
             }
         }
     }
