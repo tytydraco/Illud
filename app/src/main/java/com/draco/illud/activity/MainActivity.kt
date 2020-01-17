@@ -43,9 +43,6 @@ class MainActivity : AppCompatActivity() {
     /* Dialog is shown when writing or swapping (lock UI) */
     private var nfcScanAlertDialog: AlertDialog? = null
 
-    /* Found a tag; ask user to import contents */
-    private var readContentsAlertDialog: AlertDialog? = null
-
     /* Should we write, swap, or do nothing (potentially read) on scan */
     private var scanAction = NfcScanAction.NONE
 
@@ -165,19 +162,20 @@ class MainActivity : AppCompatActivity() {
         /* Read contents as compressed bytes */
         val nfcContent = Nfc.readBytes(intent)
 
-        /* Tell user we are blank. */
+        /* Tell user we are blank */
         if (nfcContent == null || nfcContent.isEmpty()) {
             Snackbar.make(addNew, "Tag has no contents.", Snackbar.LENGTH_SHORT)
                 .setAction("Dismiss") {}
                 .setAnchorView(addNew)
                 .show()
+
             return
         }
 
         /* Ask for confirmation, but keep data in memory so tag can be removed */
-        val dialog = AlertDialog.Builder(this)
+        AlertDialog.Builder(this)
             .setTitle("Import")
-            .setMessage("Import items from this tag?")
+            .setMessage(getString(R.string.nfc_read_dialog))
             .setPositiveButton("Confirm") { _: DialogInterface, _: Int ->
                 /* Splice the card contents and append the list view for the user */
                 val nfcItems = listItems.parseJoinedString(String(nfcContent))
@@ -188,14 +186,7 @@ class MainActivity : AppCompatActivity() {
                 recyclerView.scrollToPosition(0)
             }
             .setNegativeButton("Cancel", null)
-
-        /* Do not show the dialog if we already have it open */
-        if (readContentsAlertDialog != null &&
-            readContentsAlertDialog!!.isShowing)
-            return
-
-        readContentsAlertDialog = dialog.create()
-        readContentsAlertDialog!!.show()
+            .show()
     }
 
     /* Process Nfc tag scan event */

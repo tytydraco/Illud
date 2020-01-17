@@ -22,4 +22,5 @@
 
 Please ensure NFC is enabled."
     </string>
+    <string name="nfc_read_dialog">Append tag items to current list?</string>
 </resources>
