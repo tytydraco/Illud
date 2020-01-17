@@ -10,7 +10,7 @@
         android:id="@+id/label"
         style="@style/TextTheme"
         android:background="@null"
-        android:textSize="28sp"
+        android:textSize="32sp"
         android:ellipsize="end"
         android:paddingVertical="18dp"
         android:textStyle="bold"
