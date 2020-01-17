@@ -75,9 +75,19 @@ class MainActivity : AppCompatActivity() {
         /* Get the contents of the current Nfc tag */
         var nfcContent = Nfc.readBytes(intent)
 
-        /* If for some reason the read fails, use blank contents */
-        if (nfcContent == null)
-            nfcContent = byteArrayOf()
+        /* If for some reason the read fails, abort to prevent corruption */
+        if (nfcContent == null) {
+            Snackbar.make(addNew, "Reading failed, swap aborted.", Snackbar.LENGTH_SHORT)
+                .setAction("Dismiss") {}
+                .setAnchorView(addNew)
+                .show()
+
+            /* Dismiss the non-cancellable dialog for the user */
+            dismissNfcScanDialog()
+            scanAction = NfcScanAction.NONE
+
+            return
+        }
 
         /* Write contents as compressed bytes */
         val exception = Nfc.writeBytes(intent, writeString.toByteArray())
