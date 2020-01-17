@@ -79,26 +79,32 @@ class RecyclerViewAdapter(
         notifyItemMoved(fromPosition, toPosition)
     }
 
+    /* Delete item at viewholder position, but allow user to undo */
+    fun deleteItemWithUndo(holder: RecyclerView.ViewHolder) {
+        val updatedPosition = holder.adapterPosition
+        val updatedItem = listItems.get(updatedPosition)
+
+        listItems.remove(updatedPosition)
+        notifyItemRemoved(updatedPosition)
+
+        /* Allow user to undo item deletion temporarily */
+        Snackbar.make(snackbarAnchor, "Deleted item.", Snackbar.LENGTH_LONG)
+            .setAction("Undo") {
+                listItems.insert(updatedPosition, updatedItem)
+                notifyItemInserted(updatedPosition)
+                recyclerView.scrollToPosition(updatedPosition)
+            }
+            .setAnchorView(snackbarAnchor)
+            .show()
+    }
+
     /* Configure each holder view */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = listItems.get(position)
 
+        /* Clicking the dismiss button */
         holder.bullet.setOnClickListener {
-            val updatedPosition = holder.adapterPosition
-            val updatedItem = listItems.get(updatedPosition)
-
-            listItems.remove(updatedPosition)
-            notifyItemRemoved(updatedPosition)
-
-            /* Allow user to undo item deletion temporarily */
-            Snackbar.make(snackbarAnchor, "Deleted item.", Snackbar.LENGTH_LONG)
-                .setAction("Undo") {
-                    listItems.insert(updatedPosition, updatedItem)
-                    notifyItemInserted(updatedPosition)
-                    recyclerView.scrollToPosition(position)
-                }
-                .setAnchorView(snackbarAnchor)
-                .show()
+            deleteItemWithUndo(holder)
         }
 
         /* Set the text */

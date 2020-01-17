@@ -293,8 +293,6 @@ class MainActivity : AppCompatActivity() {
 
         /* Setup drag and drop handler */
         val callback = RecyclerViewDragHelper(
-            /* Our add button as a snackbar anchor */
-            addNew,
             viewAdapter,
             recyclerView,
 
