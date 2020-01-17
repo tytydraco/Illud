@@ -7,6 +7,7 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.get
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +20,7 @@ import com.draco.illud.utils.nfc
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import kotlin.concurrent.fixedRateTimer
 
 class MainActivity : AppCompatActivity() {
     /* UI elements */
@@ -41,7 +43,7 @@ class MainActivity : AppCompatActivity() {
     private var scanAction = NfcScanAction.NONE
 
     /* Put the user into scan mode (locks UI until scan) */
-    private fun nfcScanDialog() {
+    private fun showNfcScanDialog() {
         /* Do not show the dialog if we already have it open */
         if (nfcScanAlertDialog != null &&
             nfcScanAlertDialog!!.isShowing)
@@ -49,9 +51,6 @@ class MainActivity : AppCompatActivity() {
 
         /* Lock the UI for the user */
         nfcScanAlertDialog!!.show()
-
-        /* Next time we scan a tag, write to it */
-        scanAction = NfcScanAction.WRITE
     }
 
     /* Dismiss write Nfc tag alert dialog */
@@ -168,21 +167,6 @@ class MainActivity : AppCompatActivity() {
         readContentsAlertDialog!!.show()
     }
 
-    /* Tell the user to check device compatibility */
-    private fun warnUserAboutNfcStatus(nfcState: Nfc.State) {
-        /* Based on our Nfc status, show a special message */
-        val nfcStateString = when (nfcState) {
-            Nfc.State.SUPPORTED_OFF -> "Please enable Nfc."
-            Nfc.State.UNSUPPORTED -> "This device lacks Nfc."
-            else -> return
-        }
-
-        Snackbar.make(addNew, nfcStateString, Snackbar.LENGTH_SHORT)
-            .setAction("Dismiss") {}
-            .setAnchorView(addNew)
-            .show()
-    }
-
     /* Process Nfc tag scan event */
     private fun processNfcTagScanned() {
         if (intent != null && Nfc.startedByNDEF(intent)) {
@@ -295,23 +279,12 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.write_contents -> {
-                    /* Make sure we still have Nfc on */
-                    val nfcCurrentState = nfc.supportState()
-                    if (nfcCurrentState != Nfc.State.SUPPORTED_ON)
-                        warnUserAboutNfcStatus(nfcCurrentState)
-                    else {
-                        nfcScanDialog()
-                        scanAction = NfcScanAction.WRITE
-                    }
+                    showNfcScanDialog()
+                    scanAction = NfcScanAction.WRITE
                     true
                 }
                 R.id.swap -> {
-                    /* Make sure we still have Nfc on */
-                    val nfcCurrentState = nfc.supportState()
-                    if (nfcCurrentState != Nfc.State.SUPPORTED_ON)
-                        warnUserAboutNfcStatus(nfcCurrentState)
-                    else
-                        nfcScanDialog()
+                    showNfcScanDialog()
                     scanAction = NfcScanAction.SWAP
                     true
                 }
