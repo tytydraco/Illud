@@ -92,27 +92,33 @@ class MainActivity : AppCompatActivity() {
         /* Write contents as compressed bytes */
         val exception = Nfc.writeBytes(intent, writeString.toByteArray())
 
-        /* Based on our result, show a special message */
-        var message = "Swapped successfully."
+        /* If there was an exception, show the user the issue and abort */
+        if (exception != null) {
+            Snackbar.make(addNew, exception.message!!, Snackbar.LENGTH_SHORT)
+                .setAction("Dismiss") {}
+                .setAnchorView(addNew)
+                .show()
 
-        /* If there was an exception, show the user the issue */
-        if (exception != null)
-            message = exception.message!!
-        else {
-            /* Splice the card contents and append the list view for the user */
-            viewAdapter.notifyItemRangeRemoved(0, listItems.size())
-            listItems.clear()
+            /* Dismiss the non-cancellable dialog for the user */
+            dismissNfcScanDialog()
+            scanAction = NfcScanAction.NONE
 
-            /* If we were able to write to the tag, overwrite our list */
-            val nfcItems = listItems.parseJoinedString(String(nfcContent))
-            listItems.addAll(nfcItems)
-
-            /* Append data and scroll up to new data */
-            viewAdapter.notifyItemRangeInserted(0, nfcItems.size)
-            recyclerView.scrollToPosition(0)
+            return
         }
 
-        Snackbar.make(addNew, message, Snackbar.LENGTH_SHORT)
+        /* Splice the card contents and append the list view for the user */
+        viewAdapter.notifyItemRangeRemoved(0, listItems.size())
+        listItems.clear()
+
+        /* If we were able to write to the tag, overwrite our list */
+        val nfcItems = listItems.parseJoinedString(String(nfcContent))
+        listItems.addAll(nfcItems)
+
+        /* Append data and scroll up to new data */
+        viewAdapter.notifyItemRangeInserted(0, nfcItems.size)
+        recyclerView.scrollToPosition(0)
+
+        Snackbar.make(addNew, "Swapped successfully.", Snackbar.LENGTH_SHORT)
             .setAction("Dismiss") {}
             .setAnchorView(addNew)
             .show()
@@ -130,13 +136,21 @@ class MainActivity : AppCompatActivity() {
         /* Write contents as compressed bytes */
         val exception = Nfc.writeBytes(intent, writeString.toByteArray())
 
-        /* Based on our result, show a special message */
-        var message = "Wrote successfully."
+        /* If there was an exception, show the user the issue and abort */
+        if (exception != null) {
+            Snackbar.make(addNew, exception.message!!, Snackbar.LENGTH_SHORT)
+                .setAction("Dismiss") {}
+                .setAnchorView(addNew)
+                .show()
 
-        if (exception != null)
-            message = exception.message!!
+            /* Dismiss the non-cancellable dialog for the user */
+            dismissNfcScanDialog()
+            scanAction = NfcScanAction.NONE
 
-        Snackbar.make(addNew, message, Snackbar.LENGTH_SHORT)
+            return
+        }
+
+        Snackbar.make(addNew, "Wrote successfully.", Snackbar.LENGTH_SHORT)
             .setAction("Dismiss") {}
             .setAnchorView(addNew)
             .show()
