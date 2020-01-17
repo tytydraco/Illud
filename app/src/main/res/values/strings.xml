@@ -17,4 +17,9 @@
     <!-- Misc strings -->
     <string name="bullet">Bullet</string>
     <string name="recycler_view_empty">There are no entries</string>
+    <string name="nfc_scan_dialog">
+"Hold a tag to the back of the device until this dialog disappears.
+
+Please ensure NFC is enabled."
+    </string>
 </resources>

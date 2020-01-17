@@ -244,7 +244,7 @@ class MainActivity : AppCompatActivity() {
         /* Create write dialog */
         nfcScanAlertDialog = AlertDialog.Builder(this)
             .setTitle("Scan Nfc Tag")
-            .setMessage("Hold a tag to the back of the device until this dialog disappears.")
+            .setMessage(getString(R.string.nfc_scan_dialog))
             .setNegativeButton("Cancel", null)
             .setOnDismissListener {
                 dismissNfcScanDialog()
