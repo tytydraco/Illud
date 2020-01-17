@@ -1,18 +1,15 @@
 package com.draco.illud.activity
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.draco.illud.R
 import com.draco.illud.utils.ListItem
 import com.draco.illud.utils.listItems
-import com.google.android.material.snackbar.Snackbar
 
 class ViewMoreActivity : AppCompatActivity() {
     /* UI elements */
