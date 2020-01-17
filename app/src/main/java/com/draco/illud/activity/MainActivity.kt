@@ -7,7 +7,6 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.view.get
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +19,6 @@ import com.draco.illud.utils.nfc
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import kotlin.concurrent.fixedRateTimer
 
 class MainActivity : AppCompatActivity() {
     /* UI elements */
@@ -31,15 +29,24 @@ class MainActivity : AppCompatActivity() {
     private lateinit var bottomAppBar: BottomAppBar
     private lateinit var addNew: FloatingActionButton
 
-    /* Internal */
     enum class NfcScanAction {
+        /* Do nothing, or read contents of tag */
         NONE,
+
+        /* Write to tag */
         WRITE,
+
+        /* Write to tag, and read contents */
         SWAP
     }
 
+    /* Dialog is shown when writing or swapping (lock UI) */
     private var nfcScanAlertDialog: AlertDialog? = null
+
+    /* Found a tag; ask user to import contents */
     private var readContentsAlertDialog: AlertDialog? = null
+
+    /* Should we write, swap, or do nothing (potentially read) on scan */
     private var scanAction = NfcScanAction.NONE
 
     /* Put the user into scan mode (locks UI until scan) */
@@ -180,37 +187,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /* Enable foreground scanning */
-    override fun onResume() {
-        super.onResume()
-
-        /* When we switch activities, make sure to get updated info */
-        if (intent == null || !Nfc.startedByNDEF(intent))
-            viewAdapter.notifyDataSetChanged()
-
-        nfc.enableForegroundIntent(this)
-
-        /* Invalidate our old Nfc intent */
-        intent = null
-    }
-
-    /* Disable foreground scanning */
-    override fun onPause() {
-        super.onPause()
-        nfc.disableForegroundIntent(this)
-    }
-
-    /* Catch Nfc tag scan in our foreground intent filter */
-    override fun onNewIntent(thisIntent: Intent?) {
-        super.onNewIntent(thisIntent)
-
-        /* This is so that other functions can see our Nfc intent */
-        intent = thisIntent
-
-        /* Call Nfc tag handler if we are sure this is an Nfc scan */
-        processNfcTagScanned()
-    }
-
     /* Occurs on application start */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -332,5 +308,38 @@ class MainActivity : AppCompatActivity() {
 
         /* Activate dark mode if the system is dark themed */
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+    }
+
+    /* ----- Miscellaneous Setup ----- */
+
+    /* Enable foreground scanning */
+    override fun onResume() {
+        super.onResume()
+
+        /* When we switch activities, make sure to get updated info */
+        if (intent == null || !Nfc.startedByNDEF(intent))
+            viewAdapter.notifyDataSetChanged()
+
+        nfc.enableForegroundIntent(this)
+
+        /* Invalidate our old Nfc intent */
+        intent = null
+    }
+
+    /* Disable foreground scanning */
+    override fun onPause() {
+        super.onPause()
+        nfc.disableForegroundIntent(this)
+    }
+
+    /* Catch Nfc tag scan in our foreground intent filter */
+    override fun onNewIntent(thisIntent: Intent?) {
+        super.onNewIntent(thisIntent)
+
+        /* This is so that other functions can see our Nfc intent */
+        intent = thisIntent
+
+        /* Call Nfc tag handler if we are sure this is an Nfc scan */
+        processNfcTagScanned()
     }
 }
