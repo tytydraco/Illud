@@ -27,7 +27,7 @@
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />
                 <action android:name="android.nfc.action.TAG_DISCOVERED" />
                 <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="text/tagdrive" />
+                <data android:mimeType="text/illud" />
             </intent-filter>
         </activity>
         <activity android:name="com.draco.illud.activity.ViewMoreActivity"
