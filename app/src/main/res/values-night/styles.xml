@@ -2,23 +2,10 @@
 
     <!-- Base application theme -->
     <style name="AppTheme.DayNight" parent="Theme.MaterialComponents">
-        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:navigationBarColor">@color/colorPrimary</item>
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
-        <item name="android:windowBackground">@color/colorPrimaryDark</item>
-        <item name="actionBarStyle">@style/ActionBarTheme</item>
-    </style>
-
-    <style name="ActionBarTheme" parent="Widget.AppCompat.Light.ActionBar">
-        <item name="android:backgroundTint">@color/colorPrimaryDark</item>
-    </style>
-
-    <style name="TextTheme" parent="TextAppearance.AppCompat.Subhead">
-        <item name="android:paddingHorizontal">24dp</item>
     </style>
 
     <!-- Colors for material alert dialogs -->
