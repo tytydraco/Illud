@@ -5,7 +5,7 @@
         android:id="@+id/write_contents"
         android:icon="@drawable/ic_file_upload_24dp"
         app:showAsAction="always"
-        android:title="@string/sort"/>
+        android:title="@string/sort_by_tag"/>
     <item
         android:id="@+id/swap"
         android:icon="@drawable/ic_swap_vert_24dp"
@@ -17,7 +17,16 @@
         app:showAsAction="withText"
         android:title="@string/wipe"/>
     <item
-        android:id="@+id/sort"
+        android:id="@+id/sort_by_label"
         app:showAsAction="withText"
-        android:title="@string/sort"/>
+        android:title="@string/sort_by_label"/>
+    <item
+        android:id="@+id/sort_by_tag"
+        app:showAsAction="withText"
+        android:title="@string/sort_by_tag"/>
+    <item
+        android:id="@+id/sort_by_length"
+        app:showAsAction="withText"
+        android:title="@string/sort_by_length"/>
+
 </menu>

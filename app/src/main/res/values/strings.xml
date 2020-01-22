@@ -9,7 +9,9 @@
     <string name="delete">Delete Item</string>
     <string name="save">Save</string>
     <string name="swap">Swap</string>
-    <string name="sort">Sort</string>
+    <string name="sort_by_label">Sort By Label</string>
+    <string name="sort_by_tag">Sort By Tag</string>
+    <string name="sort_by_length">Sort By Length</string>
 
     <!-- Label hint strings -->
     <string name="hint_label">Start typing…</string>

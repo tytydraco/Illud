@@ -109,10 +109,22 @@ class ListItems {
         return listItems
     }
 
-    /* Sort based on ListItem contents */
-    fun sort() {
+    /* Sort by tags */
+    fun sortByTag() {
         listItems.sortBy { it.label }
         listItems.sortBy { it.tag }
+        save()
+    }
+
+    /* Sort by labels */
+    fun sortByLabel() {
+        listItems.sortBy { it.label }
+        save()
+    }
+
+    /* Sort by label length */
+    fun sortByLength() {
+        listItems.sortBy { it.label.length }
         save()
     }
 
