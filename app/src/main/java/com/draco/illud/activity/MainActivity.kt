@@ -17,7 +17,7 @@ import com.draco.illud.utils.Nfc
 import com.draco.illud.utils.listItems
 import com.draco.illud.utils.nfc
 import com.google.android.material.bottomappbar.BottomAppBar
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewAdapter: RecyclerViewAdapter
     private lateinit var viewLayoutManager: RecyclerView.LayoutManager
     private lateinit var bottomAppBar: BottomAppBar
-    private lateinit var addNew: FloatingActionButton
+    private lateinit var addNew: ExtendedFloatingActionButton
 
     enum class NfcScanAction {
         /* Do nothing, or read contents of tag */

@@ -32,22 +32,25 @@
             android:visibility="gone" />
     </RelativeLayout>
 
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_new"
+        app:icon="@drawable/ic_add_24dp"
+        app:layout_anchor="@id/bottom_app_bar"
+        app:backgroundTint="@color/colorAccent"
+        app:iconTint="@color/colorPrimary"
+        android:textColor="@color/colorPrimary"
+        android:id="@+id/add_new"
+        style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton" />
+
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottom_app_bar"
+        style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:navigationIcon="@drawable/ic_delete_sweep_24dp"
         app:fabAlignmentMode="center"
-        style="@style/Widget.MaterialComponents.BottomAppBar.Colored" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_add_24dp"
-        app:layout_anchor="@id/bottom_app_bar"
-        app:backgroundTint="@color/colorAccent"
-        app:tint="@color/colorPrimary"
-        android:id="@+id/add_new" />
+        app:navigationIcon="@drawable/ic_delete_sweep_24dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
