@@ -15,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.DayNight">
         <activity android:name="com.draco.illud.activity.MainActivity"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,8 +29,7 @@
                 <data android:mimeType="text/illud" />
             </intent-filter>
         </activity>
-        <activity android:name="com.draco.illud.activity.ViewMoreActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name="com.draco.illud.activity.ViewMoreActivity" />
     </application>
 
 </manifest>

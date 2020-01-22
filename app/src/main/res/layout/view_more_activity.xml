@@ -7,6 +7,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:imeOptions="flagNoExtractUi"
         android:id="@+id/label"
         style="@style/TextTheme"
         android:background="@null"
@@ -21,6 +22,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:imeOptions="flagNoExtractUi"
         android:id="@+id/tag"
         style="@style/TextTheme"
         android:background="@null"
@@ -40,6 +42,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:imeOptions="flagNoExtractUi"
         android:linksClickable="true"
         android:autoLink="all"
         android:gravity="top"
