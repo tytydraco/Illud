@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/add_new"
+        android:icon="@drawable/ic_add_24dp"
+        app:showAsAction="always"
+        android:title="@string/add_new"/>
+    <item
         android:id="@+id/write_contents"
         android:icon="@drawable/ic_file_upload_24dp"
         app:showAsAction="always"

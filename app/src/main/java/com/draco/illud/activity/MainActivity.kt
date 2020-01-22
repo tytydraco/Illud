@@ -18,7 +18,6 @@ import com.draco.illud.recycler_view.RecyclerViewDragHelper
 import com.draco.illud.utils.Nfc
 import com.draco.illud.utils.listItems
 import com.draco.illud.utils.nfc
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
@@ -27,7 +26,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var emptyView: View
     private lateinit var viewAdapter: RecyclerViewAdapter
     private lateinit var viewLayoutManager: RecyclerView.LayoutManager
-    private lateinit var addNew: FloatingActionButton
 
     enum class NfcScanAction {
         /* Do nothing, or read contents of tag */
@@ -74,9 +72,8 @@ class MainActivity : AppCompatActivity() {
 
         /* If for some reason the read fails, abort to prevent corruption */
         if (nfcContent == null) {
-            Snackbar.make(addNew, "Reading failed, swap aborted.", Snackbar.LENGTH_SHORT)
+            Snackbar.make(recyclerView, "Reading failed, swap aborted.", Snackbar.LENGTH_SHORT)
                 .setAction("Dismiss") {}
-                .setAnchorView(addNew)
                 .show()
 
             /* Dismiss the non-cancellable dialog for the user */
@@ -91,9 +88,8 @@ class MainActivity : AppCompatActivity() {
 
         /* If there was an exception, show the user the issue and abort */
         if (exception != null) {
-            Snackbar.make(addNew, exception.message!!, Snackbar.LENGTH_SHORT)
+            Snackbar.make(recyclerView, exception.message!!, Snackbar.LENGTH_SHORT)
                 .setAction("Dismiss") {}
-                .setAnchorView(addNew)
                 .show()
 
             /* Dismiss the non-cancellable dialog for the user */
@@ -115,9 +111,8 @@ class MainActivity : AppCompatActivity() {
         viewAdapter.notifyItemRangeInserted(0, nfcItems.size)
         recyclerView.scrollToPosition(0)
 
-        Snackbar.make(addNew, "Swapped successfully.", Snackbar.LENGTH_SHORT)
+        Snackbar.make(recyclerView, "Swapped successfully.", Snackbar.LENGTH_SHORT)
             .setAction("Dismiss") {}
-            .setAnchorView(addNew)
             .show()
 
         /* Dismiss the non-cancellable dialog for the user */
@@ -135,9 +130,8 @@ class MainActivity : AppCompatActivity() {
 
         /* If there was an exception, show the user the issue and abort */
         if (exception != null) {
-            Snackbar.make(addNew, exception.message!!, Snackbar.LENGTH_SHORT)
+            Snackbar.make(recyclerView, exception.message!!, Snackbar.LENGTH_SHORT)
                 .setAction("Dismiss") {}
-                .setAnchorView(addNew)
                 .show()
 
             /* Dismiss the non-cancellable dialog for the user */
@@ -147,9 +141,8 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        Snackbar.make(addNew, "Wrote successfully.", Snackbar.LENGTH_SHORT)
+        Snackbar.make(recyclerView, "Wrote successfully.", Snackbar.LENGTH_SHORT)
             .setAction("Dismiss") {}
-            .setAnchorView(addNew)
             .show()
 
         /* Dismiss the non-cancellable dialog for the user */
@@ -164,9 +157,8 @@ class MainActivity : AppCompatActivity() {
 
         /* Tell user we are blank */
         if (nfcContent == null || nfcContent.isEmpty()) {
-            Snackbar.make(addNew, "Tag has no contents.", Snackbar.LENGTH_SHORT)
+            Snackbar.make(recyclerView, "Tag has no contents.", Snackbar.LENGTH_SHORT)
                 .setAction("Dismiss") {}
-                .setAnchorView(addNew)
                 .show()
 
             return
@@ -210,7 +202,6 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recycler_view)
         emptyView = findViewById(R.id.recycler_view_empty)
         viewLayoutManager = LinearLayoutManager(this)
-        addNew = findViewById(R.id.add_new)
 
         /* Create scan dialog for writing and swapping */
         nfcScanAlertDialog = AlertDialog.Builder(this)
@@ -222,18 +213,10 @@ class MainActivity : AppCompatActivity() {
                 scanAction = NfcScanAction.NONE
             }.create()
 
-        /* Add new list item */
-        addNew.setOnClickListener {
-            startActivity(Intent(this, ViewMoreActivity::class.java))
-        }
-
         /* Set adapter */
         viewAdapter = RecyclerViewAdapter(
             /* Used to scroll to positions, and for activity context */
             recyclerView,
-
-            /* Our add button as a snackbar anchor */
-            addNew,
 
             /* View to show when we have an empty list */
             emptyView
@@ -272,6 +255,10 @@ class MainActivity : AppCompatActivity() {
     /* Setup toolbar menu actions */
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
+            R.id.add_new -> {
+                startActivity(Intent(this, ViewMoreActivity::class.java))
+            }
+
             R.id.delete -> {
                 AlertDialog.Builder(this)
                     .setTitle("Delete All")

@@ -14,7 +14,6 @@ import com.google.android.material.snackbar.Snackbar
 
 class RecyclerViewAdapter(
     private val recyclerView: RecyclerView,
-    private val snackbarAnchor: View,
     private val emptyView: View):
     RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
@@ -83,13 +82,12 @@ class RecyclerViewAdapter(
         notifyItemRemoved(updatedPosition)
 
         /* Allow user to undo item deletion temporarily */
-        Snackbar.make(snackbarAnchor, "Deleted item.", Snackbar.LENGTH_LONG)
+        Snackbar.make(recyclerView, "Deleted item.", Snackbar.LENGTH_LONG)
             .setAction("Undo") {
                 listItems.insert(updatedPosition, updatedItem)
                 notifyItemInserted(updatedPosition)
                 recyclerView.scrollToPosition(updatedPosition)
             }
-            .setAnchorView(snackbarAnchor)
             .show()
     }
 
