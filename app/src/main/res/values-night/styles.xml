@@ -17,14 +17,8 @@
         <item name="android:backgroundTint">@color/colorPrimaryDark</item>
     </style>
 
-    <style name="TextTheme">
-        <item name="android:textColor">@android:color/white</item>
+    <style name="TextTheme" parent="TextAppearance.AppCompat.Subhead">
         <item name="android:paddingHorizontal">24dp</item>
-    </style>
-
-    <style name="ItemTheme">
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:paddingHorizontal">16dp</item>
     </style>
 
     <!-- Colors for material alert dialogs -->
@@ -32,13 +26,5 @@
         <item name="buttonBarPositiveButtonStyle">@style/Alert.Button.Positive</item>
         <item name="buttonBarNegativeButtonStyle">@style/Alert.Button.Neutral</item>
         <item name="buttonBarNeutralButtonStyle">@style/Alert.Button.Neutral</item>
-    </style>
-
-    <style name="Alert.Button.Positive" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">@color/colorAccent</item>
-    </style>
-
-    <style name="Alert.Button.Neutral" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">@color/colorAccent</item>
     </style>
 </resources>

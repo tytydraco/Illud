@@ -11,13 +11,7 @@
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
     </style>
 
-    <style name="TextTheme">
-        <item name="android:textColor">@android:color/black</item>
-        <item name="android:paddingHorizontal">24dp</item>
-    </style>
-
-    <style name="ItemTheme">
-        <item name="android:textColor">@android:color/black</item>
+    <style name="ItemTheme" parent="TextAppearance.AppCompat.Subhead">
         <item name="android:paddingHorizontal">16dp</item>
     </style>
 
