@@ -13,27 +13,27 @@ class ListItem {
     constructor(setLabel: String?,
                 setContent: String?,
                 setTag: String?) {
-        if (!setLabel.isNullOrBlank())
+        if (!setLabel.isNullOrEmpty())
             label = setLabel
-        if (!setContent.isNullOrBlank())
+        if (!setContent.isNullOrEmpty())
             content = setContent
-        if (!setTag.isNullOrBlank())
+        if (!setTag.isNullOrEmpty())
             tag = setTag
     }
 
     /* Import as coagulated string with separators */
     constructor(rawString: String?) {
         /* Nothing in the string */
-        if (rawString == null || rawString.isBlank())
+        if (rawString == null || rawString.isEmpty())
             return
 
         val splitString: List<String> = rawString.split(separator)
 
-        if (!splitString[0].isBlank())
+        if (splitString[0].isNotEmpty())
             label = splitString[0]
-        if (splitString.size > 1 && !splitString[1].isBlank())
+        if (splitString.size > 1 && splitString[1].isNotEmpty())
             content = splitString[1]
-        if (splitString.size > 2 && !splitString[2].isBlank())
+        if (splitString.size > 2 && splitString[2].isNotEmpty())
             tag = splitString[2]
     }
 

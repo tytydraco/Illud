@@ -24,7 +24,7 @@ class ListItems {
     /* Parse raw string and return items */
     fun parseJoinedString(string: String): ArrayList<ListItem> {
         val items = arrayListOf<ListItem>()
-        if (string.isNotBlank()) {
+        if (string.isNotEmpty()) {
             for (item in string.split(divider))
                 items.add(ListItem(item))
         }
