@@ -27,10 +27,11 @@ class RecyclerViewAdapter(
 
     /* Check if list is empty; if so, show the empty view */
     private fun checkEmptyView() {
-        if (listItems.size() == 0)
+        if (listItems.size() == 0) {
             emptyView.visibility = View.VISIBLE
-        else
+        } else {
             emptyView.visibility = View.GONE
+        }
     }
 
     /* Inflate our rows for each item */
