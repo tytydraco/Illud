@@ -3,11 +3,13 @@
     <string name="app_name">Illud</string>
 
     <!-- Menu strings -->
-    <string name="add_new">New</string>
+    <string name="add_new">New Item</string>
     <string name="write_contents">Write Contents</string>
-    <string name="wipe">Wipe</string>
+    <string name="wipe">Delete All</string>
     <string name="delete">Delete Item</string>
     <string name="save">Save</string>
+    <string name="swap">Swap</string>
+    <string name="sort">Sort</string>
 
     <!-- Label hint strings -->
     <string name="hint_label">Start typing…</string>

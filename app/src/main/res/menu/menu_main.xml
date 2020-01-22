@@ -2,18 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/sort"
-        android:icon="@drawable/ic_sort_by_alpha_24dp"
-        app:showAsAction="ifRoom"
-        android:title=""/>
-    <item
         android:id="@+id/write_contents"
         android:icon="@drawable/ic_file_upload_24dp"
-        app:showAsAction="ifRoom"
-        android:title=""/>
+        app:showAsAction="always"
+        android:title="@string/sort"/>
     <item
         android:id="@+id/swap"
         android:icon="@drawable/ic_swap_vert_24dp"
         app:showAsAction="ifRoom"
-        android:title=""/>
+        android:title="@string/swap"/>
+
+    <item
+        android:id="@+id/delete"
+        android:icon="@drawable/ic_delete_sweep_24dp"
+        app:showAsAction="withText"
+        android:title="@string/wipe"/>
+    <item
+        android:id="@+id/sort"
+        android:icon="@drawable/ic_sort_by_alpha_24dp"
+        app:showAsAction="withText"
+        android:title="@string/sort"/>
 </menu>

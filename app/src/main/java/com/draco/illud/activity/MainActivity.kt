@@ -3,6 +3,8 @@ package com.draco.illud.activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -16,8 +18,7 @@ import com.draco.illud.recycler_view.RecyclerViewDragHelper
 import com.draco.illud.utils.Nfc
 import com.draco.illud.utils.listItems
 import com.draco.illud.utils.nfc
-import com.google.android.material.bottomappbar.BottomAppBar
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
@@ -26,8 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var emptyView: View
     private lateinit var viewAdapter: RecyclerViewAdapter
     private lateinit var viewLayoutManager: RecyclerView.LayoutManager
-    private lateinit var bottomAppBar: BottomAppBar
-    private lateinit var addNew: ExtendedFloatingActionButton
+    private lateinit var addNew: FloatingActionButton
 
     enum class NfcScanAction {
         /* Do nothing, or read contents of tag */
@@ -210,11 +210,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recycler_view)
         emptyView = findViewById(R.id.recycler_view_empty)
         viewLayoutManager = LinearLayoutManager(this)
-        bottomAppBar = findViewById(R.id.bottom_app_bar)
         addNew = findViewById(R.id.add_new)
-
-        /* Use custom bottomAppBar menu */
-        bottomAppBar.replaceMenu(R.menu.menu_main)
 
         /* Create scan dialog for writing and swapping */
         nfcScanAlertDialog = AlertDialog.Builder(this)
@@ -229,45 +225,6 @@ class MainActivity : AppCompatActivity() {
         /* Add new list item */
         addNew.setOnClickListener {
             startActivity(Intent(this, ViewMoreActivity::class.java))
-        }
-
-        /* Clear all list items button ("navigation" button) */
-        bottomAppBar.setNavigationOnClickListener {
-            AlertDialog.Builder(this)
-                .setTitle("Clear")
-                .setMessage(getString(R.string.list_items_clear))
-                .setPositiveButton("Confirm") { _: DialogInterface, _: Int ->
-                    viewAdapter.notifyItemRangeRemoved(0, listItems.size())
-                    listItems.clear()
-                }
-                .setNegativeButton("Cancel", null)
-                .show()
-        }
-
-        /* Menu item actions */
-        bottomAppBar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.sort -> {
-                    /* Sort by tag, then by label */
-                    viewAdapter.sort()
-                    true
-                }
-
-                R.id.write_contents -> {
-                    showNfcScanDialog()
-                    scanAction = NfcScanAction.WRITE
-                    true
-                }
-
-                R.id.swap -> {
-                    showNfcScanDialog()
-                    scanAction = NfcScanAction.SWAP
-                    true
-                }
-
-                /* Should never happen */
-                else -> false
-            }
         }
 
         /* Set adapter */
@@ -304,6 +261,46 @@ class MainActivity : AppCompatActivity() {
 
         /* Create and attach our drag and drop handler */
         ItemTouchHelper(callback).attachToRecyclerView(recyclerView)
+    }
+
+    /* Setup and inflate toolbar */
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    /* Setup toolbar menu actions */
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item!!.itemId) {
+            R.id.delete -> {
+                AlertDialog.Builder(this)
+                    .setTitle("Delete All")
+                    .setMessage(getString(R.string.list_items_clear))
+                    .setPositiveButton("Confirm") { _: DialogInterface, _: Int ->
+                        viewAdapter.notifyItemRangeRemoved(0, listItems.size())
+                        listItems.clear()
+                    }
+                    .setNegativeButton("Cancel", null)
+                    .show()
+            }
+
+            R.id.sort -> {
+                /* Sort by tag, then by label */
+                viewAdapter.sort()
+            }
+
+            R.id.write_contents -> {
+                showNfcScanDialog()
+                scanAction = NfcScanAction.WRITE
+            }
+
+            R.id.swap -> {
+                showNfcScanDialog()
+                scanAction = NfcScanAction.SWAP
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     /* Occurs on application start */
