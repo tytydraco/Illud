@@ -92,7 +92,7 @@ class ViewMoreActivity : AppCompatActivity() {
                 val sendText = when {
                     /* First choice is both (label: content)*/
                     contentText.isNotBlank() &&
-                    labelText.isNotBlank() -> "$labelText: $contentText"
+                    labelText.isNotBlank() -> "$labelText:\n$contentText"
 
                     /* Second choice is content */
                     contentText.isNotBlank() -> contentText
