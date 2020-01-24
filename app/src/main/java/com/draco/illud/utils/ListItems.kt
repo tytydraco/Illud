@@ -2,7 +2,11 @@ package com.draco.illud.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.provider.Settings.Secure
 import androidx.preference.PreferenceManager
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
+
 
 class ListItems {
     /* Constants */
@@ -12,6 +16,7 @@ class ListItems {
     private var items: ArrayList<ListItem> = arrayListOf()
 
     /* Shared Preferences */
+    private val prefsFileName = "encrypted_prefs"
     private val prefsStringId = "listItems"
     private lateinit var prefs: SharedPreferences
     private lateinit var prefsEditor: SharedPreferences.Editor
@@ -48,7 +53,17 @@ class ListItems {
 
     /* Setup shared preferences */
     fun setupSharedPrefs(context: Context) {
-        prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        /* Use AES256 encryption for sensitive data */
+        val masterKey = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+
+        prefs = EncryptedSharedPreferences.create(
+            prefsFileName,
+            masterKey,
+            context,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+
         prefsEditor = prefs.edit()
     }
 
