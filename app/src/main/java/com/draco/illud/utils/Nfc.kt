@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.nfc.*
 import android.nfc.tech.Ndef
+import android.util.Log
 import java.io.IOException
 
 class Nfc {
@@ -46,8 +47,17 @@ class Nfc {
             val ndefMessage = parcelables[0] as NdefMessage
             val ndefRecord = ndefMessage.records[0]
 
+            var newBytes = ndefRecord.payload
+
+            /* Attempt to decompress the bytes if possible */
+            try {
+                newBytes = Compression.decompress(ndefRecord.payload)
+            } catch (_: Exception) {
+                Log.e("Compression", "Failed to decompress bytes.")
+            }
+
             /* Return the content of the first record */
-            return ndefRecord.payload
+            return newBytes
         }
 
         /* Try to write a ByteArray to a tag. Return true if succeeded */
@@ -57,6 +67,15 @@ class Nfc {
 
             /* Connect to the tag */
             val ndef = Ndef.get(currentTag)
+
+            var newBytes = bytes
+
+            /* Try compressing the bytes to save space */
+            try {
+                newBytes = Compression.compress(bytes)
+            } catch (_: Exception) {
+                Log.e("Compression", "Failed to compress bytes.")
+            }
 
             /* Try to write to the tag; if fail, return false */
             try {
@@ -73,7 +92,7 @@ class Nfc {
                 }
 
                 /* Write the message */
-                val record = createByteRecord(bytes)
+                val record = createByteRecord(newBytes)
                 ndef.writeNdefMessage(NdefMessage(record))
 
                 /* Close */

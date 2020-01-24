@@ -8,8 +8,8 @@ class ListItems {
     /* Constants */
     private val divider = "\r" /* Separates individual notes */
 
-    /* Internal */
-    private var listItems: ArrayList<ListItem> = arrayListOf()
+    /* Items are stored here */
+    private var items: ArrayList<ListItem> = arrayListOf()
 
     /* Shared Preferences */
     private val prefsStringId = "listItems"
@@ -18,7 +18,7 @@ class ListItems {
 
     /* Coagulate raw items into a single string */
     fun generateJoinedString(): String {
-        return listItems.joinToString(divider)
+        return items.joinToString(divider)
     }
 
     /* Parse raw string and return items */
@@ -41,7 +41,7 @@ class ListItems {
     /* Restore backed up list items */
     fun load() {
         /* Empty items since we are loading. Do not call clear() due to save() */
-        listItems.clear()
+        items.clear()
         val loadedItems = parseJoinedString(prefs.getString(prefsStringId, "")!!)
         addAllToBack(loadedItems)
     }
@@ -54,7 +54,7 @@ class ListItems {
 
     /* Insert a label : content pair at position */
     fun insert(position: Int, item: ListItem) {
-        listItems.add(position, item)
+        items.add(position, item)
 
         save()
     }
@@ -66,7 +66,7 @@ class ListItems {
 
     /* Add multiple label : content pairs at the start */
     fun addAll(items: ArrayList<ListItem>) {
-        listItems.addAll(0, items)
+        this.items.addAll(0, items)
         save()
     }
 
@@ -77,65 +77,65 @@ class ListItems {
 
     /* Add multiple label : content pairs at the end */
     fun addAllToBack(items: ArrayList<ListItem>) {
-        listItems.addAll(items)
+        this.items.addAll(items)
         save()
     }
 
     /* Set a label : content pair and preserve its position */
     fun set(position: Int, item: ListItem) {
-        listItems[position] = item
+        items[position] = item
         save()
     }
 
     /* Set all label : content pairs */
     fun setAll(items: ArrayList<ListItem>) {
-        listItems = items
+        this.items = items
         save()
     }
 
     /* Remove a label : content pair at position */
     fun remove(position: Int) {
-        listItems.removeAt(position)
+        items.removeAt(position)
         save()
     }
 
     /* Get a label : content pair at position */
     fun get(position: Int): ListItem {
-        return listItems[position]
+        return items[position]
     }
 
     /* Get all a label : content pairs */
     fun getAll(): ArrayList<ListItem> {
-        return listItems
+        return items
     }
 
     /* Sort by tags */
     fun sortByTag() {
-        listItems.sortBy { it.label }
-        listItems.sortBy { it.tag }
+        items.sortBy { it.label }
+        items.sortBy { it.tag }
         save()
     }
 
     /* Sort by labels */
     fun sortByLabel() {
-        listItems.sortBy { it.label }
+        items.sortBy { it.label }
         save()
     }
 
     /* Sort by label length */
     fun sortByLength() {
-        listItems.sortBy { it.label.length }
+        items.sortBy { it.label.length }
         save()
     }
 
     /* Clear list items */
     fun clear() {
-        listItems.clear()
+        items.clear()
         save()
     }
 
     /* Return the size of the list */
     fun size(): Int {
-        return listItems.size
+        return items.size
     }
 }
