@@ -7,5 +7,4 @@ package com.draco.illud.utils
  */
 
 /* Our global copy of classes */
-var nfc = Nfc()
 val listItems = ListItems()

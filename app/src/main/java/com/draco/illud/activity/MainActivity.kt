@@ -17,7 +17,6 @@ import com.draco.illud.recycler_view.RecyclerViewAdapter
 import com.draco.illud.recycler_view.RecyclerViewDragHelper
 import com.draco.illud.utils.Nfc
 import com.draco.illud.utils.listItems
-import com.draco.illud.utils.nfc
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
@@ -26,6 +25,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var emptyView: View
     private lateinit var viewAdapter: RecyclerViewAdapter
     private lateinit var viewLayoutManager: RecyclerView.LayoutManager
+
+    /* Private classes */
+    private lateinit var nfc: Nfc
 
     enum class NfcScanAction {
         /* Do nothing, or read contents of tag */
