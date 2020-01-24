@@ -47,17 +47,8 @@ class Nfc {
             val ndefMessage = parcelables[0] as NdefMessage
             val ndefRecord = ndefMessage.records[0]
 
-            var newBytes = ndefRecord.payload
-
-            /* Attempt to decompress the bytes if possible */
-            try {
-                newBytes = Compression.decompress(ndefRecord.payload)
-            } catch (_: Exception) {
-                Log.e("Compression", "Failed to decompress bytes.")
-            }
-
             /* Return the content of the first record */
-            return newBytes
+            return Compression.safeDecompress(ndefRecord.payload)
         }
 
         /* Try to write a ByteArray to a tag. Return true if succeeded */
@@ -68,14 +59,7 @@ class Nfc {
             /* Connect to the tag */
             val ndef = Ndef.get(currentTag)
 
-            var newBytes = bytes
-
-            /* Try compressing the bytes to save space */
-            try {
-                newBytes = Compression.compress(bytes)
-            } catch (_: Exception) {
-                Log.e("Compression", "Failed to compress bytes.")
-            }
+            val newBytes = Compression.safeCompress(bytes)
 
             /* Try to write to the tag; if fail, return false */
             try {
