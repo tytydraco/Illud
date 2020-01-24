@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         val writeString = listItems.generateJoinedString()
 
         /* Get the contents of the current Nfc tag */
-        var nfcContent = Nfc.readBytes(intent)
+        val nfcContent = Nfc.readBytes(intent)
 
         /* If for some reason the read fails, abort to prevent corruption */
         if (nfcContent == null) {

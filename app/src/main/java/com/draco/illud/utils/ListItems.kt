@@ -2,8 +2,6 @@ package com.draco.illud.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.provider.Settings.Secure
-import androidx.preference.PreferenceManager
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 

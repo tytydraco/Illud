@@ -9,8 +9,7 @@ class RecyclerViewDragHelper(
     private var recyclerView: RecyclerView,
     dragDirs: Int,
     swipeDirs: Int):
-    ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs)
-{
+    ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
     /* Start swapping the positions of our list and save it to shared preferences */
     override fun onMove(recyclerView: RecyclerView,
                         viewHolder: RecyclerView.ViewHolder,
