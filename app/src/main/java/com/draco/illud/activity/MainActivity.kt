@@ -1,8 +1,10 @@
 package com.draco.illud.activity
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -15,8 +17,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.draco.illud.R
 import com.draco.illud.recycler_view.RecyclerViewAdapter
 import com.draco.illud.recycler_view.RecyclerViewDragHelper
+import com.draco.illud.utils.Constants
+import com.draco.illud.utils.ListItem
+import com.draco.illud.utils.ListItems
 import com.draco.illud.utils.Nfc
-import com.draco.illud.utils.listItems
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
@@ -28,6 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     /* Private classes */
     private lateinit var nfc: Nfc
+    private lateinit var listItems: ListItems
 
     enum class NfcScanAction {
         /* Do nothing, or read contents of tag */
@@ -220,6 +225,9 @@ class MainActivity : AppCompatActivity() {
             /* Used to scroll to positions, and for activity context */
             recyclerView,
 
+            /* Pass our local listItems copy */
+            listItems,
+
             /* View to show when we have an empty list */
             emptyView
         )
@@ -237,6 +245,9 @@ class MainActivity : AppCompatActivity() {
         val callback = RecyclerViewDragHelper(
             viewAdapter,
             recyclerView,
+
+            /* Pass our local listItems copy */
+            listItems,
 
             /* Reposition with long press and drag */
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
@@ -258,7 +269,8 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             R.id.add_new -> {
-                startActivity(Intent(this, ViewMoreActivity::class.java))
+                val viewMoreIntent = Intent(this, ViewMoreActivity::class.java)
+                startActivityForResult(viewMoreIntent, Constants.VIEW_MORE_ACTIVITY_RESULT_CODE)
             }
 
             R.id.delete -> {
@@ -302,6 +314,32 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    /* Process results from ViewMoreActivity and others */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        /* ViewMoreActivity */
+        if (requestCode == Constants.VIEW_MORE_ACTIVITY_RESULT_CODE) {
+            /* Make sure we returned with intent to process data */
+            if (resultCode == Activity.RESULT_OK) {
+                /* Make sure we have data to process */
+                if (data == null)
+                    return
+
+                val itemString = data.getStringExtra("item")
+                val item = ListItem(itemString)
+                val position = data.getIntExtra("position", -1)
+
+                /* If position is -1, we are going to make a new item */
+                if (position == -1) {
+                    listItems.add(item)
+                } else {
+                    listItems.set(position, item)
+                }
+            }
+        }
+    }
+
     /* Occurs on application start */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -316,8 +354,11 @@ class MainActivity : AppCompatActivity() {
         /* Allow Nfc tags to be scanned while the app is opened */
         nfc.setupForegroundIntent(this)
 
+        /* Register our ListItems helper class */
+        listItems = ListItems(this)
+
         /* Setup shared preferences for our list items */
-        listItems.setupSharedPrefs(this)
+        listItems.setupSharedPrefs()
 
         /* Restore backed up list items if we have any */
         listItems.load()

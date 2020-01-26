@@ -6,7 +6,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 
 
-class ListItems {
+class ListItems(private val context: Context) {
     /* Constants */
     private val divider = "\r" /* Separates individual notes */
 
@@ -50,7 +50,7 @@ class ListItems {
     }
 
     /* Setup shared preferences */
-    fun setupSharedPrefs(context: Context) {
+    fun setupSharedPrefs() {
         /* Use AES256 encryption for sensitive data */
         val masterKey = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
 

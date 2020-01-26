@@ -1,5 +1,6 @@
 package com.draco.illud.recycler_view
 
+import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +10,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.draco.illud.R
 import com.draco.illud.activity.ViewMoreActivity
-import com.draco.illud.utils.listItems
+import com.draco.illud.utils.Constants
+import com.draco.illud.utils.ListItems
 import com.google.android.material.snackbar.Snackbar
 
 class RecyclerViewAdapter(
     private val recyclerView: RecyclerView,
+    private val listItems: ListItems,
     private val emptyView: View):
     RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
@@ -120,7 +123,10 @@ class RecyclerViewAdapter(
             val intent = Intent(recyclerView.context, ViewMoreActivity::class.java)
                 .putExtra("itemString", updatedItem.toString())
                 .putExtra("position", updatedPosition)
-            recyclerView.context.startActivity(intent)
+
+            /* Use parent activity to handle result of item edit */
+            (recyclerView.context as Activity)
+                .startActivityForResult(intent, Constants.VIEW_MORE_ACTIVITY_RESULT_CODE)
         }
     }
 }

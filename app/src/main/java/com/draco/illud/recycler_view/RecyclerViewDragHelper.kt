@@ -2,11 +2,12 @@ package com.draco.illud.recycler_view
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.draco.illud.utils.listItems
+import com.draco.illud.utils.ListItems
 
 class RecyclerViewDragHelper(
     private var adapter: RecyclerViewAdapter,
     private var recyclerView: RecyclerView,
+    private val listItems: ListItems,
     dragDirs: Int,
     swipeDirs: Int):
     ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {

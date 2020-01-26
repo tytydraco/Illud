@@ -14,8 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.DayNight">
-        <activity android:name="com.draco.illud.activity.MainActivity"
-            android:launchMode="singleTask">
+        <activity android:name="com.draco.illud.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

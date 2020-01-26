@@ -1,5 +1,6 @@
 package com.draco.illud.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -9,7 +10,6 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.draco.illud.R
 import com.draco.illud.utils.ListItem
-import com.draco.illud.utils.listItems
 
 class ViewMoreActivity : AppCompatActivity() {
     /* UI elements */
@@ -19,9 +19,6 @@ class ViewMoreActivity : AppCompatActivity() {
 
     /* Position to insert the list item into (-1 means its a new item) */
     private var position = -1
-
-    /* User wanted to delete this item (so don't save it on onPause) */
-    private var deleted = false
 
     /* Occurs on application start */
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,7 +58,7 @@ class ViewMoreActivity : AppCompatActivity() {
     /* Simulate back button press on navigation icon click */
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
-        return super.onNavigateUp()
+        return super.onSupportNavigateUp()
     }
 
     /* Setup and inflate toolbar */
@@ -73,18 +70,6 @@ class ViewMoreActivity : AppCompatActivity() {
     /* Setup toolbar menu actions */
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
-            R.id.delete -> {
-                /* Don't actually delete anything if we are a brand new item */
-                if (position != -1)
-                    listItems.remove(position)
-
-                /* Tell override functions that we already finished deleting */
-                deleted = true
-
-                /* Close activity */
-                finish()
-            }
-
             R.id.share -> run {
                 val labelText = label.text.toString()
                 val contentText = content.text.toString()
@@ -117,12 +102,8 @@ class ViewMoreActivity : AppCompatActivity() {
     }
 
     /* Save contents on exit */
-    override fun onPause() {
-        super.onPause()
-
-        /* Don't save this item if we pressed delete */
-        if (deleted)
-            return
+    override fun finish() {
+        val resultIntent = Intent()
 
         /* Create a new list item object based on the new contents */
         val item = ListItem(
@@ -131,13 +112,11 @@ class ViewMoreActivity : AppCompatActivity() {
             tag.text.toString()
         )
 
-        /* If this is a new item, add it. Otherwise, just overwrite current item */
-        if (position == -1) {
-            listItems.add(item)
+        resultIntent.putExtra("item", item.toString())
+        resultIntent.putExtra("position", position)
 
-            /* Prevents item from being recreated if we resume later */
-            position = 0
-        } else
-            listItems.set(position, item)
+        /* Tell our calling activity what our user wants to do */
+        setResult(Activity.RESULT_OK, resultIntent)
+        super.finish()
     }
 }
