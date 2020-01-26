@@ -6,6 +6,11 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="actionOverflowButtonStyle">@style/OverflowButtonTheme</item>
+    </style>
+
+    <style name="OverflowButtonTheme" parent="Base.Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@color/buttonColor</item>
     </style>
 
     <style name="ItemTheme" parent="TextAppearance.AppCompat.Subhead">
