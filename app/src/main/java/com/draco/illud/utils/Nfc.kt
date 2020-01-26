@@ -29,90 +29,86 @@ class Nfc {
     /* Read NDEF while app is running */
     private var nfcPendingIntent: PendingIntent? = null
 
-    /* Public static functions */
-    companion object {
+    /* Mime type for NDEF record. P.S.: Takes up Nfc tag space */
+    private val mimeType: String = "text/illud"
 
-        /* Mime type for NDEF record. P.S.: Takes up Nfc tag space */
-        private const val mimeType: String = "text/illud"
+    /* Get the byte contents of a Nfc tag */
+    fun readBytes(intent: Intent?): ByteArray? {
+        val parcelables = intent?.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
 
-        /* Get the byte contents of a Nfc tag */
-        fun readBytes(intent: Intent?): ByteArray? {
-            val parcelables = intent?.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
+        /* Don't process nothing! */
+        if (parcelables.isNullOrEmpty())
+            return null
 
-            /* Don't process nothing! */
-            if (parcelables.isNullOrEmpty())
-                return null
+        /* Get the first record */
+        val ndefMessage = parcelables[0] as NdefMessage
+        val ndefRecord = ndefMessage.records[0]
 
-            /* Get the first record */
-            val ndefMessage = parcelables[0] as NdefMessage
-            val ndefRecord = ndefMessage.records[0]
+        /* Return the content of the first record */
+        return Compression.safeDecompress(ndefRecord.payload)
+    }
 
-            /* Return the content of the first record */
-            return Compression.safeDecompress(ndefRecord.payload)
-        }
+    /* Try to write a ByteArray to a tag. Return true if succeeded */
+    fun writeBytes(intent: Intent?, bytes: ByteArray): Exception? {
+        var exception: Exception? = null
+        val currentTag = intent?.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
 
-        /* Try to write a ByteArray to a tag. Return true if succeeded */
-        fun writeBytes(intent: Intent?, bytes: ByteArray): Exception? {
-            var exception: Exception? = null
-            val currentTag = intent?.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
+        /* Connect to the tag */
+        val ndef = Ndef.get(currentTag)
 
-            /* Connect to the tag */
-            val ndef = Ndef.get(currentTag)
+        val newBytes = Compression.safeCompress(bytes)
 
-            val newBytes = Compression.safeCompress(bytes)
+        /* Try to write to the tag; if fail, return false */
+        try {
+            /* Current tag is null */
+            if (ndef == null)
+                throw NotWritableException()
 
-            /* Try to write to the tag; if fail, return false */
-            try {
-                /* Current tag is null */
-                if (ndef == null)
-                    throw NotWritableException()
+            ndef.connect()
 
-                ndef.connect()
-
-                /* Don't bother writing if read-only */
-                if (!ndef.isWritable) {
-                    ndef.close()
-                    throw NotWritableException()
-                }
-
-                /* Write the message */
-                val record = createByteRecord(newBytes)
-                ndef.writeNdefMessage(NdefMessage(record))
-
-                /* Close */
+            /* Don't bother writing if read-only */
+            if (!ndef.isWritable) {
                 ndef.close()
-            } catch (_: NotWritableException) {
-                /* Tag is write only */
-                exception = NotWritableException("Tag not writable.")
-            } catch (_: FormatException) {
-                /* Malformed NDEF */
-                exception = FormatException("There was an internal error.")
-            } catch (_: IOException) {
-                /* Cancelled or unexpected data */
-                exception = IOException("Tag was removed from device.")
-            } catch (_: TagLostException) {
-                /* Tag removed too quickly */
-                exception = TagLostException("Tag was removed from device.")
+                throw NotWritableException()
             }
 
-            return exception
+            /* Write the message */
+            val record = createByteRecord(newBytes)
+            ndef.writeNdefMessage(NdefMessage(record))
+
+            /* Close */
+            ndef.close()
+        } catch (_: NotWritableException) {
+            /* Tag is write only */
+            exception = NotWritableException("Tag not writable.")
+        } catch (_: FormatException) {
+            /* Malformed NDEF */
+            exception = FormatException("There was an internal error.")
+        } catch (_: IOException) {
+            /* Cancelled or unexpected data */
+            exception = IOException("Tag was removed from device.")
+        } catch (_: TagLostException) {
+            /* Tag removed too quickly */
+            exception = TagLostException("Tag was removed from device.")
         }
 
-        /* Check if the passed intent was caused by a tag */
-        fun startedByNDEF(intent: Intent?): Boolean {
-            val action = intent?.action
+        return exception
+    }
 
-            /* Any of these actions are valid for an Nfc tag scan */
-            return (NfcAdapter.ACTION_NDEF_DISCOVERED == action ||
-                    NfcAdapter.ACTION_TECH_DISCOVERED == action ||
-                    NfcAdapter.ACTION_TAG_DISCOVERED == action)
-        }
+    /* Check if the passed intent was caused by a tag */
+    fun startedByNDEF(intent: Intent?): Boolean {
+        val action = intent?.action
 
-        /* Create binary record */
-        private fun createByteRecord(bytes: ByteArray): NdefRecord {
-            /* Use binary, without language code */
-            return NdefRecord.createMime(mimeType, bytes)
-        }
+        /* Any of these actions are valid for an Nfc tag scan */
+        return (NfcAdapter.ACTION_NDEF_DISCOVERED == action ||
+                NfcAdapter.ACTION_TECH_DISCOVERED == action ||
+                NfcAdapter.ACTION_TAG_DISCOVERED == action)
+    }
+
+    /* Create binary record */
+    private fun createByteRecord(bytes: ByteArray): NdefRecord {
+        /* Use binary, without language code */
+        return NdefRecord.createMime(mimeType, bytes)
     }
 
     /* Setup for scanning Nfc tags while in foreground */

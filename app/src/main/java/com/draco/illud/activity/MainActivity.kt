@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         val writeString = listItems.generateJoinedString()
 
         /* Get the contents of the current Nfc tag */
-        val nfcContent = Nfc.readBytes(intent)
+        val nfcContent = nfc.readBytes(intent)
 
         /* If for some reason the read fails, abort to prevent corruption */
         if (nfcContent == null) {
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         /* Write contents as compressed bytes */
-        val exception = Nfc.writeBytes(intent, writeString.toByteArray())
+        val exception = nfc.writeBytes(intent, writeString.toByteArray())
 
         /* If there was an exception, show the user the issue and abort */
         if (exception != null) {
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
         val writeString = listItems.generateJoinedString()
 
         /* Write contents as compressed bytes */
-        val exception = Nfc.writeBytes(intent, writeString.toByteArray())
+        val exception = nfc.writeBytes(intent, writeString.toByteArray())
 
         /* If there was an exception, show the user the issue and abort */
         if (exception != null) {
@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
     /* Read and process card contents */
     private fun nfcRead(intent: Intent) {
         /* Read contents as compressed bytes */
-        val nfcContent = Nfc.readBytes(intent)
+        val nfcContent = nfc.readBytes(intent)
 
         /* Tell user we are blank */
         if (nfcContent == null || nfcContent.isEmpty()) {
@@ -131,7 +131,7 @@ class MainActivity : AppCompatActivity() {
             val scannedIntent = intent
 
             /* Make sure we are processing an Nfc tag */
-            if (!Nfc.startedByNDEF(intent))
+            if (!nfc.startedByNDEF(intent))
                 return
 
             AlertDialog.Builder(this)
@@ -306,7 +306,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         /* When we switch activities, make sure to get updated info */
-        if (intent == null || !Nfc.startedByNDEF(intent))
+        if (intent == null || !nfc.startedByNDEF(intent))
             viewAdapter.notifyDataSetChanged()
 
         nfc.enableForegroundIntent(this)
