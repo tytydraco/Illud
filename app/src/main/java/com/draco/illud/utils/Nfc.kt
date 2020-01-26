@@ -89,10 +89,10 @@ class Nfc {
                 exception = FormatException("There was an internal error.")
             } catch (_: IOException) {
                 /* Cancelled or unexpected data */
-                exception = IOException("Write unexpectedly cancelled.")
+                exception = IOException("Tag was removed from device.")
             } catch (_: TagLostException) {
                 /* Tag removed too quickly */
-                exception = TagLostException("Tag disconnected.")
+                exception = TagLostException("Tag was removed from device.")
             }
 
             return exception
