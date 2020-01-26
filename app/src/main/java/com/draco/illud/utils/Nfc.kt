@@ -29,6 +29,14 @@ class Nfc {
     /* Mime type for NDEF record. P.S.: Takes up Nfc tag space */
     private val mimeType: String = "text/illud"
 
+    /* Get max size Nfc tag can hold in bytes */
+    fun getMaxSize(intent: Intent?): Int {
+        val currentTag = intent?.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
+        val ndef = Ndef.get(currentTag)
+
+        return ndef.maxSize
+    }
+
     /* Get the byte contents of a Nfc tag */
     fun readBytes(intent: Intent?): ByteArray? {
         val parcelables = intent?.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
@@ -54,6 +62,9 @@ class Nfc {
         val ndef = Ndef.get(currentTag) ?: return IOException("There is no scanned tag.")
 
         val newBytes = Compression.safeCompress(bytes)
+
+        if (newBytes.size > getMaxSize(intent))
+            return IOException("Contents are too large.")
 
         /* Don't bother writing if read-only */
         if (!ndef.isWritable)
