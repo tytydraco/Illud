@@ -3,9 +3,7 @@ package com.draco.illud.activity
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -35,41 +33,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nfc: Nfc
     private lateinit var listItems: ListItems
 
-    enum class NfcScanAction {
-        /* Do nothing, or read contents of tag */
-        NONE,
-
-        /* Write to tag */
-        WRITE,
-
-        /* Write to tag, and read contents */
-        SWAP
-    }
-
-    /* Dialog is shown when writing or swapping (lock UI) */
-    private var nfcScanAlertDialog: AlertDialog? = null
-
-    /* Should we write, swap, or do nothing (potentially read) on scan */
-    private var scanAction = NfcScanAction.NONE
-
-    /* Put the user into scan mode (locks UI until scan) */
-    private fun showNfcScanDialog() {
-        /* Do not show the dialog if we already have it open */
-        if (nfcScanAlertDialog != null &&
-            nfcScanAlertDialog!!.isShowing)
-            return
-
-        /* Lock the UI for the user */
-        nfcScanAlertDialog!!.show()
-    }
-
-    /* Dismiss write Nfc tag alert dialog */
-    private fun dismissNfcScanDialog() {
-        /* Allow any context to dismiss the write dialog */
-        if (nfcScanAlertDialog != null)
-            nfcScanAlertDialog!!.cancel()
-    }
-
     /* Swap contents of card and local list */
     private fun nfcSwap(intent: Intent) {
         /* Store everything in the first NDEF record */
@@ -84,10 +47,6 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Dismiss") {}
                 .show()
 
-            /* Dismiss the non-cancellable dialog for the user */
-            dismissNfcScanDialog()
-            scanAction = NfcScanAction.NONE
-
             return
         }
 
@@ -99,10 +58,6 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(recyclerView, exception.message!!, Snackbar.LENGTH_SHORT)
                 .setAction("Dismiss") {}
                 .show()
-
-            /* Dismiss the non-cancellable dialog for the user */
-            dismissNfcScanDialog()
-            scanAction = NfcScanAction.NONE
 
             return
         }
@@ -122,10 +77,6 @@ class MainActivity : AppCompatActivity() {
         Snackbar.make(recyclerView, "Swapped successfully.", Snackbar.LENGTH_SHORT)
             .setAction("Dismiss") {}
             .show()
-
-        /* Dismiss the non-cancellable dialog for the user */
-        dismissNfcScanDialog()
-        scanAction = NfcScanAction.NONE
     }
 
     /* Update card contents */
@@ -142,20 +93,12 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Dismiss") {}
                 .show()
 
-            /* Dismiss the non-cancellable dialog for the user */
-            dismissNfcScanDialog()
-            scanAction = NfcScanAction.NONE
-
             return
         }
 
         Snackbar.make(recyclerView, "Wrote successfully.", Snackbar.LENGTH_SHORT)
             .setAction("Dismiss") {}
             .show()
-
-        /* Dismiss the non-cancellable dialog for the user */
-        dismissNfcScanDialog()
-        scanAction = NfcScanAction.NONE
     }
 
     /* Read and process card contents */
@@ -193,7 +136,7 @@ class MainActivity : AppCompatActivity() {
 
             AlertDialog.Builder(this)
                 .setTitle("Tag Action")
-                .setMessage("Keep the NFC tag on the device. Select an action to perform on the NFC tag.")
+                .setMessage("Keep the NFC tag on the device and select an action to perform for the NFC tag.")
                 .setPositiveButton("Read") { _: DialogInterface, _: Int ->
                     nfcRead(scannedIntent)
                 }
@@ -204,17 +147,6 @@ class MainActivity : AppCompatActivity() {
                     nfcSwap(scannedIntent)
                 }
                 .show()
-
-            /*when (scanAction) {
-                /* Do nothing, or read contents of tag */
-                NfcScanAction.NONE -> nfcRead(intent)
-
-                /* Write to tag */
-                NfcScanAction.WRITE -> nfcWrite(intent)
-
-                /* Write to tag, and read contents */
-                NfcScanAction.SWAP -> nfcSwap(intent)
-            }*/
         }
     }
 
@@ -223,16 +155,6 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recycler_view)
         emptyView = findViewById(R.id.recycler_view_empty)
         viewLayoutManager = LinearLayoutManager(this)
-
-        /* Create scan dialog for writing and swapping */
-        nfcScanAlertDialog = AlertDialog.Builder(this)
-            .setTitle("Scan Nfc Tag")
-            .setMessage(getString(R.string.nfc_scan_dialog))
-            .setNegativeButton("Cancel", null)
-            .setOnDismissListener {
-                dismissNfcScanDialog()
-                scanAction = NfcScanAction.NONE
-            }.create()
 
         /* Set adapter */
         viewAdapter = RecyclerViewAdapter(
@@ -315,16 +237,6 @@ class MainActivity : AppCompatActivity() {
             R.id.sort_by_length -> {
                 listItems.sortByLength()
                 viewAdapter.notifyItemRangeChanged(0, listItems.size())
-            }
-
-            R.id.write_contents -> {
-                showNfcScanDialog()
-                scanAction = NfcScanAction.WRITE
-            }
-
-            R.id.swap -> {
-                showNfcScanDialog()
-                scanAction = NfcScanAction.SWAP
             }
         }
 

@@ -4,18 +4,8 @@
     <item
         android:id="@+id/add_new"
         android:icon="@drawable/ic_add_24dp"
-        app:showAsAction="always"
-        android:title="@string/add_new"/>
-    <item
-        android:id="@+id/write_contents"
-        android:icon="@drawable/ic_file_upload_24dp"
-        app:showAsAction="always"
-        android:title="@string/sort_by_tag"/>
-    <item
-        android:id="@+id/swap"
-        android:icon="@drawable/ic_swap_vert_24dp"
         app:showAsAction="ifRoom"
-        android:title="@string/swap"/>
+        android:title="@string/add_new"/>
 
     <item
         android:id="@+id/delete"
