@@ -172,27 +172,40 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        /* Ask for confirmation, but keep data in memory so tag can be removed */
-        AlertDialog.Builder(this)
-            .setTitle("Import")
-            .setMessage(getString(R.string.nfc_read_dialog))
-            .setPositiveButton("Confirm") { _: DialogInterface, _: Int ->
-                /* Splice the card contents and append the list view for the user */
-                val nfcItems = listItems.parseJoinedString(String(nfcContent))
-                listItems.addAll(nfcItems)
+        /* Splice the card contents and append the list view for the user */
+        val nfcItems = listItems.parseJoinedString(String(nfcContent))
+        listItems.addAll(nfcItems)
 
-                /* Append data and scroll up to new data */
-                viewAdapter.notifyItemRangeInserted(0, nfcItems.size)
-                recyclerView.scrollToPosition(0)
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
+        /* Append data and scroll up to new data */
+        viewAdapter.notifyItemRangeInserted(0, nfcItems.size)
+        recyclerView.scrollToPosition(0)
     }
 
     /* Process Nfc tag scan event */
     private fun processNfcTagScanned() {
-        if (intent != null && Nfc.startedByNDEF(intent)) {
-            when (scanAction) {
+        if (intent != null) {
+            /* Keep intent saved so we can process it later */
+            val scannedIntent = intent
+
+            /* Make sure we are processing an Nfc tag */
+            if (!Nfc.startedByNDEF(intent))
+                return
+
+            AlertDialog.Builder(this)
+                .setTitle("Tag Action")
+                .setMessage("Keep the NFC tag on the device. Select an action to perform on the NFC tag.")
+                .setPositiveButton("Read") { _: DialogInterface, _: Int ->
+                    nfcRead(scannedIntent)
+                }
+                .setNegativeButton("Write") { _: DialogInterface, _: Int ->
+                    nfcWrite(scannedIntent)
+                }
+                .setNeutralButton("Swap") { _: DialogInterface, _: Int ->
+                    nfcSwap(scannedIntent)
+                }
+                .show()
+
+            /*when (scanAction) {
                 /* Do nothing, or read contents of tag */
                 NfcScanAction.NONE -> nfcRead(intent)
 
@@ -201,7 +214,7 @@ class MainActivity : AppCompatActivity() {
 
                 /* Write to tag, and read contents */
                 NfcScanAction.SWAP -> nfcSwap(intent)
-            }
+            }*/
         }
     }
 
