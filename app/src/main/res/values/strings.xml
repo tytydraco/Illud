@@ -11,7 +11,7 @@
     <string name="swap">Swap</string>
     <string name="sort_by_label">Sort By Label</string>
     <string name="sort_by_tag">Sort By Tag</string>
-    <string name="sort_by_length">Sort By Length</string>
+    <string name="sort_by_size">Sort By Size</string>
 
     <!-- Label hint strings -->
     <string name="hint_label">Start typing…</string>

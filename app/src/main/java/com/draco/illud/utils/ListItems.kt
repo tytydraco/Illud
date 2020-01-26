@@ -135,9 +135,13 @@ class ListItems(private val context: Context) {
         save()
     }
 
-    /* Sort by label length */
-    fun sortByLength() {
-        items.sortBy { it.label.length }
+    /* Sort by total size (largest --> least) */
+    fun sortBySize() {
+        items.sortByDescending {
+            it.label.length +
+            it.content.length +
+            it.tag.length
+        }
         save()
     }
 

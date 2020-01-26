@@ -234,8 +234,8 @@ class MainActivity : AppCompatActivity() {
                 viewAdapter.notifyItemRangeChanged(0, listItems.size())
             }
 
-            R.id.sort_by_length -> {
-                listItems.sortByLength()
+            R.id.sort_by_size -> {
+                listItems.sortBySize()
                 viewAdapter.notifyItemRangeChanged(0, listItems.size())
             }
         }

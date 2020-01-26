@@ -20,8 +20,8 @@
         app:showAsAction="withText"
         android:title="@string/sort_by_tag"/>
     <item
-        android:id="@+id/sort_by_length"
+        android:id="@+id/sort_by_size"
         app:showAsAction="withText"
-        android:title="@string/sort_by_length"/>
+        android:title="@string/sort_by_size"/>
 
 </menu>
