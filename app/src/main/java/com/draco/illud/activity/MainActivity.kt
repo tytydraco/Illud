@@ -3,6 +3,7 @@ package com.draco.illud.activity
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -257,6 +258,9 @@ class MainActivity : AppCompatActivity() {
 
         /* Create and attach our drag and drop handler */
         ItemTouchHelper(callback).attachToRecyclerView(recyclerView)
+
+        /* Activate dark mode if the system is dark themed */
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
     }
 
     /* Setup and inflate toolbar */
@@ -368,9 +372,6 @@ class MainActivity : AppCompatActivity() {
 
         /* Check if we opened the app due to a Nfc event */
         processNfcTagScanned()
-
-        /* Activate dark mode if the system is dark themed */
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
     }
 
     /* ----- Miscellaneous Setup ----- */
