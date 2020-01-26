@@ -20,9 +20,6 @@ class Nfc {
         SUPPORTED_ON
     }
 
-    /* Custom exception for non-writable tags */
-    class NotWritableException(message: String? = null): Exception(message)
-
     /* Check if Nfc supported */
     private var nfcAdapter: NfcAdapter? = null
 
@@ -53,24 +50,18 @@ class Nfc {
         var exception: Exception? = null
         val currentTag = intent?.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
 
-        /* Connect to the tag */
-        val ndef = Ndef.get(currentTag)
+        /* Connect to the tag and return exception if we fail */
+        val ndef = Ndef.get(currentTag) ?: return IOException("There is no scanned tag.")
 
         val newBytes = Compression.safeCompress(bytes)
 
+        /* Don't bother writing if read-only */
+        if (!ndef.isWritable)
+            return IOException("Tag not writable.")
+
         /* Try to write to the tag; if fail, return false */
         try {
-            /* Current tag is null */
-            if (ndef == null)
-                throw NotWritableException()
-
             ndef.connect()
-
-            /* Don't bother writing if read-only */
-            if (!ndef.isWritable) {
-                ndef.close()
-                throw NotWritableException()
-            }
 
             /* Write the message */
             val record = createByteRecord(newBytes)
@@ -78,9 +69,6 @@ class Nfc {
 
             /* Close */
             ndef.close()
-        } catch (_: NotWritableException) {
-            /* Tag is write only */
-            exception = NotWritableException("Tag not writable.")
         } catch (_: FormatException) {
             /* Malformed NDEF */
             exception = FormatException("There was an internal error.")
