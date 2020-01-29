@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.DayNight">
-        <activity android:name="com.draco.illud.activity.MainActivity">
+        <activity android:name="com.draco.illud.activity.MainActivity"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -27,7 +28,8 @@
                 <data android:mimeType="text/illud" />
             </intent-filter>
         </activity>
-        <activity android:name="com.draco.illud.activity.ViewMoreActivity" />
+        <activity android:name="com.draco.illud.activity.ViewMoreActivity"
+            android:configChanges="orientation|screenSize" />
     </application>
 
 </manifest>
