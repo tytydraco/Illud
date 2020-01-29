@@ -29,9 +29,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewAdapter: RecyclerViewAdapter
     private lateinit var viewLayoutManager: RecyclerView.LayoutManager
 
+    /* Alert dialog for when we scan a tag */
+    private lateinit var scanDialog: AlertDialog
+
     /* Private classes */
     private lateinit var nfc: Nfc
     private lateinit var listItems: ListItems
+
+    /* Intent that contains scanned Nfc info */
+    private var scannedIntent: Intent? = null
 
     /* Swap contents of card and local list */
     private fun nfcSwap(intent: Intent) {
@@ -126,27 +132,17 @@ class MainActivity : AppCompatActivity() {
 
     /* Process Nfc tag scan event */
     private fun processNfcTagScanned() {
-        if (intent != null) {
-            /* Keep intent saved so we can process it later */
-            val scannedIntent = intent
+        /* Keep intent saved so we can process it later */
+        scannedIntent = intent
 
+        if (scannedIntent != null) {
             /* Make sure we are processing an Nfc tag */
-            if (!nfc.startedByNDEF(intent))
+            if (!nfc.startedByNDEF(scannedIntent))
                 return
 
-            AlertDialog.Builder(this)
-                .setTitle("Tag Action")
-                .setMessage("Keep the NFC tag on the device and select an action to perform for the NFC tag.")
-                .setPositiveButton("Read") { _: DialogInterface, _: Int ->
-                    nfcRead(scannedIntent)
-                }
-                .setNegativeButton("Write") { _: DialogInterface, _: Int ->
-                    nfcWrite(scannedIntent)
-                }
-                .setNeutralButton("Swap") { _: DialogInterface, _: Int ->
-                    nfcSwap(scannedIntent)
-                }
-                .show()
+            /* Only show if it's not already open */
+            if (!scanDialog.isShowing)
+                scanDialog.show()
         }
     }
 
@@ -189,7 +185,26 @@ class MainActivity : AppCompatActivity() {
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
 
             /* Prioritization shortcuts and dismissals */
-            ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT)
+            ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
+        )
+
+        /* Setup preconfigured scan dialog */
+        scanDialog = AlertDialog.Builder(this)
+            .setTitle("Tag Action")
+            .setMessage("Keep the NFC tag on the device and select an action to perform for the NFC tag.")
+            .setPositiveButton("Read") { _: DialogInterface, _: Int ->
+                if (scannedIntent != null)
+                    nfcRead(scannedIntent!!)
+            }
+            .setNegativeButton("Write") { _: DialogInterface, _: Int ->
+                if (scannedIntent != null)
+                    nfcWrite(scannedIntent!!)
+            }
+            .setNeutralButton("Swap") { _: DialogInterface, _: Int ->
+                if (scannedIntent != null)
+                    nfcSwap(scannedIntent!!)
+            }
+            .create()
 
         /* Create and attach our drag and drop handler */
         ItemTouchHelper(callback).attachToRecyclerView(recyclerView)
