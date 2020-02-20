@@ -100,7 +100,6 @@ class Nfc {
 
         /* Any of these actions are valid for an Nfc tag scan */
         return (NfcAdapter.ACTION_NDEF_DISCOVERED == action ||
-                NfcAdapter.ACTION_TECH_DISCOVERED == action ||
                 NfcAdapter.ACTION_TAG_DISCOVERED == action)
     }
 
