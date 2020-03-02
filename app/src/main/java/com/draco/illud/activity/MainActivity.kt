@@ -192,15 +192,15 @@ class MainActivity : AppCompatActivity() {
         scanDialog = AlertDialog.Builder(this)
             .setTitle("Tag Action")
             .setMessage("Keep the NFC tag on the device and select an action to perform for the NFC tag.")
-            .setPositiveButton("Read") { _: DialogInterface, _: Int ->
+            .setPositiveButton("Import") { _: DialogInterface, _: Int ->
                 if (scannedIntent != null)
                     nfcRead(scannedIntent!!)
             }
-            .setNegativeButton("Write") { _: DialogInterface, _: Int ->
+            .setNegativeButton("Export") { _: DialogInterface, _: Int ->
                 if (scannedIntent != null)
                     nfcWrite(scannedIntent!!)
             }
-            .setNeutralButton("Swap") { _: DialogInterface, _: Int ->
+            .setNeutralButton("Swap Contents") { _: DialogInterface, _: Int ->
                 if (scannedIntent != null)
                     nfcSwap(scannedIntent!!)
             }
