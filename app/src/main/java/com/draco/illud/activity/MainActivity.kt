@@ -146,6 +146,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /* Setup UI related methods */
     private fun setupUI() {
         /* Set our local lateinit variables */
         recyclerView = findViewById(R.id.recycler_view)
