@@ -36,9 +36,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nfc: Nfc
     private lateinit var listItems: ListItems
 
-    /* Intent that contains scanned Nfc info */
-    private var scannedIntent: Intent? = null
-
     /* Swap contents of card and local list */
     private fun nfcSwap(intent: Intent) {
         /* Store everything in the first NDEF record */
@@ -131,23 +128,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     /* Process Nfc tag scan event */
-    private fun processNfcTagScanned() {
-        /* Keep intent saved so we can process it later */
-        scannedIntent = intent
+    private fun processNfcTagScanned(intent: Intent) {
+        /* Make sure we are processing an Nfc tag */
+        if (!nfc.startedByNDEF(intent))
+            return
 
-        if (scannedIntent != null) {
-            /* Make sure we are processing an Nfc tag */
-            if (!nfc.startedByNDEF(scannedIntent))
-                return
-
-            /* Only show if it's not already open */
-            if (!scanDialog.isShowing)
-                scanDialog.show()
-        }
+        /* Only show if it's not already open */
+        if (!scanDialog.isShowing)
+            scanDialog.show()
     }
 
     /* Setup UI related methods */
-    private fun setupUI() {
+    private fun setupUI(intent: Intent) {
         /* Set our local lateinit variables */
         recyclerView = findViewById(R.id.recycler_view)
         emptyView = findViewById(R.id.recycler_view_empty)
@@ -194,16 +186,13 @@ class MainActivity : AppCompatActivity() {
             .setTitle("Tag Action")
             .setMessage("Keep the NFC tag on the device and select an action to perform for the NFC tag.")
             .setPositiveButton("Import") { _: DialogInterface, _: Int ->
-                if (scannedIntent != null)
-                    nfcRead(scannedIntent!!)
+                nfcRead(intent)
             }
             .setNegativeButton("Export") { _: DialogInterface, _: Int ->
-                if (scannedIntent != null)
-                    nfcWrite(scannedIntent!!)
+                nfcWrite(intent)
             }
             .setNeutralButton("Swap Contents") { _: DialogInterface, _: Int ->
-                if (scannedIntent != null)
-                    nfcSwap(scannedIntent!!)
+                nfcSwap(intent)
             }
             .create()
 
@@ -309,10 +298,10 @@ class MainActivity : AppCompatActivity() {
         listItems.load()
 
         /* Setup UI elements */
-        setupUI()
+        setupUI(intent)
 
         /* Check if we opened the app due to a Nfc event */
-        processNfcTagScanned()
+        processNfcTagScanned(intent)
     }
 
     /* ----- Miscellaneous Setup ----- */
@@ -344,10 +333,8 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(thisIntent: Intent?) {
         super.onNewIntent(thisIntent)
 
-        /* This is so that other functions can see our Nfc intent */
-        intent = thisIntent
-
         /* Call Nfc tag handler if we are sure this is an Nfc scan */
-        processNfcTagScanned()
+        if (thisIntent != null)
+            processNfcTagScanned(thisIntent)
     }
 }
