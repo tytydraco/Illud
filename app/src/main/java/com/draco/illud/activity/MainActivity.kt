@@ -32,6 +32,9 @@ class MainActivity : AppCompatActivity() {
     /* Alert dialog for when we scan a tag */
     private lateinit var scanDialog: AlertDialog
 
+    /* Store intent from Nfc when we scan it so we can perform actions with it */
+    private var nfcIntent: Intent? = null
+
     /* Private classes */
     private lateinit var nfc: Nfc
     private lateinit var listItems: ListItems
@@ -133,6 +136,9 @@ class MainActivity : AppCompatActivity() {
         if (!nfc.startedByNDEF(intent))
             return
 
+        /* Save this intent for later use */
+        nfcIntent = intent
+
         /* Only show if it's not already open */
         if (!scanDialog.isShowing)
             scanDialog.show()
@@ -186,13 +192,20 @@ class MainActivity : AppCompatActivity() {
             .setTitle("Tag Action")
             .setMessage("Keep the NFC tag on the device and select an action to perform for the NFC tag.")
             .setPositiveButton("Import") { _: DialogInterface, _: Int ->
-                nfcRead(intent)
+                if (nfcIntent != null)
+                    nfcRead(nfcIntent!!)
             }
             .setNegativeButton("Export") { _: DialogInterface, _: Int ->
-                nfcWrite(intent)
+                if (nfcIntent != null)
+                    nfcWrite(nfcIntent!!)
             }
             .setNeutralButton("Swap Contents") { _: DialogInterface, _: Int ->
-                nfcSwap(intent)
+                if (nfcIntent != null)
+                    nfcSwap(nfcIntent!!)
+            }
+            .setOnDismissListener {
+                /* Invalidate acquired Nfc intent */
+                nfcIntent = null
             }
             .create()
 
