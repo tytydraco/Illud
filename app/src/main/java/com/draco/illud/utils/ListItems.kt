@@ -43,8 +43,8 @@ class ListItems(private val context: Context) {
 
     /* Restore backed up list items */
     fun load() {
-        /* Empty items since we are loading. Do not call clear() due to save() */
-        items.clear()
+        /* Empty items since we are loading */
+        clear()
         val loadedItems = parseJoinedString(prefs.getString(prefsStringId, "")!!)
         addAllToBack(loadedItems)
     }
@@ -68,7 +68,6 @@ class ListItems(private val context: Context) {
     /* Insert a label : content pair at position */
     fun insert(position: Int, item: ListItem) {
         items.add(position, item)
-        save()
     }
 
     /* Add a label : content pair at the start */
@@ -79,7 +78,6 @@ class ListItems(private val context: Context) {
     /* Add multiple label : content pairs at the start */
     fun addAll(itemList: ArrayList<ListItem>) {
         items.addAll(0, itemList)
-        save()
     }
 
     /* Add a label : content pair at the end */
@@ -90,25 +88,21 @@ class ListItems(private val context: Context) {
     /* Add multiple label : content pairs at the end */
     fun addAllToBack(itemList: ArrayList<ListItem>) {
         items.addAll(itemList)
-        save()
     }
 
     /* Set a label : content pair and preserve its position */
     fun set(position: Int, item: ListItem) {
         items[position] = item
-        save()
     }
 
     /* Set all label : content pairs */
     fun setAll(itemList: ArrayList<ListItem>) {
         items = itemList
-        save()
     }
 
     /* Remove a label : content pair at position */
     fun remove(position: Int) {
         items.removeAt(position)
-        save()
     }
 
     /* Get a label : content pair at position */
@@ -125,13 +119,11 @@ class ListItems(private val context: Context) {
     fun sortByTag() {
         items.sortBy { it.label }
         items.sortBy { it.tag }
-        save()
     }
 
     /* Sort by labels */
     fun sortByLabel() {
         items.sortBy { it.label }
-        save()
     }
 
     /* Sort by total size (largest --> least) */
@@ -141,13 +133,11 @@ class ListItems(private val context: Context) {
             it.content.length +
             it.tag.length
         }
-        save()
     }
 
     /* Clear list items */
     fun clear() {
         items.clear()
-        save()
     }
 
     /* Return the size of the list */

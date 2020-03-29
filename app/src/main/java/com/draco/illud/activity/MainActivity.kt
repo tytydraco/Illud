@@ -334,6 +334,9 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         nfc.disableForegroundIntent(this)
+
+        /* Save pending changes to list items */
+        listItems.save()
     }
 
     /* Catch Nfc tag scan in our foreground intent filter */
