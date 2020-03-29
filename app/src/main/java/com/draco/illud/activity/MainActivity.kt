@@ -164,10 +164,16 @@ class MainActivity : AppCompatActivity() {
 
         /* Import the new Nfc list */
         nfcRead(intent)
+
+        /* Change title so user is aware of the temporary context */
+        title = "Tag Notes"
     }
 
     /* Setup UI related methods */
     private fun setupUI(intent: Intent) {
+        /* Make user aware that the current list is their local list */
+        title = "Notes"
+
         /* Set our local lateinit variables */
         recyclerView = findViewById(R.id.recycler_view)
         emptyView = findViewById(R.id.recycler_view_empty)
