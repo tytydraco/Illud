@@ -23,7 +23,7 @@ class ViewMoreActivity : AppCompatActivity() {
     /* Occurs on application start */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.view_more_activity)
+        setContentView(R.layout.activity_view_more)
 
         /* Setup our local UI elements */
         label = findViewById(R.id.label)
