@@ -68,7 +68,6 @@ class ListItems(private val context: Context) {
     /* Insert a label : content pair at position */
     fun insert(position: Int, item: ListItem) {
         items.add(position, item)
-
         save()
     }
 
@@ -78,8 +77,8 @@ class ListItems(private val context: Context) {
     }
 
     /* Add multiple label : content pairs at the start */
-    fun addAll(items: ArrayList<ListItem>) {
-        this.items.addAll(0, items)
+    fun addAll(itemList: ArrayList<ListItem>) {
+        items.addAll(0, itemList)
         save()
     }
 
@@ -89,8 +88,8 @@ class ListItems(private val context: Context) {
     }
 
     /* Add multiple label : content pairs at the end */
-    fun addAllToBack(items: ArrayList<ListItem>) {
-        this.items.addAll(items)
+    fun addAllToBack(itemList: ArrayList<ListItem>) {
+        items.addAll(itemList)
         save()
     }
 
@@ -101,8 +100,8 @@ class ListItems(private val context: Context) {
     }
 
     /* Set all label : content pairs */
-    fun setAll(items: ArrayList<ListItem>) {
-        this.items = items
+    fun setAll(itemList: ArrayList<ListItem>) {
+        items = itemList
         save()
     }
 
