@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /* Setup UI related methods */
-    private fun setupUI(intent: Intent) {
+    private fun setupUI() {
         /* Make user aware that the current list is their local list */
         title = "Notes"
 
@@ -339,7 +339,7 @@ class MainActivity : AppCompatActivity() {
         listItems.load()
 
         /* Setup UI elements */
-        setupUI(intent)
+        setupUI()
 
         /* If we opened the app by scanning a tag, switch contexts */
         switchToNfcListContext(intent)
