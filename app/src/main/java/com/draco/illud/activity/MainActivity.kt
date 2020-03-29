@@ -35,6 +35,9 @@ class MainActivity : AppCompatActivity() {
     /* Store intent from Nfc when we scan it so we can perform actions with it */
     private var nfcIntent: Intent? = null
 
+    /* Toggle auto saving to secure saved preferences within onPause() */
+    private var saveOnPause = true
+
     /* Private classes */
     private lateinit var nfc: Nfc
     private lateinit var listItems: ListItems
@@ -142,6 +145,25 @@ class MainActivity : AppCompatActivity() {
         /* Only show if it's not already open */
         if (!scanDialog.isShowing)
             scanDialog.show()
+    }
+
+    /* Switch from our local list items context to our Nfc list items context */
+    private fun switchToNfcListContext(intent: Intent) {
+        /* Make sure we are processing an Nfc tag */
+        if (!nfc.startedByNDEF(intent))
+            return
+
+        /* Save our current list before switching contexts */
+        listItems.save()
+
+        /* Since this is a temporary context, do not save */
+        saveOnPause = false
+
+        /* Clear our (now saved) list in preparation for context switch */
+        listItems.clear()
+
+        /* Import the new Nfc list */
+        nfcRead(intent)
     }
 
     /* Setup UI related methods */
@@ -313,8 +335,8 @@ class MainActivity : AppCompatActivity() {
         /* Setup UI elements */
         setupUI(intent)
 
-        /* Check if we opened the app due to a Nfc event */
-        processNfcTagScanned(intent)
+        /* If we opened the app by scanning a tag, switch contexts */
+        switchToNfcListContext(intent)
     }
 
     /* ----- Miscellaneous Setup ----- */
@@ -339,7 +361,8 @@ class MainActivity : AppCompatActivity() {
         nfc.disableForegroundIntent(this)
 
         /* Save pending changes to list items */
-        listItems.save()
+        if (saveOnPause)
+            listItems.save()
     }
 
     /* Catch Nfc tag scan in our foreground intent filter */
