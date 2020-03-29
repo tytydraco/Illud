@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity() {
 
         /* Tell user we are blank */
         if (nfcContent == null || nfcContent.isEmpty()) {
-            Snackbar.make(recyclerView, "Tag has no contents.", Snackbar.LENGTH_SHORT)
+            Snackbar.make(recyclerView, "Tag could not be read.", Snackbar.LENGTH_SHORT)
                 .setAction("Dismiss") {}
                 .show()
 
