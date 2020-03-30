@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -35,8 +36,8 @@ class MainActivity : AppCompatActivity() {
     /* Store intent from Nfc when we scan it so we can perform actions with it */
     private var nfcIntent: Intent? = null
 
-    /* Toggle auto saving to secure saved preferences within onPause() */
-    private var saveOnPause = true
+    /* If we are modifying a temporary list (i.e. Nfc) */
+    private var isTemporaryList = false
 
     /* Private classes */
     private lateinit var nfc: Nfc
@@ -48,11 +49,16 @@ class MainActivity : AppCompatActivity() {
         if (!nfc.startedByNDEF(intent))
             return
 
+        if (isTemporaryList) {
+            Toast.makeText(this, "Another list is already open.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         /* Save our current list before switching contexts */
         listItems.save()
 
-        /* Since this is a temporary context, do not save */
-        saveOnPause = false
+        /* This is a temporary context */
+        isTemporaryList = true
 
         /* Clear our (now saved) list in preparation for context switch */
         viewAdapter.notifyItemRangeRemoved(0, listItems.size())
@@ -322,7 +328,7 @@ class MainActivity : AppCompatActivity() {
         nfc.disableForegroundIntent(this)
 
         /* Save pending changes to list items */
-        if (saveOnPause)
+        if (!isTemporaryList)
             listItems.save()
     }
 
