@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -26,53 +27,25 @@ import com.google.android.material.snackbar.Snackbar
 class MainActivity : AppCompatActivity() {
     /* UI elements */
     private lateinit var recyclerView: RecyclerView
-    private lateinit var emptyView: View
+    private lateinit var emptyView: TextView
     private lateinit var viewAdapter: RecyclerViewAdapter
     private lateinit var viewLayoutManager: RecyclerView.LayoutManager
 
-    /* Alert dialog for when we scan a tag */
-    private lateinit var scanDialog: AlertDialog
-
-    /* Store intent from Nfc when we scan it so we can perform actions with it */
-    private var nfcIntent: Intent? = null
-
-    /* If we are modifying a temporary list (i.e. Nfc) */
-    private var isTemporaryList = false
+    /* If user has a temporary Nfc list open for editing */
+    private var nfcListOpen = false
 
     /* Private classes */
     private lateinit var nfc: Nfc
     private lateinit var listItems: ListItems
 
-    /* Switch from our local list items context to our Nfc list items context */
-    private fun nfcOpen(intent: Intent) {
-        /* Make sure we are processing an Nfc tag */
-        if (!nfc.startedByNDEF(intent))
-            return
-
-        if (isTemporaryList) {
-            Toast.makeText(this, "Another list is already open.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        /* Save our current list before switching contexts */
-        listItems.save()
-
-        /* This is a temporary context */
-        isTemporaryList = true
-
-        /* Clear our (now saved) list in preparation for context switch */
+    /* Clear list and update adapter */
+    private fun clearList() {
         viewAdapter.notifyItemRangeRemoved(0, listItems.size())
         listItems.clear()
-
-        /* Import the new Nfc list */
-        nfcRead(intent)
-
-        /* Change title so user is aware of the temporary context */
-        title = "Tag Notes"
     }
 
     /* Update card contents */
-    private fun nfcWrite(intent: Intent) {
+    private fun nfcExport(intent: Intent): Boolean {
         /* Store everything in the first NDEF record */
         val writeString = listItems.generateJoinedString()
 
@@ -85,26 +58,31 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Dismiss") {}
                 .show()
 
-            return
+            return false
         }
+
+        /* Clear our list for the next import */
+        clearList()
 
         Snackbar.make(recyclerView, "Wrote successfully.", Snackbar.LENGTH_SHORT)
             .setAction("Dismiss") {}
             .show()
+
+        return true
     }
 
     /* Read and process card contents */
-    private fun nfcRead(intent: Intent) {
+    private fun nfcImport(intent: Intent): Boolean {
         /* Read contents as compressed bytes */
         val nfcContent = nfc.readBytes(intent)
 
-        /* Tell user we are blank */
-        if (nfcContent == null || nfcContent.isEmpty()) {
+        /* Tell user we read a bad tag */
+        if (nfcContent == null) {
             Snackbar.make(recyclerView, "Tag could not be read.", Snackbar.LENGTH_SHORT)
                 .setAction("Dismiss") {}
                 .show()
 
-            return
+            return false
         }
 
         /* Splice the card contents and append the list view for the user */
@@ -114,20 +92,28 @@ class MainActivity : AppCompatActivity() {
         /* Append data and scroll up to new data */
         viewAdapter.notifyItemRangeInserted(0, nfcItems.size)
         recyclerView.scrollToPosition(0)
+
+        Snackbar.make(recyclerView, "Read successfully.", Snackbar.LENGTH_SHORT)
+            .setAction("Dismiss") {}
+            .show()
+
+        return true
     }
 
     /* Process Nfc tag scan event */
-    private fun processNfcTagScanned(intent: Intent) {
+    private fun handleNfcScan(intent: Intent) {
         /* Make sure we are processing an Nfc tag */
         if (!nfc.startedByNDEF(intent))
             return
 
-        /* Save this intent for later use */
-        nfcIntent = intent
-
-        /* Only show if it's not already open */
-        if (!scanDialog.isShowing)
-            scanDialog.show()
+        /* Either import or export */
+        if (nfcListOpen) {
+            if (nfcExport(intent))
+                nfcListOpen = false
+        } else {
+            if (nfcImport(intent))
+                nfcListOpen = true
+        }
     }
 
     /* Setup UI related methods */
@@ -176,28 +162,6 @@ class MainActivity : AppCompatActivity() {
             ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
         )
 
-        /* Setup preconfigured scan dialog */
-        scanDialog = AlertDialog.Builder(this)
-            .setTitle("Tag Action")
-            .setMessage("Keep the NFC tag on the device and select an action to perform for the NFC tag.")
-            .setPositiveButton("Import") { _: DialogInterface, _: Int ->
-                if (nfcIntent != null)
-                    nfcRead(nfcIntent!!)
-            }
-            .setNegativeButton("Export") { _: DialogInterface, _: Int ->
-                if (nfcIntent != null)
-                    nfcWrite(nfcIntent!!)
-            }
-            .setNeutralButton("Open") { _: DialogInterface, _: Int ->
-                if (nfcIntent != null)
-                    nfcOpen(nfcIntent!!)
-            }
-            .setOnDismissListener {
-                /* Invalidate acquired Nfc intent */
-                nfcIntent = null
-            }
-            .create()
-
         /* Create and attach our drag and drop handler */
         ItemTouchHelper(callback).attachToRecyclerView(recyclerView)
 
@@ -224,8 +188,7 @@ class MainActivity : AppCompatActivity() {
                     .setTitle("Delete All")
                     .setMessage(getString(R.string.list_items_clear))
                     .setPositiveButton("Confirm") { _: DialogInterface, _: Int ->
-                        viewAdapter.notifyItemRangeRemoved(0, listItems.size())
-                        listItems.clear()
+                        clearList()
                     }
                     .setNegativeButton("Cancel", null)
                     .show()
@@ -291,19 +254,14 @@ class MainActivity : AppCompatActivity() {
         nfc.setupForegroundIntent(this)
 
         /* Register our ListItems helper class */
-        listItems = ListItems(this)
-
-        /* Setup shared preferences for our list items */
-        listItems.setupSharedPrefs()
-
-        /* Restore backed up list items if we have any */
-        listItems.load()
+        listItems = ListItems()
 
         /* Setup UI elements */
         setupUI()
 
         /* If we opened the app by scanning a tag, switch contexts */
-        nfcOpen(intent)
+        if (nfc.startedByNDEF(intent) && nfcImport(intent))
+            nfcListOpen = true
     }
 
     /* ----- Miscellaneous Setup ----- */
@@ -326,10 +284,6 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         nfc.disableForegroundIntent(this)
-
-        /* Save pending changes to list items */
-        if (!isTemporaryList)
-            listItems.save()
     }
 
     /* Catch Nfc tag scan in our foreground intent filter */
@@ -338,6 +292,6 @@ class MainActivity : AppCompatActivity() {
 
         /* Call Nfc tag handler if we are sure this is an Nfc scan */
         if (thisIntent != null)
-            processNfcTagScanned(thisIntent)
+            handleNfcScan(thisIntent)
     }
 }

@@ -1,23 +1,13 @@
 package com.draco.illud.utils
 
 import android.content.Context
-import android.content.SharedPreferences
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
 
-
-class ListItems(private val context: Context) {
+class ListItems {
     /* Constants */
     private val divider = "\r" /* Separates individual notes */
 
     /* Items are stored here */
     private var items: ArrayList<ListItem> = arrayListOf()
-
-    /* Shared Preferences */
-    private val prefsFileName = "encrypted_prefs"
-    private val prefsStringId = "listItems"
-    private lateinit var prefs: SharedPreferences
-    private lateinit var prefsEditor: SharedPreferences.Editor
 
     /* Coagulate raw items into a single string */
     fun generateJoinedString(): String {
@@ -33,36 +23,6 @@ class ListItems(private val context: Context) {
         }
 
         return items
-    }
-
-    /* Backup list items */
-    fun save() {
-        prefsEditor.putString(prefsStringId, generateJoinedString())
-        prefsEditor.apply()
-    }
-
-    /* Restore backed up list items */
-    fun load() {
-        /* Empty items since we are loading */
-        clear()
-        val loadedItems = parseJoinedString(prefs.getString(prefsStringId, "")!!)
-        addAllToBack(loadedItems)
-    }
-
-    /* Setup shared preferences */
-    fun setupSharedPrefs() {
-        /* Use AES256 encryption for sensitive data */
-        val masterKey = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-
-        prefs = EncryptedSharedPreferences.create(
-            prefsFileName,
-            masterKey,
-            context,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-
-        prefsEditor = prefs.edit()
     }
 
     /* Insert a label : content pair at position */
