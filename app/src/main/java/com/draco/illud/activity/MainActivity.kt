@@ -42,50 +42,27 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nfc: Nfc
     private lateinit var listItems: ListItems
 
-    /* Swap contents of card and local list */
-    private fun nfcSwap(intent: Intent) {
-        /* Store everything in the first NDEF record */
-        val writeString = listItems.generateJoinedString()
-
-        /* Get the contents of the current Nfc tag */
-        val nfcContent = nfc.readBytes(intent)
-
-        /* If for some reason the read fails, abort to prevent corruption */
-        if (nfcContent == null) {
-            Snackbar.make(recyclerView, "Reading failed, swap aborted.", Snackbar.LENGTH_SHORT)
-                .setAction("Dismiss") {}
-                .show()
-
+    /* Switch from our local list items context to our Nfc list items context */
+    private fun nfcOpen(intent: Intent) {
+        /* Make sure we are processing an Nfc tag */
+        if (!nfc.startedByNDEF(intent))
             return
-        }
 
-        /* Write contents as compressed bytes */
-        val exception = nfc.writeBytes(intent, writeString.toByteArray())
+        /* Save our current list before switching contexts */
+        listItems.save()
 
-        /* If there was an exception, show the user the issue and abort */
-        if (exception != null) {
-            Snackbar.make(recyclerView, exception.message!!, Snackbar.LENGTH_SHORT)
-                .setAction("Dismiss") {}
-                .show()
+        /* Since this is a temporary context, do not save */
+        saveOnPause = false
 
-            return
-        }
-
-        /* Splice the card contents and append the list view for the user */
+        /* Clear our (now saved) list in preparation for context switch */
         viewAdapter.notifyItemRangeRemoved(0, listItems.size())
         listItems.clear()
 
-        /* If we were able to write to the tag, overwrite our list */
-        val nfcItems = listItems.parseJoinedString(String(nfcContent))
-        listItems.addAll(nfcItems)
+        /* Import the new Nfc list */
+        nfcRead(intent)
 
-        /* Append data and scroll up to new data */
-        viewAdapter.notifyItemRangeInserted(0, nfcItems.size)
-        recyclerView.scrollToPosition(0)
-
-        Snackbar.make(recyclerView, "Swapped successfully.", Snackbar.LENGTH_SHORT)
-            .setAction("Dismiss") {}
-            .show()
+        /* Change title so user is aware of the temporary context */
+        title = "Tag Notes"
     }
 
     /* Update card contents */
@@ -147,28 +124,6 @@ class MainActivity : AppCompatActivity() {
             scanDialog.show()
     }
 
-    /* Switch from our local list items context to our Nfc list items context */
-    private fun switchToNfcListContext(intent: Intent) {
-        /* Make sure we are processing an Nfc tag */
-        if (!nfc.startedByNDEF(intent))
-            return
-
-        /* Save our current list before switching contexts */
-        listItems.save()
-
-        /* Since this is a temporary context, do not save */
-        saveOnPause = false
-
-        /* Clear our (now saved) list in preparation for context switch */
-        listItems.clear()
-
-        /* Import the new Nfc list */
-        nfcRead(intent)
-
-        /* Change title so user is aware of the temporary context */
-        title = "Tag Notes"
-    }
-
     /* Setup UI related methods */
     private fun setupUI() {
         /* Make user aware that the current list is their local list */
@@ -227,9 +182,9 @@ class MainActivity : AppCompatActivity() {
                 if (nfcIntent != null)
                     nfcWrite(nfcIntent!!)
             }
-            .setNeutralButton("Swap Contents") { _: DialogInterface, _: Int ->
+            .setNeutralButton("Open") { _: DialogInterface, _: Int ->
                 if (nfcIntent != null)
-                    nfcSwap(nfcIntent!!)
+                    nfcOpen(nfcIntent!!)
             }
             .setOnDismissListener {
                 /* Invalidate acquired Nfc intent */
@@ -342,7 +297,7 @@ class MainActivity : AppCompatActivity() {
         setupUI()
 
         /* If we opened the app by scanning a tag, switch contexts */
-        switchToNfcListContext(intent)
+        nfcOpen(intent)
     }
 
     /* ----- Miscellaneous Setup ----- */
