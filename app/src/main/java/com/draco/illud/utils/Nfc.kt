@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.nfc.*
 import android.nfc.tech.Ndef
-import android.util.Log
 import java.io.IOException
 
 class Nfc {

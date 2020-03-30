@@ -4,11 +4,9 @@
 
     <!-- Menu strings -->
     <string name="add_new">New Item</string>
-    <string name="write_contents">Write Contents</string>
+    <string name="stop_editing">Stop Editing</string>
     <string name="wipe">Delete All</string>
-    <string name="delete">Delete Item</string>
     <string name="save">Save</string>
-    <string name="swap">Swap</string>
     <string name="sort_by_label">Sort By Label</string>
     <string name="sort_by_tag">Sort By Tag</string>
     <string name="sort_by_size">Sort By Size</string>
@@ -21,11 +19,6 @@
     <!-- Misc strings -->
     <string name="bullet">Bullet</string>
     <string name="recycler_view_empty">There are no entries</string>
-    <string name="nfc_scan_dialog">
-"Hold a tag to the back of the device until this dialog disappears.
-
-Please ensure NFC is enabled."
-    </string>
-    <string name="nfc_read_dialog">Append tag items to current list?</string>
+    <string name="recycler_view_scan">Scan a tag to get started</string>
     <string name="list_items_clear">"Are you sure you would like to clear your list?"</string>
 </resources>

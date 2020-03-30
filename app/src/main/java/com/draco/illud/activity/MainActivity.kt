@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -25,6 +24,10 @@ import com.draco.illud.utils.Nfc
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
+    /* Constants */
+    private val titleNotes = "Notes"
+    private val titleEdit = "Editing"
+
     /* UI elements */
     private lateinit var recyclerView: RecyclerView
     private lateinit var emptyView: TextView
@@ -38,13 +41,27 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nfc: Nfc
     private lateinit var listItems: ListItems
 
+    /* Close Nfc list */
+    private fun closeNfcList() {
+        nfcListOpen = false
+        title = titleNotes
+        emptyView.text = getString(R.string.recycler_view_scan)
+    }
+
+    /* Open Nfc list */
+    private fun openNfcList() {
+        nfcListOpen = true
+        title = titleEdit
+        emptyView.text = getString(R.string.recycler_view_empty)
+    }
+
     /* Clear list and update adapter */
     private fun clearList() {
         viewAdapter.notifyItemRangeRemoved(0, listItems.size())
         listItems.clear()
     }
 
-    /* Update card contents */
+    /* Update card contents (clears list) */
     private fun nfcExport(intent: Intent): Boolean {
         /* Store everything in the first NDEF record */
         val writeString = listItems.generateJoinedString()
@@ -64,14 +81,14 @@ class MainActivity : AppCompatActivity() {
         /* Clear our list for the next import */
         clearList()
 
-        Snackbar.make(recyclerView, "Wrote successfully.", Snackbar.LENGTH_SHORT)
+        Snackbar.make(recyclerView, "Exported successfully.", Snackbar.LENGTH_SHORT)
             .setAction("Dismiss") {}
             .show()
 
         return true
     }
 
-    /* Read and process card contents */
+    /* Read and process card contents (appends) */
     private fun nfcImport(intent: Intent): Boolean {
         /* Read contents as compressed bytes */
         val nfcContent = nfc.readBytes(intent)
@@ -93,7 +110,7 @@ class MainActivity : AppCompatActivity() {
         viewAdapter.notifyItemRangeInserted(0, nfcItems.size)
         recyclerView.scrollToPosition(0)
 
-        Snackbar.make(recyclerView, "Read successfully.", Snackbar.LENGTH_SHORT)
+        Snackbar.make(recyclerView, "Imported successfully.", Snackbar.LENGTH_SHORT)
             .setAction("Dismiss") {}
             .show()
 
@@ -109,17 +126,17 @@ class MainActivity : AppCompatActivity() {
         /* Either import or export */
         if (nfcListOpen) {
             if (nfcExport(intent))
-                nfcListOpen = false
+                closeNfcList()
         } else {
             if (nfcImport(intent))
-                nfcListOpen = true
+                openNfcList()
         }
     }
 
     /* Setup UI related methods */
     private fun setupUI() {
         /* Make user aware that the current list is their local list */
-        title = "Notes"
+        title = titleNotes
 
         /* Set our local lateinit variables */
         recyclerView = findViewById(R.id.recycler_view)
@@ -169,18 +186,19 @@ class MainActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
     }
 
-    /* Setup and inflate toolbar */
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
     /* Setup toolbar menu actions */
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             R.id.add_new -> {
                 val viewMoreIntent = Intent(this, ViewMoreActivity::class.java)
                 startActivityForResult(viewMoreIntent, Constants.VIEW_MORE_ACTIVITY_RESULT_CODE)
+            }
+
+            R.id.stop_editing -> {
+                if (!nfcListOpen)
+                    Toast.makeText(this, "There is nothing to close.", Toast.LENGTH_SHORT).show()
+                else
+                    closeNfcList()
             }
 
             R.id.delete -> {
@@ -230,11 +248,10 @@ class MainActivity : AppCompatActivity() {
                 val position = data.getIntExtra("position", -1)
 
                 /* If position is -1, we are going to make a new item */
-                if (position == -1) {
+                if (position == -1)
                     listItems.add(item)
-                } else {
+                else
                     listItems.set(position, item)
-                }
             }
         }
     }
@@ -259,9 +276,8 @@ class MainActivity : AppCompatActivity() {
         /* Setup UI elements */
         setupUI()
 
-        /* If we opened the app by scanning a tag, switch contexts */
-        if (nfc.startedByNDEF(intent) && nfcImport(intent))
-            nfcListOpen = true
+        /* If we opened the app by scanning a tag, process it */
+        handleNfcScan(intent)
     }
 
     /* ----- Miscellaneous Setup ----- */
@@ -269,15 +285,10 @@ class MainActivity : AppCompatActivity() {
     /* Enable foreground scanning */
     override fun onResume() {
         super.onResume()
-
-        /* When we switch activities, make sure to get updated info */
-        if (intent == null || !nfc.startedByNDEF(intent))
-            viewAdapter.notifyDataSetChanged()
-
         nfc.enableForegroundIntent(this)
 
-        /* Invalidate our old Nfc intent */
-        intent = null
+        /* When we switch activities, make sure to get updated info */
+        viewAdapter.notifyDataSetChanged()
     }
 
     /* Disable foreground scanning */
@@ -293,5 +304,11 @@ class MainActivity : AppCompatActivity() {
         /* Call Nfc tag handler if we are sure this is an Nfc scan */
         if (thisIntent != null)
             handleNfcScan(thisIntent)
+    }
+
+    /* Setup and inflate toolbar */
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 }

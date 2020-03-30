@@ -1,7 +1,5 @@
 package com.draco.illud.utils
 
-import android.content.Context
-
 class ListItems {
     /* Constants */
     private val divider = "\r" /* Separates individual notes */

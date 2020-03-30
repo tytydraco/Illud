@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="@string/recycler_view_empty"
+        android:text="@string/recycler_view_scan"
         android:textAlignment="center"
         android:visibility="gone" />
 

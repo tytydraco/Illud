@@ -8,6 +8,10 @@
         android:title="@string/add_new"/>
 
     <item
+        android:id="@+id/stop_editing"
+        app:showAsAction="withText"
+        android:title="@string/stop_editing"/>
+    <item
         android:id="@+id/delete"
         app:showAsAction="withText"
         android:title="@string/wipe"/>
