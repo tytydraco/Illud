@@ -73,24 +73,9 @@ class ListItems {
         return items
     }
 
-    /* Sort by tags */
-    fun sortByTag() {
-        items.sortBy { it.label }
-        items.sortBy { it.tag }
-    }
-
     /* Sort by labels */
-    fun sortByLabel() {
+    fun sort() {
         items.sortBy { it.label }
-    }
-
-    /* Sort by total size (largest --> least) */
-    fun sortBySize() {
-        items.sortByDescending {
-            it.label.length +
-            it.content.length +
-            it.tag.length
-        }
     }
 
     /* Clear list items */

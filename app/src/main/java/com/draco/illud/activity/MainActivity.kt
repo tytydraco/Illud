@@ -212,18 +212,8 @@ class MainActivity : AppCompatActivity() {
                     .show()
             }
 
-            R.id.sort_by_label -> {
-                listItems.sortByLabel()
-                viewAdapter.notifyItemRangeChanged(0, listItems.size())
-            }
-
-            R.id.sort_by_tag -> {
-                listItems.sortByTag()
-                viewAdapter.notifyItemRangeChanged(0, listItems.size())
-            }
-
-            R.id.sort_by_size -> {
-                listItems.sortBySize()
+            R.id.sort -> {
+                listItems.sort()
                 viewAdapter.notifyItemRangeChanged(0, listItems.size())
             }
         }

@@ -7,9 +7,7 @@
     <string name="stop_editing">Stop Editing</string>
     <string name="wipe">Delete All</string>
     <string name="save">Save</string>
-    <string name="sort_by_label">Sort By Label</string>
-    <string name="sort_by_tag">Sort By Tag</string>
-    <string name="sort_by_size">Sort By Size</string>
+    <string name="sort">Sort</string>
 
     <!-- Label hint strings -->
     <string name="hint_label">Start typing…</string>
