@@ -32,8 +32,6 @@ class ViewMoreActivity : AppCompatActivity() {
 
         /* Allow back button functionality */
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
-        /* Change title to be more relevant */
         title = "View More"
 
         /* Import the item that was passed to us as a raw string */
@@ -53,18 +51,6 @@ class ViewMoreActivity : AppCompatActivity() {
             label.requestFocus()
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         }
-    }
-
-    /* Simulate back button press on navigation icon click */
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return super.onSupportNavigateUp()
-    }
-
-    /* Setup and inflate toolbar */
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_view_more, menu)
-        return super.onCreateOptionsMenu(menu)
     }
 
     /* Setup toolbar menu actions */
@@ -118,5 +104,17 @@ class ViewMoreActivity : AppCompatActivity() {
         /* Tell our calling activity what our user wants to do */
         setResult(Activity.RESULT_OK, resultIntent)
         super.finish()
+    }
+
+    /* Simulate back button press on navigation icon click */
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
+
+    /* Setup and inflate toolbar */
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_view_more, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 }
