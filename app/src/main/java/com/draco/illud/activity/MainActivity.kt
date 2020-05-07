@@ -63,13 +63,9 @@ class MainActivity : AppCompatActivity() {
 
     /* Update card contents (clears list) */
     private fun nfcExport(intent: Intent): Boolean {
-        /* Store everything in the first NDEF record */
         val writeString = listItems.generateJoinedString()
-
-        /* Write contents as compressed bytes */
         val exception = nfc.writeBytes(intent, writeString.toByteArray())
 
-        /* If there was an exception, show the user the issue and abort */
         if (exception != null) {
             Snackbar.make(recyclerView, exception.message!!, Snackbar.LENGTH_SHORT)
                 .setAction("Dismiss") {}
@@ -90,10 +86,8 @@ class MainActivity : AppCompatActivity() {
 
     /* Read and process card contents (appends) */
     private fun nfcImport(intent: Intent): Boolean {
-        /* Read contents as compressed bytes */
         val nfcContent = nfc.readBytes(intent)
 
-        /* Tell user we read a bad tag */
         if (nfcContent == null) {
             Snackbar.make(recyclerView, "Tag could not be read.", Snackbar.LENGTH_SHORT)
                 .setAction("Dismiss") {}
@@ -124,18 +118,14 @@ class MainActivity : AppCompatActivity() {
             return
 
         /* Either import or export */
-        if (nfcListOpen) {
-            if (nfcExport(intent))
-                closeNfcList()
-        } else {
-            if (nfcImport(intent))
-                openNfcList()
-        }
+        if (nfcListOpen && nfcExport(intent))
+            closeNfcList()
+        else if (nfcImport(intent))
+            openNfcList()
     }
 
     /* Setup UI related methods */
     private fun setupUI() {
-        /* Make user aware that the current list is their local list */
         title = titleNotes
 
         /* Set our local lateinit variables */
@@ -143,43 +133,22 @@ class MainActivity : AppCompatActivity() {
         emptyView = findViewById(R.id.recycler_view_empty)
         viewLayoutManager = LinearLayoutManager(this)
 
-        /* Set adapter */
-        viewAdapter = RecyclerViewAdapter(
-            /* Used to scroll to positions, and for activity context */
-            recyclerView,
+        viewAdapter = RecyclerViewAdapter(recyclerView, listItems, emptyView)
 
-            /* Pass our local listItems copy */
-            listItems,
-
-            /* View to show when we have an empty list */
-            emptyView
-        )
-
-        /* Update the recycler view with our new view adapter */
         recyclerView.apply {
             layoutManager = viewLayoutManager
             adapter = viewAdapter
         }
 
-        /* Tell our adapter that we have new data to handle */
         viewAdapter.notifyDataSetChanged()
 
         /* Setup drag and drop handler */
         val callback = RecyclerViewDragHelper(
-            viewAdapter,
-            recyclerView,
-
-            /* Pass our local listItems copy */
-            listItems,
-
-            /* Reposition with long press and drag */
+            viewAdapter, recyclerView, listItems,
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-
-            /* Prioritization shortcuts and dismissals */
             ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
         )
 
-        /* Create and attach our drag and drop handler */
         ItemTouchHelper(callback).attachToRecyclerView(recyclerView)
 
         /* Activate dark mode if the system is dark themed */
@@ -195,9 +164,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.stop_editing -> {
-                if (!nfcListOpen)
-                    Toast.makeText(this, "There is nothing to close.", Toast.LENGTH_SHORT).show()
-                else
                     closeNfcList()
             }
 
@@ -226,23 +192,18 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         /* ViewMoreActivity */
-        if (requestCode == Constants.VIEW_MORE_ACTIVITY_RESULT_CODE) {
-            /* Make sure we returned with intent to process data */
-            if (resultCode == Activity.RESULT_OK) {
-                /* Make sure we have data to process */
-                if (data == null)
-                    return
+        if (resultCode == Activity.RESULT_OK &&
+            requestCode == Constants.VIEW_MORE_ACTIVITY_RESULT_CODE &&
+            data != null) {
+            val itemString = data.getStringExtra("item")
+            val item = ListItem(itemString)
+            val position = data.getIntExtra("position", -1)
 
-                val itemString = data.getStringExtra("item")
-                val item = ListItem(itemString)
-                val position = data.getIntExtra("position", -1)
-
-                /* If position is -1, we are going to make a new item */
-                if (position == -1)
-                    listItems.add(item)
-                else
-                    listItems.set(position, item)
-            }
+            /* If position is -1, we are going to make a new item */
+            if (position == -1)
+                listItems.add(item)
+            else
+                listItems.set(position, item)
         }
     }
 
@@ -253,11 +214,7 @@ class MainActivity : AppCompatActivity() {
 
         /* Register our Nfc helper class */
         nfc = Nfc()
-
-        /* Register Nfc adapter */
         nfc.registerAdapter(this)
-
-        /* Allow Nfc tags to be scanned while the app is opened */
         nfc.setupForegroundIntent(this)
 
         /* Register our ListItems helper class */
