@@ -159,7 +159,15 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.stop_editing -> {
+                if (nfcListOpen) {
                     closeNfcList()
+                    Snackbar.make(recyclerView, "Closed list for editing.", Snackbar.LENGTH_SHORT)
+                        .setAction("Dismiss") {}
+                        .show()
+                } else
+                    Snackbar.make(recyclerView, "List is not in edit mode.", Snackbar.LENGTH_SHORT)
+                        .setAction("Dismiss") {}
+                        .show()
             }
         }
 

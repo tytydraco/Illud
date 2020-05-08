@@ -4,12 +4,13 @@
     <item
         android:id="@+id/add_new"
         android:icon="@drawable/ic_add_24dp"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:title="@string/add_new"/>
 
     <item
         android:id="@+id/stop_editing"
-        app:showAsAction="withText"
-        android:title="@string/stop_editing"/>
+        android:icon="@drawable/ic_done_24dp"
+        app:showAsAction="ifRoom"
+        android:title="@string/stop_editing" />
 
 </menu>
