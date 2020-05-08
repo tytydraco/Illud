@@ -5,13 +5,11 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.draco.illud.R
 import com.draco.illud.activity.ViewMoreActivity
 import com.draco.illud.utils.ListItems
-import com.google.android.material.snackbar.Snackbar
 
 class RecyclerViewAdapter(
     private val recyclerView: RecyclerView,
