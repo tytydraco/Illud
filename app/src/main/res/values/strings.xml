@@ -5,9 +5,6 @@
     <!-- Menu strings -->
     <string name="add_new">New Item</string>
     <string name="stop_editing">Stop Editing</string>
-    <string name="wipe">Delete All</string>
-    <string name="save">Save</string>
-    <string name="sort">Sort</string>
 
     <!-- Label hint strings -->
     <string name="hint_label">Start typing…</string>
@@ -15,8 +12,6 @@
     <string name="hint_tag">Tag</string>
 
     <!-- Misc strings -->
-    <string name="bullet">Bullet</string>
     <string name="recycler_view_empty">There are no entries</string>
     <string name="recycler_view_scan">Scan a tag to get started</string>
-    <string name="list_items_clear">"Are you sure you would like to clear your list?"</string>
 </resources>
