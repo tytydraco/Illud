@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +21,7 @@ import com.draco.illud.utils.ListItem
 import com.draco.illud.utils.ListItems
 import com.draco.illud.utils.Nfc
 import com.google.android.material.snackbar.Snackbar
+
 
 class MainActivity : AppCompatActivity() {
     /* Constants */
@@ -136,7 +138,9 @@ class MainActivity : AppCompatActivity() {
         recyclerView.apply {
             layoutManager = viewLayoutManager
             adapter = viewAdapter
+            addItemDecoration(DividerItemDecoration(recyclerView.context, DividerItemDecoration.VERTICAL))
         }
+
 
         viewAdapter.notifyDataSetChanged()
 
