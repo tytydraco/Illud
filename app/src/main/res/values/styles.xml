@@ -15,10 +15,6 @@
         <item name="android:tint">@color/buttonColor</item>
     </style>
 
-    <style name="ItemTheme" parent="TextAppearance.AppCompat.Subhead">
-        <item name="android:paddingHorizontal">16dp</item>
-    </style>
-
     <!-- Colors for material alert dialogs -->
     <style name="AlertDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
         <item name="buttonBarPositiveButtonStyle">@style/Alert.Button.Positive</item>
