@@ -21,7 +21,6 @@ class RecyclerViewAdapter(
 
     /* Holds our views inside our row view */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val bullet = view.findViewById<ImageView>(R.id.bullet)!!
         val label = view.findViewById<TextView>(R.id.label)!!
         val tag = view.findViewById<TextView>(R.id.tag)!!
     }
@@ -34,31 +33,9 @@ class RecyclerViewAdapter(
             emptyView.visibility = View.GONE
     }
 
-    /* Delete item at viewholder position, but allow user to undo */
-    fun deleteItemWithUndo(holder: RecyclerView.ViewHolder) {
-        val updatedPosition = holder.adapterPosition
-        val updatedItem = listItems.items[updatedPosition]
-
-        listItems.items.removeAt(updatedPosition)
-        notifyItemRemoved(updatedPosition)
-
-        Snackbar.make(recyclerView, "Deleted item.", Snackbar.LENGTH_LONG)
-            .setAction("Undo") {
-                listItems.items.add(updatedPosition, updatedItem)
-                notifyItemInserted(updatedPosition)
-                recyclerView.scrollToPosition(updatedPosition)
-            }
-            .show()
-    }
-
     /* Configure each holder view */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = listItems.items[position]
-
-        /* Clicking the dismiss button */
-        holder.bullet.setOnClickListener {
-            deleteItemWithUndo(holder)
-        }
 
         /* Set the text */
         holder.label.text = item.label

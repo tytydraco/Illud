@@ -10,16 +10,6 @@
     android:elevation="4dp"
     android:clipToPadding="false">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        android:id="@+id/bullet"
-        android:src="@drawable/ic_radio_button_unchecked_24dp"
-        android:tint="@color/colorAccent"
-        android:layout_centerVertical="true"
-        android:contentDescription="@string/bullet" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,8 +20,7 @@
         android:paddingHorizontal="16dp"
         android:maxLines="3"
         android:ellipsize="end"
-        android:includeFontPadding="false"
-        android:layout_toEndOf="@id/bullet" />
+        android:includeFontPadding="false" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -46,7 +35,6 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:includeFontPadding="false"
-        android:layout_toEndOf="@id/bullet"
         android:layout_below="@id/label"/>
 
 </RelativeLayout>

@@ -3,6 +3,7 @@ package com.draco.illud.recycler_view
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.draco.illud.utils.ListItems
+import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 class RecyclerViewDragHelper(
@@ -25,7 +26,19 @@ class RecyclerViewDragHelper(
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         /* Swipe right to delete */
         if (direction == ItemTouchHelper.RIGHT) {
-            adapter.deleteItemWithUndo(viewHolder)
+            val updatedPosition = viewHolder.adapterPosition
+            val updatedItem = listItems.items[updatedPosition]
+
+            listItems.items.removeAt(updatedPosition)
+            adapter.notifyItemRemoved(updatedPosition)
+
+            Snackbar.make(recyclerView, "Deleted item.", Snackbar.LENGTH_LONG)
+                .setAction("Undo") {
+                    listItems.items.add(updatedPosition, updatedItem)
+                    adapter.notifyItemInserted(updatedPosition)
+                    recyclerView.scrollToPosition(updatedPosition)
+                }
+                .show()
         } else if (direction == ItemTouchHelper.LEFT) {
             val position = viewHolder.adapterPosition
             val targetItem = listItems.items[position]
