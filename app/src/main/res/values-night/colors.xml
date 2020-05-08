@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- Application Colors -->
-    <color name="colorPrimary">#414141</color>
-    <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#03a9f4</color>
-    <color name="buttonColor">#ffffff</color>
-</resources>

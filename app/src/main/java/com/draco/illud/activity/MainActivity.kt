@@ -148,9 +148,6 @@ class MainActivity : AppCompatActivity() {
         val callback = RecyclerViewDragHelper(viewAdapter, recyclerView, listItems)
 
         ItemTouchHelper(callback).attachToRecyclerView(recyclerView)
-
-        /* Activate dark mode if the system is dark themed */
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
     }
 
     /* Setup toolbar menu actions */
