@@ -16,7 +16,7 @@ class RecyclerViewDragHelper(
     override fun onMove(recyclerView: RecyclerView,
                         viewHolder: RecyclerView.ViewHolder,
                         target: RecyclerView.ViewHolder): Boolean {
-        Collections.swap(listItems.rawItems, viewHolder.adapterPosition, target.adapterPosition)
+        Collections.swap(listItems.items, viewHolder.adapterPosition, target.adapterPosition)
         adapter.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
         return true
     }
@@ -28,20 +28,20 @@ class RecyclerViewDragHelper(
             adapter.deleteItemWithUndo(viewHolder)
         } else if (direction == ItemTouchHelper.LEFT) {
             val position = viewHolder.adapterPosition
-            val targetItem = listItems.get(position)
+            val targetItem = listItems.items[position]
 
             /* Send first item to back, else to front */
             if (position == 0) {
                 /* To back */
-                listItems.remove(position)
-                listItems.addToBack(targetItem)
+                listItems.items.removeAt(position)
+                listItems.items.add(listItems.items.size, targetItem)
                 adapter.notifyItemRemoved(position)
-                adapter.notifyItemInserted(listItems.size() - 1)
-                recyclerView.scrollToPosition(listItems.size() - 1)
+                adapter.notifyItemInserted(listItems.items.size - 1)
+                recyclerView.scrollToPosition(listItems.items.size - 1)
             } else {
                 /* To front */
-                listItems.remove(position)
-                listItems.insert(0, targetItem)
+                listItems.items.removeAt(position)
+                listItems.items.add(0, targetItem)
                 adapter.notifyItemRemoved(position)
                 adapter.notifyItemInserted(0)
                 recyclerView.scrollToPosition(0)

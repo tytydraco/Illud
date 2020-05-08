@@ -55,8 +55,8 @@ class MainActivity : AppCompatActivity() {
 
     /* Clear list and update adapter */
     private fun clearList() {
-        viewAdapter.notifyItemRangeRemoved(0, listItems.size())
-        listItems.clear()
+        viewAdapter.notifyItemRangeRemoved(0, listItems.items.size)
+        listItems.items.clear()
     }
 
     /* Update card contents (clears list) */
@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
 
         /* Splice the card contents and append the list view for the user */
         val nfcItems = listItems.parseJoinedString(String(nfcContent))
-        listItems.addAll(nfcItems)
+        listItems.items.addAll(nfcItems)
 
         /* Append data and scroll up to new data */
         viewAdapter.notifyItemRangeInserted(0, nfcItems.size)
@@ -173,8 +173,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.sort -> {
-                listItems.sort()
-                viewAdapter.notifyItemRangeChanged(0, listItems.size())
+                listItems.items.sortBy { it.label }
+                viewAdapter.notifyItemRangeChanged(0, listItems.items.size)
             }
         }
 
@@ -195,9 +195,9 @@ class MainActivity : AppCompatActivity() {
 
             /* If position is -1, we are going to make a new item */
             if (position == -1)
-                listItems.add(item)
+                listItems.items.add(item)
             else
-                listItems.set(position, item)
+                listItems.items[position] = item
         }
     }
 

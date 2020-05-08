@@ -28,7 +28,7 @@ class RecyclerViewAdapter(
 
     /* Check if list is empty; if so, show the empty view */
     private fun updateEmptyView() {
-        if (listItems.size() == 0)
+        if (listItems.items.size == 0)
             emptyView.visibility = View.VISIBLE
         else
             emptyView.visibility = View.GONE
@@ -37,14 +37,14 @@ class RecyclerViewAdapter(
     /* Delete item at viewholder position, but allow user to undo */
     fun deleteItemWithUndo(holder: RecyclerView.ViewHolder) {
         val updatedPosition = holder.adapterPosition
-        val updatedItem = listItems.get(updatedPosition)
+        val updatedItem = listItems.items[updatedPosition]
 
-        listItems.remove(updatedPosition)
+        listItems.items.removeAt(updatedPosition)
         notifyItemRemoved(updatedPosition)
 
         Snackbar.make(recyclerView, "Deleted item.", Snackbar.LENGTH_LONG)
             .setAction("Undo") {
-                listItems.insert(updatedPosition, updatedItem)
+                listItems.items.add(updatedPosition, updatedItem)
                 notifyItemInserted(updatedPosition)
                 recyclerView.scrollToPosition(updatedPosition)
             }
@@ -53,7 +53,7 @@ class RecyclerViewAdapter(
 
     /* Configure each holder view */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = listItems.get(position)
+        val item = listItems.items[position]
 
         /* Clicking the dismiss button */
         holder.bullet.setOnClickListener {
@@ -74,7 +74,7 @@ class RecyclerViewAdapter(
         holder.itemView.setOnClickListener {
             /* The local position variable may be outdated */
             val updatedPosition = holder.adapterPosition
-            val updatedItem = listItems.get(updatedPosition)
+            val updatedItem = listItems.items[updatedPosition]
 
             /* Start the ViewMore activity when we click an item */
             val intent = Intent(recyclerView.context, ViewMoreActivity::class.java)
@@ -102,6 +102,6 @@ class RecyclerViewAdapter(
     /* Return our item count */
     override fun getItemCount(): Int {
         updateEmptyView()
-        return listItems.size()
+        return listItems.items.size
     }
 }
