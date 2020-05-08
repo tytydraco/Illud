@@ -161,22 +161,6 @@ class MainActivity : AppCompatActivity() {
             R.id.stop_editing -> {
                     closeNfcList()
             }
-
-            R.id.delete -> {
-                AlertDialog.Builder(this)
-                    .setTitle("Delete All")
-                    .setMessage(getString(R.string.list_items_clear))
-                    .setPositiveButton("Confirm") { _: DialogInterface, _: Int ->
-                        clearList()
-                    }
-                    .setNegativeButton("Cancel", null)
-                    .show()
-            }
-
-            R.id.sort -> {
-                listItems.items.sortBy { it.label }
-                viewAdapter.notifyItemRangeChanged(0, listItems.items.size)
-            }
         }
 
         return super.onOptionsItemSelected(item)
