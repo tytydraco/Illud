@@ -12,6 +12,10 @@ import com.draco.illud.R
 import com.draco.illud.utils.ListItem
 
 class ViewMoreActivity : AppCompatActivity() {
+    companion object {
+        val activityResultCode = 0
+    }
+
     /* UI elements */
     private lateinit var label: EditText
     private lateinit var content: EditText

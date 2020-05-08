@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.draco.illud.R
 import com.draco.illud.recycler_view.RecyclerViewAdapter
 import com.draco.illud.recycler_view.RecyclerViewDragHelper
-import com.draco.illud.utils.Constants
 import com.draco.illud.utils.ListItem
 import com.draco.illud.utils.ListItems
 import com.draco.illud.utils.Nfc
@@ -156,7 +154,7 @@ class MainActivity : AppCompatActivity() {
         when (item!!.itemId) {
             R.id.add_new -> {
                 val viewMoreIntent = Intent(this, ViewMoreActivity::class.java)
-                startActivityForResult(viewMoreIntent, Constants.VIEW_MORE_ACTIVITY_RESULT_CODE)
+                startActivityForResult(viewMoreIntent, ViewMoreActivity.activityResultCode)
             }
 
             R.id.stop_editing -> {
@@ -189,7 +187,7 @@ class MainActivity : AppCompatActivity() {
 
         /* ViewMoreActivity */
         if (resultCode == Activity.RESULT_OK &&
-            requestCode == Constants.VIEW_MORE_ACTIVITY_RESULT_CODE &&
+            requestCode == ViewMoreActivity.activityResultCode &&
             data != null) {
             val itemString = data.getStringExtra("item")
             val item = ListItem(itemString)
