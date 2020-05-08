@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:fullBackupContent="true">
-        <activity android:name="com.draco.illud.activity.MainActivity"
+        <activity android:name=".activity.MainActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleInstance">
             <intent-filter>
@@ -29,7 +29,7 @@
                 <data android:mimeType="text/illud" />
             </intent-filter>
         </activity>
-        <activity android:name="com.draco.illud.activity.ViewMoreActivity"
+        <activity android:name=".activity.ViewMoreActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleInstance"/>
     </application>
