@@ -5,11 +5,11 @@ class ListItems {
     private val divider = "\r" /* Separates individual notes */
 
     /* Items are stored here */
-    private var items: ArrayList<ListItem> = arrayListOf()
+    var rawItems: ArrayList<ListItem> = arrayListOf()
 
     /* Coagulate raw items into a single string */
     fun generateJoinedString(): String {
-        return items.joinToString(divider)
+        return rawItems.joinToString(divider)
     }
 
     /* Parse raw string and return items */
@@ -25,7 +25,7 @@ class ListItems {
 
     /* Insert a label : content pair at position */
     fun insert(position: Int, item: ListItem) {
-        items.add(position, item)
+        rawItems.add(position, item)
     }
 
     /* Add a label : content pair at the start */
@@ -35,7 +35,7 @@ class ListItems {
 
     /* Add multiple label : content pairs at the start */
     fun addAll(itemList: ArrayList<ListItem>) {
-        items.addAll(0, itemList)
+        rawItems.addAll(0, itemList)
     }
 
     /* Add a label : content pair at the end */
@@ -45,46 +45,46 @@ class ListItems {
 
     /* Add multiple label : content pairs at the end */
     fun addAllToBack(itemList: ArrayList<ListItem>) {
-        items.addAll(itemList)
+        rawItems.addAll(itemList)
     }
 
     /* Set a label : content pair and preserve its position */
     fun set(position: Int, item: ListItem) {
-        items[position] = item
+        rawItems[position] = item
     }
 
     /* Set all label : content pairs */
     fun setAll(itemList: ArrayList<ListItem>) {
-        items = itemList
+        rawItems = itemList
     }
 
     /* Remove a label : content pair at position */
     fun remove(position: Int) {
-        items.removeAt(position)
+        rawItems.removeAt(position)
     }
 
     /* Get a label : content pair at position */
     fun get(position: Int): ListItem {
-        return items[position]
+        return rawItems[position]
     }
 
     /* Get all a label : content pairs */
     fun getAll(): ArrayList<ListItem> {
-        return items
+        return rawItems
     }
 
     /* Sort by labels */
     fun sort() {
-        items.sortBy { it.label }
+        rawItems.sortBy { it.label }
     }
 
     /* Clear list items */
     fun clear() {
-        items.clear()
+        rawItems.clear()
     }
 
     /* Return the size of the list */
     fun size(): Int {
-        return items.size
+        return rawItems.size
     }
 }

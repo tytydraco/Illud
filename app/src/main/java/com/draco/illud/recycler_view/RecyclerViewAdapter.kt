@@ -13,6 +13,7 @@ import com.draco.illud.activity.ViewMoreActivity
 import com.draco.illud.utils.Constants
 import com.draco.illud.utils.ListItems
 import com.google.android.material.snackbar.Snackbar
+import java.util.*
 
 class RecyclerViewAdapter(
     private val recyclerView: RecyclerView,
@@ -28,52 +29,11 @@ class RecyclerViewAdapter(
     }
 
     /* Check if list is empty; if so, show the empty view */
-    private fun checkEmptyView() {
-        if (listItems.size() == 0) {
+    private fun updateEmptyView() {
+        if (listItems.size() == 0)
             emptyView.visibility = View.VISIBLE
-        } else {
+        else
             emptyView.visibility = View.GONE
-        }
-    }
-
-    /* Inflate our rows for each item */
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recycler_view_item, parent, false)
-        return ViewHolder(view)
-    }
-
-    /* Check if our list is empty when we attach our recycler view */
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-        checkEmptyView()
-    }
-
-    /* Return our item count */
-    override fun getItemCount(): Int {
-        checkEmptyView()
-        return listItems.size()
-    }
-
-    /* Swap to items in a list */
-    fun swapItems(fromPosition: Int, toPosition: Int) {
-        if (fromPosition < toPosition) {
-            for (i in fromPosition until toPosition) {
-                val oldItem = listItems.get(i + 1)
-                val newItem = listItems.get(i)
-                listItems.set(i + 1, newItem)
-                listItems.set(i, oldItem)
-            }
-        } else {
-            for (i in fromPosition..toPosition + 1) {
-                val oldItem = listItems.get(i - 1)
-                val newItem = listItems.get(i)
-                listItems.set(i - 1, newItem)
-                listItems.set(i, oldItem)
-            }
-        }
-
-        notifyItemMoved(fromPosition, toPosition)
     }
 
     /* Delete item at viewholder position, but allow user to undo */
@@ -84,7 +44,6 @@ class RecyclerViewAdapter(
         listItems.remove(updatedPosition)
         notifyItemRemoved(updatedPosition)
 
-        /* Allow user to undo item deletion temporarily */
         Snackbar.make(recyclerView, "Deleted item.", Snackbar.LENGTH_LONG)
             .setAction("Undo") {
                 listItems.insert(updatedPosition, updatedItem)
@@ -128,5 +87,23 @@ class RecyclerViewAdapter(
             (recyclerView.context as Activity)
                 .startActivityForResult(intent, Constants.VIEW_MORE_ACTIVITY_RESULT_CODE)
         }
+    }
+
+    /* Inflate our rows for each item */
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_view_item, parent, false)
+        return ViewHolder(view)
+    }
+
+    /* Check if our list is empty when we attach our recycler view */
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        updateEmptyView()
+    }
+
+    /* Return our item count */
+    override fun getItemCount(): Int {
+        updateEmptyView()
+        return listItems.size()
     }
 }

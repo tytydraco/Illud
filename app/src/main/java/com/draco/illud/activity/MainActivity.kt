@@ -143,11 +143,7 @@ class MainActivity : AppCompatActivity() {
         viewAdapter.notifyDataSetChanged()
 
         /* Setup drag and drop handler */
-        val callback = RecyclerViewDragHelper(
-            viewAdapter, recyclerView, listItems,
-            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-            ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
-        )
+        val callback = RecyclerViewDragHelper(viewAdapter, recyclerView, listItems)
 
         ItemTouchHelper(callback).attachToRecyclerView(recyclerView)
 

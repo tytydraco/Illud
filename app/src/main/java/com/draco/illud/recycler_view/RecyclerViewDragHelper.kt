@@ -3,26 +3,26 @@ package com.draco.illud.recycler_view
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.draco.illud.utils.ListItems
+import java.util.*
 
 class RecyclerViewDragHelper(
     private var adapter: RecyclerViewAdapter,
     private var recyclerView: RecyclerView,
-    private val listItems: ListItems,
-    dragDirs: Int,
-    swipeDirs: Int):
-    ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
+    private val listItems: ListItems):
+    ItemTouchHelper.SimpleCallback(
+        ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+        ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT) {
     /* Start swapping the positions of our list and save it to shared preferences */
     override fun onMove(recyclerView: RecyclerView,
                         viewHolder: RecyclerView.ViewHolder,
-                        target: RecyclerView.ViewHolder): Boolean
-    {
-        adapter.swapItems(viewHolder.adapterPosition, target.adapterPosition)
+                        target: RecyclerView.ViewHolder): Boolean {
+        Collections.swap(listItems.rawItems, viewHolder.adapterPosition, target.adapterPosition)
+        adapter.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
         return true
     }
 
     /* Depending on which direction we swipe, process a different action */
-    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int)
-    {
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         /* Swipe right to delete */
         if (direction == ItemTouchHelper.RIGHT) {
             adapter.deleteItemWithUndo(viewHolder)
