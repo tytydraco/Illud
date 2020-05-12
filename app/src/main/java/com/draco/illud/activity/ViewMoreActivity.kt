@@ -11,7 +11,7 @@ import com.draco.illud.utils.ListItem
 
 class ViewMoreActivity : AppCompatActivity() {
     companion object {
-        val activityResultCode = 0
+        const val activityResultCode = 0
     }
 
     /* UI elements */
