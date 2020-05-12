@@ -3,8 +3,6 @@ package com.draco.illud.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.WindowManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
@@ -57,40 +55,6 @@ class ViewMoreActivity : AppCompatActivity() {
         }
     }
 
-    /* Setup toolbar menu actions */
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item!!.itemId) {
-            R.id.share -> run {
-                val labelText = label.text.toString()
-                val contentText = content.text.toString()
-
-                val sendText = when {
-                    /* First choice is both (label: content)*/
-                    contentText.isNotBlank() &&
-                    labelText.isNotBlank() -> "$labelText:\n$contentText"
-
-                    /* Second choice is content */
-                    contentText.isNotBlank() -> contentText
-
-                    /* Third choice is label */
-                    labelText.isNotBlank() -> labelText
-
-                    /* If there's nothing to share, just ignore request */
-                    else -> return@run
-                }
-
-                /* Open send-to dialog with our copy text */
-                val shareIntent = Intent()
-                shareIntent.action = Intent.ACTION_SEND
-                shareIntent.type="text/plain"
-                shareIntent.putExtra(Intent.EXTRA_TEXT, sendText)
-                startActivity(Intent.createChooser(shareIntent, "Send to"))
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
     /* Save contents on exit */
     override fun finish() {
         val resultIntent = Intent()
@@ -114,11 +78,5 @@ class ViewMoreActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()
-    }
-
-    /* Setup and inflate toolbar */
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_view_more, menu)
-        return super.onCreateOptionsMenu(menu)
     }
 }
