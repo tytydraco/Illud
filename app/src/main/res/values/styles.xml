@@ -8,11 +8,6 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
-        <item name="actionOverflowButtonStyle">@style/OverflowButtonTheme</item>
-    </style>
-
-    <style name="OverflowButtonTheme" parent="Base.Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:tint">@color/buttonColor</item>
     </style>
 
     <!-- Colors for material alert dialogs -->
