@@ -19,7 +19,6 @@ import com.draco.illud.utils.ListItems
 import com.draco.illud.utils.Nfc
 import com.google.android.material.snackbar.Snackbar
 
-
 class MainActivity : AppCompatActivity() {
     /* Constants */
     private val titleNotes = "Notes"
@@ -121,32 +120,6 @@ class MainActivity : AppCompatActivity() {
             openNfcList()
     }
 
-    /* Setup UI related methods */
-    private fun setupUI() {
-        title = titleNotes
-
-        /* Set our local lateinit variables */
-        recyclerView = findViewById(R.id.recycler_view)
-        emptyView = findViewById(R.id.recycler_view_empty)
-        viewLayoutManager = LinearLayoutManager(this)
-
-        viewAdapter = RecyclerViewAdapter(recyclerView, listItems, emptyView)
-
-        recyclerView.apply {
-            layoutManager = viewLayoutManager
-            adapter = viewAdapter
-            addItemDecoration(DividerItemDecoration(recyclerView.context, DividerItemDecoration.VERTICAL))
-        }
-
-
-        viewAdapter.notifyDataSetChanged()
-
-        /* Setup drag and drop handler */
-        val callback = RecyclerViewDragHelper(viewAdapter, recyclerView, listItems)
-
-        ItemTouchHelper(callback).attachToRecyclerView(recyclerView)
-    }
-
     /* Setup toolbar menu actions */
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
@@ -196,6 +169,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        title = titleNotes
+
         /* Register our Nfc helper class */
         nfc = Nfc()
         nfc.registerAdapter(this)
@@ -204,8 +179,25 @@ class MainActivity : AppCompatActivity() {
         /* Register our ListItems helper class */
         listItems = ListItems()
 
-        /* Setup UI elements */
-        setupUI()
+        /* Set our local lateinit variables */
+        recyclerView = findViewById(R.id.recycler_view)
+        emptyView = findViewById(R.id.recycler_view_empty)
+        viewLayoutManager = LinearLayoutManager(this)
+
+        viewAdapter = RecyclerViewAdapter(recyclerView, listItems, emptyView)
+
+        recyclerView.apply {
+            layoutManager = viewLayoutManager
+            adapter = viewAdapter
+            addItemDecoration(DividerItemDecoration(recyclerView.context, DividerItemDecoration.VERTICAL))
+        }
+
+        viewAdapter.notifyDataSetChanged()
+
+        /* Setup drag and drop handler */
+        val callback = RecyclerViewDragHelper(viewAdapter, recyclerView, listItems)
+
+        ItemTouchHelper(callback).attachToRecyclerView(recyclerView)
 
         /* If we opened the app by scanning a tag, process it */
         handleNfcScan(intent)
