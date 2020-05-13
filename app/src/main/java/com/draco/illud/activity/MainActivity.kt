@@ -2,6 +2,7 @@ package com.draco.illud.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
 import com.draco.illud.R
 import com.draco.illud.recycler_view.RecyclerViewAdapter
 import com.draco.illud.recycler_view.RecyclerViewDragHelper
@@ -18,6 +21,7 @@ import com.draco.illud.utils.ListItem
 import com.draco.illud.utils.ListItems
 import com.draco.illud.utils.Nfc
 import com.google.android.material.snackbar.Snackbar
+
 
 class MainActivity : AppCompatActivity() {
     /* Constants */
@@ -36,6 +40,10 @@ class MainActivity : AppCompatActivity() {
     /* Private classes */
     private lateinit var nfc: Nfc
     private lateinit var listItems: ListItems
+
+    /* Shared Preferences */
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var sharedPrefsEditor: SharedPreferences.Editor
 
     /* Close Nfc list */
     private fun closeNfcList() {
@@ -171,6 +179,17 @@ class MainActivity : AppCompatActivity() {
 
         title = titleNotes
 
+        /* Setup encrypted shared preferences */
+        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+        sharedPreferences = EncryptedSharedPreferences.create(
+            "illud_shared_prefs",
+            masterKeyAlias,
+            this,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+        sharedPrefsEditor = sharedPreferences.edit()
+
         /* Register our Nfc helper class */
         nfc = Nfc()
         nfc.registerAdapter(this)
@@ -178,6 +197,11 @@ class MainActivity : AppCompatActivity() {
 
         /* Register our ListItems helper class */
         listItems = ListItems()
+
+        /* Load saved list items */
+        val listItemsJoinedString = sharedPreferences.getString("listItemsJoinedString", "")!!
+        val items = listItems.parseJoinedString(listItemsJoinedString)
+        listItems.items.addAll(items)
 
         /* Set our local lateinit variables */
         recyclerView = findViewById(R.id.recycler_view)
@@ -218,6 +242,10 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         nfc.disableForegroundIntent(this)
+
+        /* Save local list item changes */
+        sharedPrefsEditor.putString("listItemsJoinedString", listItems.generateJoinedString())
+        sharedPrefsEditor.apply()
     }
 
     /* Catch Nfc tag scan in our foreground intent filter */
