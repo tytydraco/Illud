@@ -22,7 +22,6 @@ import com.draco.illud.utils.ListItems
 import com.draco.illud.utils.Nfc
 import com.google.android.material.snackbar.Snackbar
 
-
 class MainActivity : AppCompatActivity() {
     /* Constants */
     private val titleNotes = "Notes"
@@ -198,8 +197,21 @@ class MainActivity : AppCompatActivity() {
         /* Register our ListItems helper class */
         listItems = ListItems()
 
+        /* Generate default tutorial item */
+        val tutorialListItem = ListItem()
+        with (tutorialListItem) {
+            label = "Welcome to Illud!"
+            tag = "Tutorial"
+            content = "To use Illud with an NFC tag, simply scan it to start editing.\n\n" +
+                    "Once you have finished making changes, scan the NFC tag again to write the new contents.\n\n" +
+                    "If you wish to import the contents from an NFC tag without making any changes, " +
+                    "press the check mark menu item to stop editing the tag.\n\n" +
+                    "All locally stored items are encrypted with AES256 encryption.\n\n" +
+                    "Enjoy!"
+        }
+
         /* Load saved list items */
-        val listItemsJoinedString = sharedPreferences.getString("listItemsJoinedString", "")!!
+        val listItemsJoinedString = sharedPreferences.getString("listItemsJoinedString", tutorialListItem.toString())!!
         val items = listItems.parseJoinedString(listItemsJoinedString)
         listItems.items.addAll(items)
 
