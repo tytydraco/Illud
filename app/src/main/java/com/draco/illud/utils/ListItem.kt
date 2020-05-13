@@ -22,9 +22,9 @@ class ListItem {
     }
 
     /* Import as coagulated string with separators */
-    constructor(rawString: String?) {
+    constructor(rawString: String? = null) {
         /* Nothing in the string */
-        if (rawString == null || rawString.isEmpty())
+        if (rawString.isNullOrEmpty())
             return
 
         val splitString: List<String> = rawString.split(separator)
