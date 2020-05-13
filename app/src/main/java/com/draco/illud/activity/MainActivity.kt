@@ -48,14 +48,12 @@ class MainActivity : AppCompatActivity() {
     private fun closeNfcList() {
         nfcListOpen = false
         title = titleNotes
-        emptyView.text = getString(R.string.recycler_view_scan)
     }
 
     /* Open Nfc list */
     private fun openNfcList() {
         nfcListOpen = true
         title = titleEdit
-        emptyView.text = getString(R.string.recycler_view_empty)
     }
 
     /* Clear list and update adapter */

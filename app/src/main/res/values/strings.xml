@@ -12,6 +12,5 @@
     <string name="hint_tag">Tag</string>
 
     <!-- Misc strings -->
-    <string name="recycler_view_empty">There are no entries</string>
-    <string name="recycler_view_scan">Scan a tag to get started</string>
+    <string name="recycler_view_empty">There are no entries.</string>
 </resources>
