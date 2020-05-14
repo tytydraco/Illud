@@ -15,7 +15,6 @@ Have a list of tasks that need to be accomplished by the end of the day? Have ea
 Never forget a password again by uploading them directly to your NFC tags. The only way for an attacker to steal your passwords is to steal your physical NFC tag, which greatly reduces your risk of losing your passwords.
 
 Illud is a hobby project, and I am always open to suggestions and feedback. Don't hesitate to contact me directly.
-  - Press confirm.
   
 # Contact
 - Telegram: @tytydraco
