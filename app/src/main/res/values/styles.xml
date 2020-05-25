@@ -1,12 +1,19 @@
 <resources>
 
     <!-- Base application theme -->
-    <style name="AppTheme.DayNight" parent="Theme.MaterialComponents.Light">
+    <style name="AppTheme.DayNight" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="actionBarStyle">@style/ActionBarTheme</item>
+    </style>
+
+    <!-- Action Bar theme. -->
+    <style name="ActionBarTheme" parent="Widget.AppCompat.ActionBar.Solid">
+        <item name="elevation">0dp</item>
     </style>
 </resources>
