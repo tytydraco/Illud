@@ -25,16 +25,20 @@ import com.google.android.material.snackbar.Snackbar
 class MainActivity : AppCompatActivity() {
     /* Constants */
     private val titleNotes = "Notes"
-    private val titleEdit = "Editing"
 
     /* UI elements */
     private lateinit var recyclerView: RecyclerView
     private lateinit var emptyView: TextView
     private lateinit var viewAdapter: RecyclerViewAdapter
     private lateinit var viewLayoutManager: RecyclerView.LayoutManager
+    private lateinit var nfcModeMenuItem: MenuItem
 
     /* If user has a temporary Nfc list open for editing */
-    private var nfcListOpen = false
+    enum class NfcMode {
+        UPLOAD,
+        DOWNLOAD
+    }
+    private var nfcMode = NfcMode.DOWNLOAD
 
     /* Private classes */
     private lateinit var nfc: Nfc
@@ -44,25 +48,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var sharedPrefsEditor: SharedPreferences.Editor
 
-    /* Close Nfc list */
-    private fun closeNfcList() {
-        nfcListOpen = false
-        title = titleNotes
-    }
-
-    /* Open Nfc list */
-    private fun openNfcList() {
-        nfcListOpen = true
-        title = titleEdit
-    }
-
     /* Clear list and update adapter */
     private fun clearList() {
         viewAdapter.notifyItemRangeRemoved(0, listItems.items.size)
         listItems.items.clear()
     }
 
-    /* Update card contents (clears list) */
+    /* Update card contents  */
     private fun nfcExport(intent: Intent): Boolean {
         val writeString = listItems.generateJoinedString()
         val exception = nfc.writeBytes(intent, writeString.toByteArray())
@@ -74,9 +66,6 @@ class MainActivity : AppCompatActivity() {
 
             return false
         }
-
-        /* Clear our list for the next import */
-        clearList()
 
         Snackbar.make(recyclerView, "Exported successfully.", Snackbar.LENGTH_SHORT)
             .setAction("Dismiss") {}
@@ -119,10 +108,10 @@ class MainActivity : AppCompatActivity() {
             return
 
         /* Either import or export */
-        if (nfcListOpen && nfcExport(intent))
-            closeNfcList()
-        else if (nfcImport(intent))
-            openNfcList()
+        if (nfcMode == NfcMode.UPLOAD)
+            nfcExport(intent)
+        else
+            nfcImport(intent)
     }
 
     /* Setup toolbar menu actions */
@@ -133,16 +122,20 @@ class MainActivity : AppCompatActivity() {
                 startActivityForResult(viewMoreIntent, ViewMoreActivity.activityResultCode)
             }
 
-            R.id.stop_editing -> {
-                if (nfcListOpen) {
-                    closeNfcList()
-                    Snackbar.make(recyclerView, "Closed list for editing.", Snackbar.LENGTH_SHORT)
+            R.id.nfc_mode -> {
+                if (nfcMode == NfcMode.UPLOAD) {
+                    nfcMode = NfcMode.DOWNLOAD
+                    nfcModeMenuItem.icon = getDrawable(R.drawable.ic_file_download_24dp)
+                    Snackbar.make(recyclerView, "Set to download NFC contents.", Snackbar.LENGTH_SHORT)
                         .setAction("Dismiss") {}
                         .show()
-                } else
-                    Snackbar.make(recyclerView, "List is not in edit mode.", Snackbar.LENGTH_SHORT)
+                } else {
+                    nfcMode = NfcMode.UPLOAD
+                    nfcModeMenuItem.icon = getDrawable(R.drawable.ic_file_upload_24dp)
+                    Snackbar.make(recyclerView, "Set to upload list contents.", Snackbar.LENGTH_SHORT)
                         .setAction("Dismiss") {}
                         .show()
+                }
             }
         }
 
@@ -270,6 +263,7 @@ class MainActivity : AppCompatActivity() {
     /* Setup and inflate toolbar */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+        nfcModeMenuItem = menu!!.findItem(R.id.nfc_mode)
         return super.onCreateOptionsMenu(menu)
     }
 }

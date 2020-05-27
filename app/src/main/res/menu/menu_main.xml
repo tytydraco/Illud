@@ -8,8 +8,8 @@
         android:title="@string/add_new"/>
 
     <item
-        android:id="@+id/stop_editing"
-        android:icon="@drawable/ic_done_24dp"
+        android:id="@+id/nfc_mode"
+        android:icon="@drawable/ic_file_download_24dp"
         app:showAsAction="ifRoom"
         android:title="@string/stop_editing" />
 
