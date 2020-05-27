@@ -48,12 +48,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var sharedPrefsEditor: SharedPreferences.Editor
 
-    /* Clear list and update adapter */
-    private fun clearList() {
-        viewAdapter.notifyItemRangeRemoved(0, listItems.items.size)
-        listItems.items.clear()
-    }
-
     /* Update card contents  */
     private fun nfcExport(intent: Intent): Boolean {
         val writeString = listItems.generateJoinedString()
