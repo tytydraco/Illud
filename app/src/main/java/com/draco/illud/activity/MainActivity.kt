@@ -86,13 +86,12 @@ class MainActivity : AppCompatActivity() {
         listItems.items.addAll(nfcItems)
 
         /* Append data and scroll up to new data */
-        viewAdapter.notifyItemRangeInserted(0, nfcItems.size)
-        recyclerView.scrollToPosition(0)
+        viewAdapter.notifyItemRangeInserted(backupItems.size, nfcItems.size)
 
         Snackbar.make(recyclerView, "Imported successfully.", Snackbar.LENGTH_SHORT)
             .setAction("Undo") {
                 listItems.items = backupItems
-                viewAdapter.notifyItemRangeRemoved(0, nfcItems.size)
+                viewAdapter.notifyItemRangeRemoved(backupItems.size, nfcItems.size)
             }
             .show()
 
