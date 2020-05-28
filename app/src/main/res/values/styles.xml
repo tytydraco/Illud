@@ -13,6 +13,12 @@
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowEnterTransition">@android:transition/slide_right</item>
         <item name="android:windowExitTransition">@android:transition/fade</item>
+        <item name="actionOverflowButtonStyle">@style/AppTheme.Overflow</item>
+    </style>
+
+    <!-- Overflow button color -->
+    <style name="AppTheme.Overflow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@color/colorAccent</item>
     </style>
 
     <!-- Action Bar theme. -->
