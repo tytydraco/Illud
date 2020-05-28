@@ -1,6 +1,8 @@
 <resources>
     <!-- Application strings -->
     <string name="app_name">Illud</string>
+    <string name="notes">Notes</string>
+    <string name="view_more">View More</string>
 
     <!-- Menu strings -->
     <string name="add_new">New Item</string>

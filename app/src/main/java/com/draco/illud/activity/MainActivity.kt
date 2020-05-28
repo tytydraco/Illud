@@ -23,9 +23,6 @@ import com.draco.illud.utils.Nfc
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
-    /* Constants */
-    private val titleNotes = "Notes"
-
     /* UI elements */
     private lateinit var recyclerView: RecyclerView
     private lateinit var emptyView: TextView
@@ -160,8 +157,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        title = titleNotes
 
         /* Setup encrypted shared preferences */
         val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)

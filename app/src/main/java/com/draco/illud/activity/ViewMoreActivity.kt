@@ -34,7 +34,6 @@ class ViewMoreActivity : AppCompatActivity() {
 
         /* Allow back button functionality */
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        title = "View More"
 
         /* Import the item that was passed to us as a raw string */
         val itemString = intent.getStringExtra("itemString")
