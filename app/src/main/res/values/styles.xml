@@ -9,7 +9,7 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="actionBarStyle">@style/ActionBarTheme</item>
+        <item name="actionBarStyle">@style/AppTheme.ActionBar</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowEnterTransition">@android:transition/slide_right</item>
         <item name="android:windowExitTransition">@android:transition/fade</item>
@@ -22,7 +22,7 @@
     </style>
 
     <!-- Action Bar theme. -->
-    <style name="ActionBarTheme" parent="Widget.AppCompat.ActionBar.Solid">
+    <style name="AppTheme.ActionBar" parent="Widget.AppCompat.ActionBar.Solid">
         <item name="elevation">0dp</item>
     </style>
 </resources>
