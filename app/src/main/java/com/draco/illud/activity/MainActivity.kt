@@ -78,6 +78,9 @@ class MainActivity : AppCompatActivity() {
             return false
         }
 
+        /* Preserve pre-import items */
+        val backupItems = ArrayList(listItems.items)
+
         /* Splice the card contents and append the list view for the user */
         val nfcItems = listItems.parseJoinedString(String(nfcContent))
         listItems.items.addAll(nfcItems)
@@ -87,7 +90,10 @@ class MainActivity : AppCompatActivity() {
         recyclerView.scrollToPosition(0)
 
         Snackbar.make(recyclerView, "Imported successfully.", Snackbar.LENGTH_SHORT)
-            .setAction("Dismiss") {}
+            .setAction("Undo") {
+                listItems.items = backupItems
+                viewAdapter.notifyItemRangeRemoved(0, nfcItems.size)
+            }
             .show()
 
         return true
