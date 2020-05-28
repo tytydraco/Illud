@@ -1,6 +1,7 @@
 package com.draco.illud.activity
 
 import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -110,7 +111,8 @@ class MainActivity : AppCompatActivity() {
         when (item!!.itemId) {
             R.id.add_new -> {
                 val viewMoreIntent = Intent(this, ViewMoreActivity::class.java)
-                startActivityForResult(viewMoreIntent, ViewMoreActivity.activityResultCode)
+                startActivityForResult(viewMoreIntent, ViewMoreActivity.activityResultCode,
+                    ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
             }
 
             R.id.nfc_mode -> {
@@ -200,7 +202,12 @@ class MainActivity : AppCompatActivity() {
         emptyView = findViewById(R.id.recycler_view_empty)
         viewLayoutManager = LinearLayoutManager(this)
 
-        viewAdapter = RecyclerViewAdapter(recyclerView, listItems, emptyView)
+        viewAdapter = RecyclerViewAdapter(
+            this,
+            recyclerView,
+            listItems,
+            emptyView
+        )
 
         recyclerView.apply {
             layoutManager = viewLayoutManager

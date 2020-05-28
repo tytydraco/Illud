@@ -1,6 +1,7 @@
 package com.draco.illud.recycler_view
 
 import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import com.draco.illud.activity.ViewMoreActivity
 import com.draco.illud.utils.ListItems
 
 class RecyclerViewAdapter(
+    private val parentActivity: Activity,
     private val recyclerView: RecyclerView,
     private val listItems: ListItems,
     private val emptyView: View):
@@ -58,7 +60,8 @@ class RecyclerViewAdapter(
 
             /* Use parent activity to handle result of item edit */
             (recyclerView.context as Activity)
-                .startActivityForResult(intent, ViewMoreActivity.activityResultCode)
+                .startActivityForResult(intent, ViewMoreActivity.activityResultCode,
+                    ActivityOptions.makeSceneTransitionAnimation(parentActivity).toBundle())
         }
     }
 
