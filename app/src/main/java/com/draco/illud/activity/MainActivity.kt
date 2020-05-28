@@ -265,6 +265,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         nfcModeMenuItem = menu!!.findItem(R.id.nfc_mode)
+
+        /* Disable nfc mode if device lacks nfc */
+        if (nfc.supportState() == Nfc.State.UNSUPPORTED)
+            nfcModeMenuItem.isVisible = false
+
         return super.onCreateOptionsMenu(menu)
     }
 }
