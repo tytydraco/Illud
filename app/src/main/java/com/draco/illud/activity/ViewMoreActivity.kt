@@ -32,9 +32,6 @@ class ViewMoreActivity : AppCompatActivity() {
         content = findViewById(R.id.content)
         tag = findViewById(R.id.tag)
 
-        /* Allow back button functionality */
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
         /* Import the item that was passed to us as a raw string */
         val itemString = intent.getStringExtra("itemString")
         position = intent.getIntExtra("position", -1)
