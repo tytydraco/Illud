@@ -189,12 +189,7 @@ class MainActivity : AppCompatActivity() {
         with (tutorialListItem) {
             label = "Welcome to Illud!"
             tag = "Tutorial"
-            content = "To use Illud with an NFC tag, simply scan it to start editing.\n\n" +
-                    "Once you have finished making changes, scan the NFC tag again to write the new contents.\n\n" +
-                    "If you wish to import the contents from an NFC tag without making any changes, " +
-                    "press the check mark menu item to stop editing the tag.\n\n" +
-                    "All locally stored items are encrypted with AES256 encryption.\n\n" +
-                    "Enjoy!"
+            content = getString(R.string.tutorial_text)
         }
 
         /* Load saved list items */
