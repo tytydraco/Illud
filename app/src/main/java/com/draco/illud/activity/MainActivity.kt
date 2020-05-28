@@ -135,12 +135,12 @@ class MainActivity : AppCompatActivity() {
             R.id.nfc_mode -> {
                 if (nfcMode == NfcMode.UPLOAD) {
                     downloadMode()
-                    Snackbar.make(recyclerView, "Set to download NFC contents.", Snackbar.LENGTH_SHORT)
+                    Snackbar.make(recyclerView, "Will import items from scanned tag.", Snackbar.LENGTH_SHORT)
                         .setAction("Dismiss") {}
                         .show()
                 } else {
                     uploadMode()
-                    Snackbar.make(recyclerView, "Set to upload list contents.", Snackbar.LENGTH_SHORT)
+                    Snackbar.make(recyclerView, "Will upload items to scanned tag.", Snackbar.LENGTH_SHORT)
                         .setAction("Dismiss") {}
                         .show()
                 }
