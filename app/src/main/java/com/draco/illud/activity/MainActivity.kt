@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewLayoutManager: RecyclerView.LayoutManager
     private lateinit var nfcModeMenuItem: MenuItem
 
-    /* How to handle an nfc tag scan */
+    /* If user has a temporary Nfc list open for editing */
     enum class NfcMode {
         UPLOAD,
         DOWNLOAD
@@ -47,22 +47,6 @@ class MainActivity : AppCompatActivity() {
     /* Shared Preferences */
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var sharedPrefsEditor: SharedPreferences.Editor
-
-    /* Next scan should download contents */
-    private fun downloadMode() {
-        nfcMode = NfcMode.DOWNLOAD
-        nfcModeMenuItem.icon = getDrawable(R.drawable.ic_file_download_24dp)
-        sharedPrefsEditor.putString("nfcMode", "DOWNLOAD")
-        sharedPrefsEditor.apply()
-    }
-
-    /* Next scan should upload contents */
-    private fun uploadMode() {
-        nfcMode = NfcMode.UPLOAD
-        nfcModeMenuItem.icon = getDrawable(R.drawable.ic_file_upload_24dp)
-        sharedPrefsEditor.putString("nfcMode", "UPLOAD")
-        sharedPrefsEditor.apply()
-    }
 
     /* Update card contents  */
     private fun nfcExport(intent: Intent): Boolean {
@@ -134,12 +118,14 @@ class MainActivity : AppCompatActivity() {
 
             R.id.nfc_mode -> {
                 if (nfcMode == NfcMode.UPLOAD) {
-                    downloadMode()
+                    nfcMode = NfcMode.DOWNLOAD
+                    nfcModeMenuItem.icon = getDrawable(R.drawable.ic_file_download_24dp)
                     Snackbar.make(recyclerView, "Will import items from scanned tag.", Snackbar.LENGTH_SHORT)
                         .setAction("Dismiss") {}
                         .show()
                 } else {
-                    uploadMode()
+                    nfcMode = NfcMode.UPLOAD
+                    nfcModeMenuItem.icon = getDrawable(R.drawable.ic_file_upload_24dp)
                     Snackbar.make(recyclerView, "Will upload items to scanned tag.", Snackbar.LENGTH_SHORT)
                         .setAction("Dismiss") {}
                         .show()
@@ -272,14 +258,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         nfcModeMenuItem = menu!!.findItem(R.id.nfc_mode)
-
-        /* Set our nfc mode based on previous preferences */
-        val savedNfcMode = sharedPreferences.getString("nfcMode", "DOWNLOAD")
-        if (savedNfcMode == "DOWNLOAD")
-            downloadMode()
-        else
-            uploadMode()
-
         return super.onCreateOptionsMenu(menu)
     }
 }
