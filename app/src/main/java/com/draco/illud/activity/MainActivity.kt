@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     nfcMode = NfcMode.UPLOAD
                     nfcModeMenuItem.icon = getDrawable(R.drawable.ic_file_upload_24dp)
-                    Snackbar.make(recyclerView, "Will upload items to scanned tag.", Snackbar.LENGTH_SHORT)
+                    Snackbar.make(recyclerView, "Will export items to scanned tag.", Snackbar.LENGTH_SHORT)
                         .setAction("Dismiss") {}
                         .show()
                 }
