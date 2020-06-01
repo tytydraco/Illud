@@ -28,7 +28,7 @@ class Nfc(context: Context) {
     )
 
     /* Mime type for NDEF record. P.S.: Takes up Nfc tag space */
-    private val mimeType: String = context.getString(R.string.nfc_mine)
+    private val mimeType: String = context.getString(R.string.nfc_mime)
 
     /* Get the byte contents of a Nfc tag */
     fun readBytes(intent: Intent): ByteArray {

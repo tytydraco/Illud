@@ -1,7 +1,7 @@
 <resources>
     <!-- Application strings -->
     <string name="app_name">Illud</string>
-    <string name="nfc_mine">text/illud</string>
+    <string name="nfc_mime">text/illud</string>
     <string name="view_more">View More</string>
 
     <!-- Menu strings -->
