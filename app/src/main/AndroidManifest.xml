@@ -16,7 +16,6 @@
         android:theme="@style/AppTheme.DayNight"
         android:fullBackupContent="true">
         <activity android:name=".activity.MainActivity"
-            android:label="@string/notes"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTask">
             <intent-filter>
