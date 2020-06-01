@@ -6,7 +6,7 @@
 
     <!-- Menu strings -->
     <string name="add_new">New Item</string>
-    <string name="stop_editing">Stop Editing</string>
+    <string name="nfc_mode">Switch NFC Mode</string>
 
     <!-- Label hint strings -->
     <string name="hint_label">Start typing…</string>
