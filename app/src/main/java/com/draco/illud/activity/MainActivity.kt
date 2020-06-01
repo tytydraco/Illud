@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
     /* Read and process card contents (appends) */
     private fun nfcImport(intent: Intent): Boolean {
         val nfcContent = nfc.readBytes(intent)
-        
+
         /* Preserve pre-import items */
         val backupItems = ArrayList(listItems.items)
 
