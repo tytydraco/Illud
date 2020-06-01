@@ -28,7 +28,7 @@
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
                 <action android:name="android.nfc.action.TAG_DISCOVERED" />
                 <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="text/illud" />
+                <data android:mimeType="@string/nfc_mine" />
             </intent-filter>
         </activity>
         <activity android:name=".activity.ViewMoreActivity"

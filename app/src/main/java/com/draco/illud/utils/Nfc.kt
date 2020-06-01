@@ -6,9 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.nfc.*
 import android.nfc.tech.Ndef
+import com.draco.illud.R
 import java.io.IOException
 
-class Nfc {
+class Nfc(val context: Context) {
     /* Device Nfc State */
     enum class State {
         /* Device lacks Nfc support on a hardware level */
@@ -26,7 +27,7 @@ class Nfc {
     private var nfcPendingIntent: PendingIntent? = null
 
     /* Mime type for NDEF record. P.S.: Takes up Nfc tag space */
-    private val mimeType: String = "text/illud"
+    private val mimeType: String = context.getString(R.string.nfc_mine)
 
     /* Get the byte contents of a Nfc tag */
     fun readBytes(intent: Intent?): ByteArray? {
@@ -104,7 +105,7 @@ class Nfc {
     }
 
     /* Setup for scanning Nfc tags while in foreground */
-    fun setupForegroundIntent(context: Context) {
+    fun setupForegroundIntent() {
         nfcPendingIntent = PendingIntent.getActivity(
             context,
             0,
@@ -140,7 +141,7 @@ class Nfc {
     }
 
     /* Try to register the Nfc adapter */
-    fun registerAdapter(context: Context) {
+    fun registerAdapter() {
         nfcAdapter = NfcAdapter.getDefaultAdapter(context)
     }
 

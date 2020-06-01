@@ -177,9 +177,9 @@ class MainActivity : AppCompatActivity() {
         sharedPrefsEditor = sharedPreferences.edit()
 
         /* Register our Nfc helper class */
-        nfc = Nfc()
-        nfc.registerAdapter(this)
-        nfc.setupForegroundIntent(this)
+        nfc = Nfc(this)
+        nfc.registerAdapter()
+        nfc.setupForegroundIntent()
 
         /* Register our ListItems helper class */
         listItems = ListItems()
