@@ -30,17 +30,6 @@ class Nfc {
 
     /* Get the byte contents of a Nfc tag */
     fun readBytes(intent: Intent?): ByteArray? {
-        /* Check if we can even access the tag */
-        val currentTag = intent?.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
-            ?: return null
-
-        /* Connect to the tag and return exception if we fail */
-        val ndef = Ndef.get(currentTag) ?: return null
-
-        /* If the tag is read only, fail */
-        if (!ndef.isWritable)
-            return null
-
         /* Parse any messages */
         val parcelables = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
 
