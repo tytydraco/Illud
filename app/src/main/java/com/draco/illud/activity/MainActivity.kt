@@ -69,15 +69,7 @@ class MainActivity : AppCompatActivity() {
     /* Read and process card contents (appends) */
     private fun nfcImport(intent: Intent): Boolean {
         val nfcContent = nfc.readBytes(intent)
-
-        if (nfcContent == null) {
-            Snackbar.make(recyclerView, "Tag could not be read.", Snackbar.LENGTH_SHORT)
-                .setAction("Dismiss") {}
-                .show()
-
-            return false
-        }
-
+        
         /* Preserve pre-import items */
         val backupItems = ArrayList(listItems.items)
 
@@ -178,8 +170,6 @@ class MainActivity : AppCompatActivity() {
 
         /* Register our Nfc helper class */
         nfc = Nfc(this)
-        nfc.registerAdapter()
-        nfc.setupForegroundIntent()
 
         /* Register our ListItems helper class */
         listItems = ListItems()
