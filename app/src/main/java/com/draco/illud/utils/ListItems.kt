@@ -2,7 +2,7 @@ package com.draco.illud.utils
 
 class ListItems {
     /* Constants */
-    private val divider = "\r" /* Separates individual notes */
+    private val divider = "\u001D" /* Separates individual notes */
 
     /* Items are stored here */
     var items: ArrayList<ListItem> = arrayListOf()

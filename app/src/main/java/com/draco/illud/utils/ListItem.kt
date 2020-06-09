@@ -2,7 +2,7 @@ package com.draco.illud.utils
 
 class ListItem {
     /* Separates label from content. Use something that a user cannot manually type. */
-    private val separator = "\t"
+    private val separator = "\u001E"
 
     /* These can be blank by default */
     var label: String = ""
