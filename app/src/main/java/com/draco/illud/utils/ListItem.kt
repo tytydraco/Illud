@@ -2,7 +2,7 @@ package com.draco.illud.utils
 
 class ListItem {
     /* Separates label from content. Use something that a user cannot manually type. */
-    private val separator = "\u001E"
+    private val componentSeparator = "\u001E"
 
     /* These can be blank by default */
     var label: String = ""
@@ -27,7 +27,7 @@ class ListItem {
         if (rawString.isNullOrEmpty())
             return
 
-        val splitString: List<String> = rawString.split(separator)
+        val splitString: List<String> = rawString.split(componentSeparator)
 
         if (splitString[0].isNotEmpty())
             label = splitString[0]
@@ -39,6 +39,6 @@ class ListItem {
 
     /* Return as coagulated string with separators */
     override fun toString(): String {
-        return "${label}${separator}${content}${separator}${tag}"
+        return "${label}${componentSeparator}${content}${componentSeparator}${tag}"
     }
 }
