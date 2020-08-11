@@ -38,9 +38,10 @@ class MainActivity : AppCompatActivity() {
     /* If user has a temporary Nfc list open for editing */
     enum class NfcMode {
         UPLOAD,
-        DOWNLOAD
+        DOWNLOAD,
+        SWAP
     }
-    private var nfcMode = NfcMode.DOWNLOAD
+    private var nfcMode = NfcMode.UPLOAD
 
     /* Private classes */
     private lateinit var nfc: Nfc
@@ -81,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         val nfcItems = listItems.parseJoinedString(String(nfcContent))
         listItems.items.addAll(nfcItems)
 
-        /* Append data and scroll up to new data */
+        /* Update information */
         viewAdapter.notifyItemRangeInserted(backupItems.size, nfcItems.size)
 
         Snackbar.make(recyclerView, "Imported successfully.", Snackbar.LENGTH_SHORT)
@@ -94,19 +95,59 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    /* Swap internal contents with card contents */
+    private fun nfcSwap(intent: Intent): Boolean {
+        val nfcContent = nfc.readBytes(intent)
+
+        /* Preserve pre-import items */
+        val backupItems = ArrayList(listItems.items)
+
+        /* Splice the card contents */
+        val nfcItems = listItems.parseJoinedString(String(nfcContent))
+
+        /* Write list items to tag */
+        val writeString = listItems.generateJoinedString()
+        val exception = nfc.writeBytes(intent, writeString.toByteArray())
+
+        if (exception != null) {
+            /* Restore backed up list */
+            listItems.items = backupItems
+            viewAdapter.notifyItemRangeRemoved(backupItems.size, nfcItems.size)
+            Snackbar.make(recyclerView, exception.message!!, Snackbar.LENGTH_SHORT)
+                .setAction("Dismiss") {}
+                .show()
+
+            return false
+        }
+
+        /* Finalize adding list items */
+        listItems.items.clear()
+        listItems.items.addAll(nfcItems)
+
+        /* Update information */
+        viewAdapter.notifyDataSetChanged()
+
+        Snackbar.make(recyclerView, "Swapped successfully.", Snackbar.LENGTH_SHORT)
+            .setAction("Dismiss") {}
+            .show()
+
+        return true
+    }
+
     /* Process Nfc tag scan event */
     private fun handleNfcScan(intent: Intent) {
         /* Make sure we are processing an Nfc tag */
         if (!nfc.startedByNDEF(intent))
             return
 
-        /* Either import or export */
-        if (nfcMode == NfcMode.UPLOAD)
-            nfcExport(intent)
-        else
-            nfcImport(intent)
+        when (nfcMode) {
+            NfcMode.UPLOAD -> nfcExport(intent)
+            NfcMode.DOWNLOAD -> nfcImport(intent)
+            NfcMode.SWAP -> nfcSwap(intent)
+        }
     }
 
+    /* Handle action bar events */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.add_new -> {
@@ -116,18 +157,30 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.nfc_mode -> {
-                if (nfcMode == NfcMode.UPLOAD) {
-                    nfcMode = NfcMode.DOWNLOAD
-                    nfcModeMenuItem.icon = ContextCompat.getDrawable(this, R.drawable.ic_file_download_24dp)
-                    Snackbar.make(recyclerView, "Will import items from scanned tag.", Snackbar.LENGTH_SHORT)
-                        .setAction("Dismiss") {}
-                        .show()
-                } else {
-                    nfcMode = NfcMode.UPLOAD
-                    nfcModeMenuItem.icon = ContextCompat.getDrawable(this, R.drawable.ic_file_upload_24dp)
-                    Snackbar.make(recyclerView, "Will export items to scanned tag.", Snackbar.LENGTH_SHORT)
-                        .setAction("Dismiss") {}
-                        .show()
+                when (nfcMode) {
+                    NfcMode.UPLOAD -> {
+                        nfcMode = NfcMode.DOWNLOAD
+                        nfcModeMenuItem.icon = ContextCompat.getDrawable(this, R.drawable.ic_file_download_24dp)
+                        Snackbar.make(recyclerView, "Will import items from scanned tag.", Snackbar.LENGTH_SHORT)
+                            .setAction("Dismiss") {}
+                            .show()
+                    }
+
+                    NfcMode.DOWNLOAD -> {
+                        nfcMode = NfcMode.SWAP
+                        nfcModeMenuItem.icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_swap_vert_24)
+                        Snackbar.make(recyclerView, "Will swap items with scanned tag.", Snackbar.LENGTH_SHORT)
+                            .setAction("Dismiss") {}
+                            .show()
+                    }
+
+                    NfcMode.SWAP -> {
+                        nfcMode = NfcMode.UPLOAD
+                        nfcModeMenuItem.icon = ContextCompat.getDrawable(this, R.drawable.ic_file_upload_24dp)
+                        Snackbar.make(recyclerView, "Will export items to scanned tag.", Snackbar.LENGTH_SHORT)
+                            .setAction("Dismiss") {}
+                            .show()
+                    }
                 }
             }
         }
