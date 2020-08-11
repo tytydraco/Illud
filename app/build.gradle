@@ -9,14 +9,14 @@ android {
     defaultConfig {
         applicationId "com.draco.illud"
         minSdkVersion 26
-        targetSdkVersion 39
+        targetSdkVersion 30
         versionCode 26
         versionName "3.4.7"
     }
     buildTypes {
         release {
-            minifyEnabled false
-            shrinkResources false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

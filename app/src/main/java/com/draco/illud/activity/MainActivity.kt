@@ -5,16 +5,19 @@ import android.app.ActivityOptions
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
+import androidx.security.crypto.MasterKey
 import com.draco.illud.R
 import com.draco.illud.recycler_view.RecyclerViewAdapter
 import com.draco.illud.recycler_view.RecyclerViewDragHelper
@@ -22,6 +25,7 @@ import com.draco.illud.utils.ListItem
 import com.draco.illud.utils.ListItems
 import com.draco.illud.utils.Nfc
 import com.google.android.material.snackbar.Snackbar
+
 
 class MainActivity : AppCompatActivity() {
     /* UI elements */
@@ -103,9 +107,8 @@ class MainActivity : AppCompatActivity() {
             nfcImport(intent)
     }
 
-    /* Setup toolbar menu actions */
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item!!.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.add_new -> {
                 val viewMoreIntent = Intent(this, ViewMoreActivity::class.java)
                 startActivityForResult(viewMoreIntent, ViewMoreActivity.activityResultCode,
@@ -115,13 +118,13 @@ class MainActivity : AppCompatActivity() {
             R.id.nfc_mode -> {
                 if (nfcMode == NfcMode.UPLOAD) {
                     nfcMode = NfcMode.DOWNLOAD
-                    nfcModeMenuItem.icon = getDrawable(R.drawable.ic_file_download_24dp)
+                    nfcModeMenuItem.icon = ContextCompat.getDrawable(this, R.drawable.ic_file_download_24dp)
                     Snackbar.make(recyclerView, "Will import items from scanned tag.", Snackbar.LENGTH_SHORT)
                         .setAction("Dismiss") {}
                         .show()
                 } else {
                     nfcMode = NfcMode.UPLOAD
-                    nfcModeMenuItem.icon = getDrawable(R.drawable.ic_file_upload_24dp)
+                    nfcModeMenuItem.icon = ContextCompat.getDrawable(this, R.drawable.ic_file_upload_24dp)
                     Snackbar.make(recyclerView, "Will export items to scanned tag.", Snackbar.LENGTH_SHORT)
                         .setAction("Dismiss") {}
                         .show()
@@ -158,11 +161,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         /* Setup encrypted shared preferences */
-        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+       KeyGenParameterSpec.Builder(
+           "illud_encrypted_prefs_key",
+           KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT).build()
+        val masterKeyAlias = MasterKey.Builder(this, "illud_encrypted_prefs_key")
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build()
         sharedPreferences = EncryptedSharedPreferences.create(
+            this,
             "illud_shared_prefs",
             masterKeyAlias,
-            this,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )

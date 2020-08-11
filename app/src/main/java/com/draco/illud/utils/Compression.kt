@@ -6,6 +6,7 @@ import java.util.zip.*
 
 class Compression {
     companion object {
+        @Suppress("unused")
         fun compress(bytes: ByteArray): ByteArray {
             val byteStream = ByteArrayOutputStream()
             val deflater = Deflater(Deflater.BEST_COMPRESSION, true)
@@ -24,6 +25,7 @@ class Compression {
             }
         }
 
+        @Suppress("unused")
         fun decompress(bytes: ByteArray): ByteArray {
             val byteStream = ByteArrayOutputStream()
             val inflater = Inflater(true)
