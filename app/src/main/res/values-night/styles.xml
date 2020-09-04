@@ -1,5 +1,4 @@
 <resources>
-
     <!-- Base application theme -->
     <style name="AppTheme.DayNight" parent="Theme.MaterialComponents">
         <item name="colorPrimary">@color/colorPrimary</item>
