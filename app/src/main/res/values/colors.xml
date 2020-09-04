@@ -3,5 +3,5 @@
     <!-- Application Colors -->
     <color name="colorPrimary">@android:color/white</color>
     <color name="colorPrimaryDark">@android:color/white</color>
-    <color name="colorAccent">#121212</color>
+    <color name="colorAccent">@android:color/black</color>
 </resources>
