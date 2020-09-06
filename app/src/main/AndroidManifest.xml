@@ -16,7 +16,6 @@
         android:theme="@style/AppTheme.DayNight"
         android:fullBackupContent="true">
         <activity android:name=".activity.MainActivity"
-            android:configChanges="orientation|screenSize"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,8 +30,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.ViewMoreActivity"
-            android:label="@string/view_more"
-            android:configChanges="orientation|screenSize" />
+            android:label="@string/view_more" />
     </application>
 
 </manifest>
