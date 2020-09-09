@@ -26,7 +26,6 @@ import com.draco.illud.utils.ListItems
 import com.draco.illud.utils.Nfc
 import com.google.android.material.snackbar.Snackbar
 
-
 class MainActivity : AppCompatActivity() {
     /* UI elements */
     private lateinit var recyclerView: RecyclerView

@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme -->
-    <style name="AppTheme.DayNight" parent="Theme.MaterialComponents">
+    <style name="AppTheme.DayNight" parent="Theme.AppCompat">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -10,6 +10,5 @@
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowEnterTransition">@android:transition/slide_right</item>
         <item name="android:windowExitTransition">@android:transition/fade</item>
-        <item name="actionOverflowButtonStyle">@style/AppTheme.Overflow</item>
     </style>
 </resources>

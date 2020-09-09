@@ -12,5 +12,4 @@
         android:icon="@drawable/ic_file_upload_24dp"
         app:showAsAction="always"
         android:title="@string/nfc_mode" />
-
 </menu>
