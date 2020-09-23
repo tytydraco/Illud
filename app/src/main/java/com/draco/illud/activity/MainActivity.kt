@@ -57,14 +57,14 @@ class MainActivity : AppCompatActivity() {
 
         if (exception != null) {
             Snackbar.make(recyclerView, exception.message!!, Snackbar.LENGTH_SHORT)
-                .setAction("Dismiss") {}
+                .setAction(getString(R.string.snackbar_dismiss)) {}
                 .show()
 
             return false
         }
 
-        Snackbar.make(recyclerView, "Exported successfully.", Snackbar.LENGTH_SHORT)
-            .setAction("Dismiss") {}
+        Snackbar.make(recyclerView, getString(R.string.snackbar_exported_successfully), Snackbar.LENGTH_SHORT)
+            .setAction(getString(R.string.snackbar_dismiss)) {}
             .show()
 
         return true
@@ -84,8 +84,8 @@ class MainActivity : AppCompatActivity() {
         /* Update information */
         viewAdapter.notifyItemRangeInserted(backupItems.size, nfcItems.size)
 
-        Snackbar.make(recyclerView, "Imported successfully.", Snackbar.LENGTH_SHORT)
-            .setAction("Undo") {
+        Snackbar.make(recyclerView, getString(R.string.snackbar_imported_successfully), Snackbar.LENGTH_SHORT)
+            .setAction(getString(R.string.snackbar_undo)) {
                 listItems.items = backupItems
                 viewAdapter.notifyItemRangeRemoved(backupItems.size, nfcItems.size)
             }
@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity() {
             listItems.items = backupItems
             viewAdapter.notifyItemRangeRemoved(backupItems.size, nfcItems.size)
             Snackbar.make(recyclerView, exception.message!!, Snackbar.LENGTH_SHORT)
-                .setAction("Dismiss") {}
+                .setAction(getString(R.string.snackbar_dismiss)) {}
                 .show()
 
             return false
@@ -126,8 +126,8 @@ class MainActivity : AppCompatActivity() {
         /* Update information */
         viewAdapter.notifyDataSetChanged()
 
-        Snackbar.make(recyclerView, "Swapped successfully.", Snackbar.LENGTH_SHORT)
-            .setAction("Dismiss") {}
+        Snackbar.make(recyclerView, getString(R.string.snackbar_swapped_successfully), Snackbar.LENGTH_SHORT)
+            .setAction(getString(R.string.snackbar_dismiss)) {}
             .show()
 
         return true
@@ -160,24 +160,24 @@ class MainActivity : AppCompatActivity() {
                     NfcMode.UPLOAD -> {
                         nfcMode = NfcMode.DOWNLOAD
                         nfcModeMenuItem.icon = ContextCompat.getDrawable(this, R.drawable.ic_file_download_24dp)
-                        Snackbar.make(recyclerView, "Will import items from scanned tag.", Snackbar.LENGTH_SHORT)
-                            .setAction("Dismiss") {}
+                        Snackbar.make(recyclerView, getString(R.string.snackbar_mode_import), Snackbar.LENGTH_SHORT)
+                            .setAction(getString(R.string.snackbar_dismiss)) {}
                             .show()
                     }
 
                     NfcMode.DOWNLOAD -> {
                         nfcMode = NfcMode.SWAP
                         nfcModeMenuItem.icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_swap_vert_24)
-                        Snackbar.make(recyclerView, "Will swap items with scanned tag.", Snackbar.LENGTH_SHORT)
-                            .setAction("Dismiss") {}
+                        Snackbar.make(recyclerView, getString(R.string.snackbar_mode_swap), Snackbar.LENGTH_SHORT)
+                            .setAction(getString(R.string.snackbar_dismiss)) {}
                             .show()
                     }
 
                     NfcMode.SWAP -> {
                         nfcMode = NfcMode.UPLOAD
                         nfcModeMenuItem.icon = ContextCompat.getDrawable(this, R.drawable.ic_file_upload_24dp)
-                        Snackbar.make(recyclerView, "Will export items to scanned tag.", Snackbar.LENGTH_SHORT)
-                            .setAction("Dismiss") {}
+                        Snackbar.make(recyclerView, getString(R.string.snackbar_mode_export), Snackbar.LENGTH_SHORT)
+                            .setAction(getString(R.string.snackbar_dismiss)) {}
                             .show()
                     }
                 }

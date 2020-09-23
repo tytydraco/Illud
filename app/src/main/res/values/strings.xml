@@ -13,6 +13,16 @@
     <string name="hint_content">Additional content…</string>
     <string name="hint_tag">Tag</string>
 
+    <!-- Snackbar strings -->
+    <string name="snackbar_dismiss">Dismiss</string>
+    <string name="snackbar_undo">Undo</string>
+    <string name="snackbar_exported_successfully">Exported successfully</string>
+    <string name="snackbar_imported_successfully">Imported successfully</string>
+    <string name="snackbar_swapped_successfully">Swapped successfully</string>
+    <string name="snackbar_mode_import">Will import items from scanned tag</string>
+    <string name="snackbar_mode_swap">Will swap items with scanned tag.</string>
+    <string name="snackbar_mode_export">Will export items to scanned tag</string>
+
     <!-- Misc strings -->
     <string name="recycler_view_empty">There are no entries.</string>
     <string name="tutorial_text">
