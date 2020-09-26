@@ -26,6 +26,6 @@
     <!-- Misc strings -->
     <string name="recycler_view_empty">There are no entries.</string>
     <string name="tutorial_text">
-        To use Illud with an NFC tag, use the mode switch button in menu bar to switch between download and upload mode.\n\n\Download mode will import all contents from the scanned NFC tag onto your local list, while upload mode will overwrite the NFC contents with your local list.\n\nAll locally stored items are encrypted with AES256 encryption.\n\n\Enjoy!
+        To use Illud with an NFC tag, use the mode switch button in menu bar to switch between download and upload mode.\n\nDownload mode will import all contents from the scanned NFC tag onto your local list, while upload mode will overwrite the NFC contents with your local list.\n\nAll locally stored items are encrypted with AES256 encryption.\n\nEnjoy!
     </string>
 </resources>
