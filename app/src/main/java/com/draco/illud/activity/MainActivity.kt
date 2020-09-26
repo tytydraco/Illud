@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity() {
 
     /* Shared Preferences */
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var sharedPrefsEditor: SharedPreferences.Editor
 
     /* Update card contents  */
     private fun nfcExport(intent: Intent): Boolean {
@@ -226,7 +225,6 @@ class MainActivity : AppCompatActivity() {
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
-        sharedPrefsEditor = sharedPreferences.edit()
 
         /* Register our Nfc helper class */
         nfc = Nfc(this)
@@ -293,8 +291,9 @@ class MainActivity : AppCompatActivity() {
         nfc.disableForegroundIntent(this)
 
         /* Save local list item changes */
-        sharedPrefsEditor.putString("listItemsJoinedString", listItems.generateJoinedString())
-        sharedPrefsEditor.apply()
+        val editor = sharedPreferences.edit()
+        editor.putString("listItemsJoinedString", listItems.generateJoinedString())
+        editor.apply()
     }
 
     /* Catch Nfc tag scan in our foreground intent filter */
