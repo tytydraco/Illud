@@ -15,8 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.DayNight"
         android:fullBackupContent="true">
-        <activity android:name=".activity.MainActivity"
-            android:launchMode="singleTask">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
