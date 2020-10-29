@@ -25,11 +25,12 @@ import com.draco.illud.utils.ListItem
 import com.draco.illud.utils.ListItems
 import com.draco.illud.utils.Nfc
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textview.MaterialTextView
 
 class MainActivity : AppCompatActivity() {
     /* UI elements */
     private lateinit var recyclerView: RecyclerView
-    private lateinit var emptyView: TextView
+    private lateinit var emptyView: MaterialTextView
     private lateinit var viewAdapter: RecyclerViewAdapter
     private lateinit var viewLayoutManager: RecyclerView.LayoutManager
     private lateinit var nfcModeMenuItem: MenuItem
