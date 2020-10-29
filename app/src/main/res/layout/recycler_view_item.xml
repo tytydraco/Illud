@@ -2,29 +2,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimaryDark"
+    android:background="?attr/colorSurface"
     android:paddingVertical="18dp"
     android:paddingHorizontal="12dp">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/label"
         android:textSize="20sp"
-        android:textColor="@color/colorText"
+        android:textColor="?attr/colorOnSurface"
         android:layout_marginVertical="2dp"
         android:paddingHorizontal="16dp"
         android:maxLines="3"
         android:ellipsize="end"
         android:includeFontPadding="false" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tag"
         android:textSize="14sp"
         android:paddingHorizontal="16dp"
-        android:textColor="@color/colorSecondary"
+        android:textColor="?attr/colorSecondary"
         android:textStyle="bold"
         android:textAlignment="center"
         android:ellipsize="end"
