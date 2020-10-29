@@ -1,63 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingHorizontal="24dp">
+    android:layout_marginHorizontal="24dp"
+    android:layout_marginVertical="12dp">
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:imeOptions="flagNoExtractUi"
-        android:linksClickable="true"
-        android:autoLink="all"
-        android:id="@+id/label"
-        android:background="@null"
-        android:drawableStart="@drawable/ic_edit_24dp"
-        android:drawablePadding="12dp"
-        android:textSize="20sp"
-        android:layout_marginTop="12dp"
-        android:paddingVertical="12dp"
-        android:textStyle="bold"
-        android:ellipsize="end"
-        android:maxLines="3"
-        android:hint="@string/hint_label"
-        android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
-        android:autofillHints="@string/hint_label" />
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/label_layout">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:imeOptions="flagNoExtractUi"
+            android:linksClickable="true"
+            android:autoLink="all"
+            android:id="@+id/label"
+            android:background="@null"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:hint="@string/hint_label"
+            android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
+            android:autofillHints="@string/hint_label" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:imeOptions="flagNoExtractUi"
-        android:id="@+id/tag"
-        android:background="@null"
-        android:drawableStart="@drawable/ic_label_outline_24dp"
-        android:drawablePadding="12dp"
-        android:textSize="20sp"
-        android:paddingVertical="12dp"
-        android:textStyle="bold"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:hint="@string/hint_tag"
-        android:inputType="textCapSentences|textAutoCorrect"
-        android:autofillHints="@string/hint_tag" />
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/tag_layout"
+        android:layout_below="@id/label_layout"
+        android:layout_marginVertical="12dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:imeOptions="flagNoExtractUi"
+            android:id="@+id/tag"
+            android:background="@null"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:hint="@string/hint_tag"
+            android:inputType="textCapSentences|textAutoCorrect"
+            android:autofillHints="@string/hint_tag" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:imeOptions="flagNoExtractUi"
-        android:linksClickable="true"
-        android:autoLink="all"
-        android:gravity="top"
-        android:id="@+id/content"
-        android:drawableStart="@drawable/ic_short_text_24dp"
-        android:drawablePadding="12dp"
-        android:textSize="20sp"
-        android:paddingVertical="12dp"
-        android:ellipsize="end"
-        android:background="@null"
-        android:hint="@string/hint_content"
-        android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
-        android:autofillHints="@string/hint_content" />
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/content_layout"
+        android:layout_below="@id/tag_layout"
+        android:layout_alignParentBottom="true">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:imeOptions="flagNoExtractUi"
+            android:linksClickable="true"
+            android:autoLink="all"
+            android:gravity="top"
+            android:id="@+id/content"
+            android:ellipsize="end"
+            android:background="@null"
+            android:hint="@string/hint_content"
+            android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
+            android:autofillHints="@string/hint_content" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-</LinearLayout>
+</RelativeLayout>

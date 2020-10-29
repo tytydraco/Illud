@@ -9,8 +9,8 @@
     <string name="nfc_mode">Switch NFC Mode</string>
 
     <!-- Label hint strings -->
-    <string name="hint_label">Start typing…</string>
-    <string name="hint_content">Additional content…</string>
+    <string name="hint_label">Label</string>
+    <string name="hint_content">Additional Content</string>
     <string name="hint_tag">Tag</string>
 
     <!-- Snackbar strings -->

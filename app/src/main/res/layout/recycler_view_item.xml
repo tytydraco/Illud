@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorPrimaryDark"
     android:paddingVertical="18dp"
     android:paddingHorizontal="12dp">
 
@@ -24,7 +24,7 @@
         android:id="@+id/tag"
         android:textSize="14sp"
         android:paddingHorizontal="16dp"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorSecondary"
         android:textStyle="bold"
         android:textAlignment="center"
         android:ellipsize="end"
