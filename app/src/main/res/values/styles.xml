@@ -1,5 +1,0 @@
-<resources>
-    <style name="AppTheme.DayNight" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <item name="colorSecondary">@color/colorSecondary</item>
-    </style>
-</resources>
