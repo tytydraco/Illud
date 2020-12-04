@@ -18,13 +18,14 @@ class Nfc(context: Context) {
 
     private var nfcAdapter = NfcAdapter.getDefaultAdapter(context)
 
-    private var nfcPendingIntent: PendingIntent = PendingIntent.getActivity(
+    private var nfcPendingIntent = PendingIntent.getActivity(
         context,
         0,
-        Intent(context, context.javaClass)
-            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or
-                    Intent.FLAG_ACTIVITY_CLEAR_TOP),
-        0
+        Intent(context, context.javaClass).addFlags(
+        Intent.FLAG_ACTIVITY_SINGLE_TOP or
+            Intent.FLAG_ACTIVITY_CLEAR_TOP
+        ),
+        PendingIntent.FLAG_IMMUTABLE
     )
 
     /* Mime type for NDEF record. P.S.: Takes up Nfc tag space */
