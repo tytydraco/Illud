@@ -1,6 +1,18 @@
 <resources>
-    <style name="Theme.Illud.DayNight" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="Theme.Illud.DayNight" parent="Theme.MaterialComponents.Light">
+        <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorSecondary">@color/colorSecondary</item>
-        <item name="colorSecondaryVariant">@color/colorSecondary</item>
+        <item name="colorSurface">?colorPrimary</item>
+        <item name="android:statusBarColor">?colorSurface</item>
+        <item name="android:navigationBarColor">?colorSurface</item>
+        <item name="android:colorControlActivated">?colorSecondary</item>
+        <item name="android:windowBackground">?colorPrimary</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Theme.Illud.TextBox" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="hintTextColor">?colorSecondary</item>
+        <item name="boxBackgroundColor">@android:color/transparent</item>
+        <item name="boxStrokeColor">@color/colorSecondary</item>
     </style>
 </resources>
