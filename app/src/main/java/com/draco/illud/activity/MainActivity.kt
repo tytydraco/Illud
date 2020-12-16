@@ -212,15 +212,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         /* Setup encrypted shared preferences */
-       KeyGenParameterSpec.Builder(
-           "illud_encrypted_prefs_key",
-           KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT).build()
-        val masterKeyAlias = MasterKey.Builder(this, "illud_encrypted_prefs_key")
+        val masterKeyAlias = MasterKey.Builder(this, MasterKey.DEFAULT_MASTER_KEY_ALIAS)
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
             .build()
         sharedPreferences = EncryptedSharedPreferences.create(
             this,
-            "illud_shared_prefs",
+            MasterKey.DEFAULT_MASTER_KEY_ALIAS,
             masterKeyAlias,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
